@@ -51,35 +51,201 @@ namespace poly
         return &mRat;
     }
 
-    std::ostream& operator<<(std::ostream& os, const Rational& r) {
+    std::ostream &operator<<(std::ostream &os, const Rational &r)
+    {
         return os << lp_rational_to_string(r.get_internal());
     }
 
-double to_double(const Rational& r) {
-    return lp_rational_to_double(r.get_internal());
-}
+    double to_double(const Rational &r)
+    {
+        return lp_rational_to_double(r.get_internal());
+    }
 
-int sgn(const Rational& r) {
-    return lp_rational_sgn(r.get_internal());
-}
+    int sgn(const Rational &r)
+    {
+        return lp_rational_sgn(r.get_internal());
+    }
 
-bool operator==(const Rational& lhs, const Rational& rhs) {
-    return lp_rational_cmp(lhs.get_internal(), rhs.get_internal()) == 0;
-}
-bool operator!=(const Rational& lhs, const Rational& rhs) {
-    return lp_rational_cmp(lhs.get_internal(), rhs.get_internal()) != 0;
-}
-bool operator<(const Rational& lhs, const Rational& rhs) {
-    return lp_rational_cmp(lhs.get_internal(), rhs.get_internal()) < 0;
-}
-bool operator<=(const Rational& lhs, const Rational& rhs) {
-    return lp_rational_cmp(lhs.get_internal(), rhs.get_internal()) <= 0;
-}
-bool operator>(const Rational& lhs, const Rational& rhs) {
-    return lp_rational_cmp(lhs.get_internal(), rhs.get_internal()) > 0;
-}
-bool operator>=(const Rational& lhs, const Rational& rhs) {
-    return lp_rational_cmp(lhs.get_internal(), rhs.get_internal()) >= 0;
-}
+    bool operator==(const Rational &lhs, const Rational &rhs)
+    {
+        return lp_rational_cmp(lhs.get_internal(), rhs.get_internal()) == 0;
+    }
+    bool operator!=(const Rational &lhs, const Rational &rhs)
+    {
+        return lp_rational_cmp(lhs.get_internal(), rhs.get_internal()) != 0;
+    }
+    bool operator<(const Rational &lhs, const Rational &rhs)
+    {
+        return lp_rational_cmp(lhs.get_internal(), rhs.get_internal()) < 0;
+    }
+    bool operator<=(const Rational &lhs, const Rational &rhs)
+    {
+        return lp_rational_cmp(lhs.get_internal(), rhs.get_internal()) <= 0;
+    }
+    bool operator>(const Rational &lhs, const Rational &rhs)
+    {
+        return lp_rational_cmp(lhs.get_internal(), rhs.get_internal()) > 0;
+    }
+    bool operator>=(const Rational &lhs, const Rational &rhs)
+    {
+        return lp_rational_cmp(lhs.get_internal(), rhs.get_internal()) >= 0;
+    }
+
+    bool operator==(const Rational &lhs, const Integer &rhs)
+    {
+        return lp_rational_cmp_integer(lhs.get_internal(), rhs.get_internal()) == 0;
+    }
+    bool operator!=(const Rational &lhs, const Integer &rhs)
+    {
+        return lp_rational_cmp_integer(lhs.get_internal(), rhs.get_internal()) != 0;
+    }
+    bool operator<(const Rational &lhs, const Integer &rhs)
+    {
+        return lp_rational_cmp_integer(lhs.get_internal(), rhs.get_internal()) < 0;
+    }
+    bool operator<=(const Rational &lhs, const Integer &rhs)
+    {
+        return lp_rational_cmp_integer(lhs.get_internal(), rhs.get_internal()) <= 0;
+    }
+    bool operator>(const Rational &lhs, const Integer &rhs)
+    {
+        return lp_rational_cmp_integer(lhs.get_internal(), rhs.get_internal()) > 0;
+    }
+    bool operator>=(const Rational &lhs, const Integer &rhs)
+    {
+        return lp_rational_cmp_integer(lhs.get_internal(), rhs.get_internal()) >= 0;
+    }
+
+    bool operator==(const Integer &lhs, const Rational &rhs)
+    {
+        return rhs == lhs;
+    }
+    bool operator!=(const Integer &lhs, const Rational &rhs)
+    {
+        return rhs != lhs;
+    }
+    bool operator<(const Integer &lhs, const Rational &rhs)
+    {
+        return rhs > lhs;
+    }
+    bool operator<=(const Integer &lhs, const Rational &rhs)
+    {
+        return rhs >= lhs;
+    }
+    bool operator>(const Integer &lhs, const Rational &rhs)
+    {
+        return rhs < lhs;
+    }
+    bool operator>=(const Integer &lhs, const Rational &rhs)
+    {
+        return rhs <= lhs;
+    }
+
+    void swap(Rational &lhs, Rational &rhs)
+    {
+        lp_rational_swap(lhs.get_internal(), rhs.get_internal());
+    }
+
+    Rational operator+(const Rational &lhs, const Rational &rhs)
+    {
+        Rational res;
+        lp_rational_add(res.get_internal(), lhs.get_internal(), rhs.get_internal());
+        return res;
+    }
+    Rational operator+(const Rational &lhs, const Integer &rhs)
+    {
+        Rational res;
+        lp_rational_add_integer(res.get_internal(), lhs.get_internal(), rhs.get_internal());
+        return res;
+    }
+    Rational operator+(const Integer &lhs, const Rational &rhs)
+    {
+        return rhs + lhs;
+    }
+
+    Rational operator-(const Rational &lhs, const Rational &rhs)
+    {
+        Rational res;
+        lp_rational_sub(res.get_internal(), lhs.get_internal(), rhs.get_internal());
+        return res;
+    }
+    Rational operator-(const Rational &r)
+    {
+        Rational res;
+        lp_rational_neg(res.get_internal(), r.get_internal());
+        return res;
+    }
+    Rational inverse(const Rational &r)
+    {
+        Rational res;
+        lp_rational_inv(res.get_internal(), r.get_internal());
+        return res;
+    }
+
+    Rational operator*(const Rational &lhs, const Rational &rhs)
+    {
+        Rational res;
+        lp_rational_mul(res.get_internal(), lhs.get_internal(), rhs.get_internal());
+        return res;
+    }
+
+    Rational mul_2exp(const Rational &lhs, unsigned n)
+    {
+        Rational res;
+        lp_rational_mul_2exp(res.get_internal(), lhs.get_internal(), n);
+        return res;
+    }
+
+    Rational pow(const Rational &r, unsigned n)
+    {
+        Rational res;
+        lp_rational_pow(res.get_internal(), r.get_internal(), n);
+        return res;
+    }
+
+    Rational operator/(const Rational &lhs, const Rational &rhs)
+    {
+        Rational res;
+        lp_rational_div(res.get_internal(), lhs.get_internal(), rhs.get_internal());
+        return res;
+    }
+
+    Rational div_2exp(const Rational &lhs, unsigned n)
+    {
+        Rational res;
+        lp_rational_div_2exp(res.get_internal(), lhs.get_internal(), n);
+        return res;
+    }
+
+    Integer numerator(const Rational &r)
+    {
+        Integer res;
+        lp_rational_get_num(r.get_internal(), res.get_internal());
+        return res;
+    }
+    Integer denominator(const Rational &r)
+    {
+        Integer res;
+        lp_rational_get_den(r.get_internal(), res.get_internal());
+        return res;
+    }
+
+    bool is_integer(const Rational &r)
+    {
+        return lp_rational_is_integer(r.get_internal());
+    }
+
+    Integer ceil(const Rational &r)
+    {
+        Integer res;
+        lp_rational_ceiling(r.get_internal(), res.get_internal());
+        return res;
+    }
+    Integer floor(const Rational &r)
+    {
+        Integer res;
+        lp_rational_floor(r.get_internal(), res.get_internal());
+        return res;
+    }
 
 } // namespace poly
