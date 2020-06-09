@@ -6,3 +6,5 @@ add_custom_target(check
     WORKING_DIRECTORY
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+add_subdirectory(polyxx)
