@@ -3,6 +3,7 @@ set(polyxx_tests
     test_assignment
     test_context
     test_dyadic_interval
+    test_dyadic_rational
     test_integer
     test_rational
     test_upolynomial

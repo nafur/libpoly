@@ -6,6 +6,7 @@
 #include "polyxx/assignment.h"
 #include "polyxx/context.h"
 #include "polyxx/dyadic_interval.h"
+#include "polyxx/dyadic_rational.h"
 #include "polyxx/integer.h"
 #include "polyxx/interval.h"
 #include "polyxx/polynomial.h"

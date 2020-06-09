@@ -43,6 +43,7 @@ set(polyxx_SOURCES
   polyxx/assignment.cpp
   polyxx/context.cpp
   polyxx/dyadic_interval.cpp
+  polyxx/dyadic_rational.cpp
   polyxx/integer.cpp
   polyxx/interval.cpp
   polyxx/polynomial.cpp
