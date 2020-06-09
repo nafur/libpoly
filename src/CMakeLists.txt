@@ -71,12 +71,12 @@ set_target_properties(poly PROPERTIES
 target_link_libraries(poly ${GMP_LIBRARY})
 
 add_library(polyxx SHARED ${polyxx_SOURCES})
-set_target_properties(poly PROPERTIES 
+set_target_properties(polyxx PROPERTIES 
   VERSION ${LIBPOLY_VERSION} 
   SOVERSION ${LIBPOLY_VERSION_MAJOR}
 ) 
 
-target_link_libraries(poly ${GMP_LIBRARY})
+target_link_libraries(polyxx poly ${GMP_LIBRARY})
 
 #
 # For windows and friends: the DLL goes into <install>/bin
@@ -102,6 +102,7 @@ if (LIBPOLY_BUILD_STATIC)
   add_library(static_polyxx STATIC ${polyxx_SOURCES})
   set_target_properties(static_polyxx PROPERTIES OUTPUT_NAME polyxx)
   install(TARGETS static_polyxx ARCHIVE DESTINATION lib)
+  target_link_libraries(static_polyxx static_poly)
 endif()
 
 #
@@ -118,4 +119,5 @@ if(LIBPOLY_BUILD_STATIC_PIC AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_
 
   add_library(static_pic_polyxx STATIC ${polyxx_SOURCES})
   set_target_properties(static_pic_polyxx PROPERTIES OUTPUT_NAME picpolyxx POSITION_INDEPENDENT_CODE true)
+  target_link_libraries(static_pic_polyxx static_pic_poly)
 endif()
