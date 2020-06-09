@@ -45,6 +45,7 @@ set(polyxx_SOURCES
   polyxx/dyadic_interval.cpp
   polyxx/dyadic_rational.cpp
   polyxx/integer.cpp
+  polyxx/integer_ring.cpp
   polyxx/interval.cpp
   polyxx/polynomial.cpp
   polyxx/rational.cpp
