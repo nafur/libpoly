@@ -3,8 +3,10 @@
 
 #include <polyxx.h>
 
+using namespace poly;
+
 TEST_CASE("algebraic_number::constructors") {
     int coeffs[] = {-2,0,1};
-    poly::UPolynomial p(2, coeffs);
-    poly::AlgebraicNumber an(p, poly::DyadicInterval(1,2));
+    UPolynomial p(2, coeffs);
+    AlgebraicNumber an(p, DyadicInterval(Integer(1), Integer(2)));
 }

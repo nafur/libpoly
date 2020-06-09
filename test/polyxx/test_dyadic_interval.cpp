@@ -3,6 +3,8 @@
 
 #include <polyxx.h>
 
+using namespace poly;
+
 TEST_CASE("dyadic_interval::constructors") {
-    poly::DyadicInterval di(1,2);
+    DyadicInterval di(Integer(1), Integer(2));
 }

@@ -3,7 +3,9 @@
 #include "../value.h"
 
 #include "algebraic_number.h"
+#include "dyadic_rational.h"
 #include "integer.h"
+#include "rational.h"
 
 #include <iosfwd>
 
@@ -20,6 +22,7 @@ class Value
  public:
   /** Construct a none value. */
   Value();
+  Value(long i);
   /** Create from a lp_value_t, creating a copy. */
   Value(const lp_value_t& val);
   /** Create from a lp_value_t pointer, claiming it's ownership. */
@@ -29,10 +32,10 @@ class Value
   /** Move from the given Value. */
   Value(Value&& val);
 
-  /** Construct from an integer. */
-  Value(const Integer& i);
-  /** Construct from an algebraic number. */
   Value(const AlgebraicNumber& an);
+  Value(const DyadicRational& i);
+  Value(const Integer& i);
+  Value(const Rational& i);
 
   /** Copy from the given Value. */
   Value& operator=(const Value& v);
@@ -53,28 +56,65 @@ class Value
   static Value minus_infty();
   /** Return +infty */
   static Value plus_infty();
-
-  Integer as_integer() const;
-  AlgebraicNumber as_algebraic_number() const;
 };
+
+void swap(Value& lhs, Value& rhs);
+
+// RationalInterval approximate(const Value& v);
+ 
+bool operator==(const Value& lhs, const Value& rhs);
+bool operator!=(const Value& lhs, const Value& rhs);
+bool operator<(const Value& lhs, const Value& rhs);
+bool operator<=(const Value& lhs, const Value& rhs);
+bool operator>(const Value& lhs, const Value& rhs);
+bool operator>=(const Value& lhs, const Value& rhs);
+ 
+bool operator==(const Value& lhs, const Rational& rhs);
+bool operator!=(const Value& lhs, const Rational& rhs);
+bool operator<(const Value& lhs, const Rational& rhs);
+bool operator<=(const Value& lhs, const Rational& rhs);
+bool operator>(const Value& lhs, const Rational& rhs);
+bool operator>=(const Value& lhs, const Rational& rhs);
+ 
+bool operator==(const Rational& lhs, const Value& rhs);
+bool operator!=(const Rational& lhs, const Value& rhs);
+bool operator<(const Rational& lhs, const Value& rhs);
+bool operator<=(const Rational& lhs, const Value& rhs);
+bool operator>(const Rational& lhs, const Value& rhs);
+bool operator>=(const Rational& lhs, const Value& rhs);
 
 /** Stream the given Value to an output stream. */
 std::ostream& operator<<(std::ostream& os, const Value& v);
-/** Compare values for equality. */
-bool operator==(const Value& lhs, const Value& rhs);
-/** Compare values for disequality. */
-bool operator!=(const Value& lhs, const Value& rhs);
-/** Compare two values. */
-bool operator<(const Value& lhs, const Value& rhs);
 
-Value sample_between(const lp_value_t* lhs,
+int sgn(const Value& v);
+
+bool is_rational(const Value& v);
+bool is_integer(const Value& v);
+bool is_infinity(const Value& v);
+
+
+double to_double(const Value& v);
+AlgebraicNumber to_algebraic_number(const Value& v);
+DyadicRational to_dyadic_rational(const Value& v);
+Integer to_integer(const Value& v);
+Rational to_rational(const Value& v);
+
+Integer ceil(const Value& v);
+Integer floor(const Value& v);
+
+Integer numerator(const Value& v);
+Integer denominator(const Value& v);
+
+Value value_between(const lp_value_t* lhs,
                      bool l_strict,
                      const lp_value_t* rhs,
                      bool r_strict);
 
-Value sample_between(const Value& lhs,
+Value value_between(const Value& lhs,
                      bool l_strict,
                      const Value& rhs,
                      bool r_strict);
+
+int approximate_size(const Value& lower, const Value& upper);
 
 }  // namespace poly

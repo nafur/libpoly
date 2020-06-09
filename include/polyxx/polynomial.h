@@ -139,6 +139,8 @@ std::vector<Interval> infeasible_regions(const Polynomial& p,
                                          const Assignment& a,
                                          SignCondition sc);
 
+int sgn(const Polynomial& p, const Assignment& a);
+
 /** Utility class to collect all variables from a sequence of polynomials.
  */
 class VariableCollector {

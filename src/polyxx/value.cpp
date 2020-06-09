@@ -47,12 +47,12 @@ Value Value::plus_infty()
   return Value(lp_value_new(LP_VALUE_PLUS_INFINITY, nullptr));
 }
 
-Integer Value::as_integer() const {
-  return Integer(get_internal()->value.z);
+Integer to_integer(const Value& v) {
+  return Integer(v.get_internal()->value.z);
 }
 
-AlgebraicNumber Value::as_algebraic_number() const {
-  return AlgebraicNumber(get_internal()->value.a);
+AlgebraicNumber to_algebraic_number(const Value& v) {
+  return AlgebraicNumber(v.get_internal()->value.a);
 }
 
 std::ostream& operator<<(std::ostream& os, const Value& v)

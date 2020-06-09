@@ -9,6 +9,7 @@
 #include "polyxx/dyadic_rational.h"
 #include "polyxx/integer.h"
 #include "polyxx/interval.h"
+#include "polyxx/interval_assignment.h"
 #include "polyxx/polynomial.h"
 #include "polyxx/rational.h"
 #include "polyxx/sign_condition.h"
