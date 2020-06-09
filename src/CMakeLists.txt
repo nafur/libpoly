@@ -46,6 +46,7 @@ set(polyxx_SOURCES
   polyxx/integer.cpp
   polyxx/interval.cpp
   polyxx/polynomial.cpp
+  polyxx/rational.cpp
   polyxx/sign_condition.cpp
   polyxx/upolynomial.cpp
   polyxx/value.cpp

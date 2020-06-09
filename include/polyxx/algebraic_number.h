@@ -19,16 +19,22 @@ class AlgebraicNumber
   lp_algebraic_number_t mValue;
 
  public:
+ /** Construct as zero. */
+  AlgebraicNumber();
+  /** Copy from the given AlgebraicNumber. */
+  AlgebraicNumber(const AlgebraicNumber& an);
+  /** Move from the given AlgebraicNumber. */
+  AlgebraicNumber(AlgebraicNumber&& an);
+
+  /** Construct from a DyadicRational */
+  //AlgebraicNumber(const DyadicRational& dr);
+
   /** Construct from a defining polynomial and an isolating interval. */
   AlgebraicNumber(UPolynomial&& poly, const DyadicInterval& i);
   /** Construct from a defining polynomial and an isolating interval. */
   AlgebraicNumber(const UPolynomial& poly, const DyadicInterval& i);
   /** Construct from a lp_algebraic_number_t, copying its contents. */
   AlgebraicNumber(const lp_algebraic_number_t& an);
-  /** Copy from the given AlgebraicNumber. */
-  AlgebraicNumber(const AlgebraicNumber& an);
-  /** Move from the given AlgebraicNumber. */
-  AlgebraicNumber(AlgebraicNumber&& an);
   /** Custom destructor. */
   ~AlgebraicNumber();
   /** Assign from the given AlgebraicNumber. */

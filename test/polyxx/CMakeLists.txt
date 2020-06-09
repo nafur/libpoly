@@ -4,9 +4,12 @@ set(polyxx_tests
     test_context
     test_dyadic_interval
     test_integer
+    test_rational
     test_upolynomial
     test_variable
 )
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -std=c++11")
 
 foreach(file ${polyxx_tests})
     add_executable(${file} ${file}.cpp)

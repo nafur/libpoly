@@ -11,5 +11,5 @@ TEST_CASE("integer::constructors") {
 TEST_CASE("integer::gcd") {
     poly::Integer a(15);
     poly::Integer b(125);
-    CHECK(gcd(a, b) == 5);
+    CHECK(gcd(a, b) == poly::Integer(5));
 }
