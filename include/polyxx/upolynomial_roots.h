@@ -18,9 +18,6 @@ namespace libpoly {
 
 /** Isolate the real roots of a UPolynomial. */
 std::vector<RAN> isolate_real_roots(const UPolynomial& p);
-/** Isolate the real roots of a Polynomial with respect to an Assignment for all
- * but the main variable. */
-std::vector<Value> isolate_real_roots(const Polynomial& p, const Assignment& a);
 
 }  // namespace libpoly
 }  // namespace nl

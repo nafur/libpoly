@@ -14,8 +14,6 @@ namespace poly {
  */
 class Assignment
 {
-  const Context& mContext;
-
   /** The actual assignment. */
   deleting_unique_ptr<lp_assignment_t> mAssignment;
 

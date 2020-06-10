@@ -47,6 +47,12 @@ Integer::Integer(IntegerRing& ir, const mpz_class& m)
   lp_integer_construct_copy(ir.get_internal(), &mInt, m.get_mpz_t());
 }
 
+Integer::Integer(const lp_integer_t* i) : Integer(IntegerRing::Z, i) {}
+Integer::Integer(IntegerRing& ir, const lp_integer_t* i)
+{
+  lp_integer_construct_copy(ir.get_internal(), &mInt, i);
+}
+
 Integer::~Integer() { lp_integer_destruct(&mInt); }
 
 Integer& Integer::operator=(const Integer& i)

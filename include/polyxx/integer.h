@@ -33,6 +33,8 @@ class Integer
   Integer(IntegerRing& ir, const lp_integer_t& i);
   Integer(const mpz_class& m);
   Integer(IntegerRing& ir, const mpz_class& m);
+  explicit Integer(const lp_integer_t* i);
+  Integer(IntegerRing& ir, const lp_integer_t* i);
 
   /** Custom destructor. */
   ~Integer();
@@ -48,6 +50,17 @@ class Integer
   /** Get a const pointer to the internal lp_integer_t. */
   const lp_integer_t* get_internal() const;
 };
+
+static_assert(sizeof(Integer) == sizeof(lp_integer_t));
+namespace detail {
+  inline lp_integer_t* cast_in_place(Integer* i) {
+    return reinterpret_cast<lp_integer_t*>(i);
+  }
+  inline const lp_integer_t* cast_in_place(const Integer* i) {
+    return reinterpret_cast<const lp_integer_t*>(i);
+  }
+}
+
 /** Stream the given Integer to an output stream. */
 std::ostream& operator<<(std::ostream& os, const Integer& i);
 
@@ -129,11 +142,9 @@ Integer& sub_mul(IntegerRing& ir,
 
 Integer operator/(const Integer& lhs, const Integer& rhs);
 Integer& operator/=(Integer& lhs, const Integer& rhs);
-Integer div(const Integer& lhs, const Integer& rhs);
 
 Integer operator%(const Integer& lhs, const Integer& rhs);
 Integer& operator%=(Integer& lhs, const Integer& rhs);
-Integer rem(const Integer& lhs, const Integer& rhs);
 
 Integer div_exact(const Integer& lhs, const Integer& rhs);
 Integer div_exact(IntegerRing& ir, const Integer& lhs, const Integer& rhs);
@@ -159,3 +170,11 @@ Integer gcd(const Integer& a, const Integer& b);
 Integer lcm(const Integer& a, const Integer& b);
 
 }  // namespace poly
+
+namespace std {
+template <>
+struct hash<poly::Integer>
+{
+  std::size_t operator()(const poly::Integer& i) const { return poly::hash(i); }
+};
+}  // namespace std

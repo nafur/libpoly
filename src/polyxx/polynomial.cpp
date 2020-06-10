@@ -1,7 +1,6 @@
 #include "polyxx/polynomial.h"
 
 #include "feasibility_set.h"
-
 #include "polyxx/value.h"
 
 namespace poly {
@@ -9,32 +8,50 @@ namespace poly {
 /** A deleter for an std::unique_ptr holding a lp_polynomial_t pointer */
 void polynomial_deleter(lp_polynomial_t* ptr) { lp_polynomial_delete(ptr); }
 
+/** Create from a lp_polynomial_t pointer, claiming it's ownership. */
+Polynomial::Polynomial(lp_polynomial_t* poly)
+    : mPoly(poly, polynomial_deleter)
+{
+}
+Polynomial::Polynomial(const lp_polynomial_t* poly)
+    : mPoly(lp_polynomial_new_copy(poly), polynomial_deleter)
+{
+}
+Polynomial::Polynomial(const lp_polynomial_context_t* c)
+    : 
+      mPoly(lp_polynomial_new(c),
+            polynomial_deleter)
+{
+}
 Polynomial::Polynomial(const Context& c)
-    : mContext(c), mPoly(lp_polynomial_new(get_context().get_polynomial_context()), polynomial_deleter)
+    : Polynomial(c.get_polynomial_context())
 {
 }
 Polynomial::Polynomial(const Polynomial& p)
-    : mContext(p.get_context()), mPoly(lp_polynomial_new_copy(p.get_internal()), polynomial_deleter)
-{
-}
-/** Create from a lp_polynomial_t pointer, claiming it's ownership. */
-Polynomial::Polynomial(const Context& c, lp_polynomial_t* poly) : mContext(c), mPoly(poly, polynomial_deleter)
+    : 
+      mPoly(lp_polynomial_new_copy(p.get_internal()), polynomial_deleter)
 {
 }
 /** Create from a variable. */
 Polynomial::Polynomial(const Context& c, Variable v) : Polynomial(c, 1, v, 1) {}
 /** Construct i * v^n. */
 Polynomial::Polynomial(const Context& c, Integer i, Variable v, unsigned n)
-    : mContext(c), mPoly(lp_polynomial_alloc(), polynomial_deleter)
+    : mPoly(lp_polynomial_alloc(), polynomial_deleter)
 {
-  lp_polynomial_construct_simple(
-      get_internal(), get_context().get_polynomial_context(), i.get_internal(), v.get_internal(), n);
+  lp_polynomial_construct_simple(get_internal(),
+                                 c.get_polynomial_context(),
+                                 i.get_internal(),
+                                 v.get_internal(),
+                                 n);
 }
 Polynomial::Polynomial(const Context& c, Integer i)
-    : mContext(c), mPoly(lp_polynomial_alloc(), polynomial_deleter)
+    : mPoly(lp_polynomial_alloc(), polynomial_deleter)
 {
-  lp_polynomial_construct_simple(
-      get_internal(), get_context().get_polynomial_context(), i.get_internal(), lp_variable_null, 0);
+  lp_polynomial_construct_simple(get_internal(),
+                                 c.get_polynomial_context(),
+                                 i.get_internal(),
+                                 lp_variable_null,
+                                 0);
 }
 
 /** Assign from the given Polynomial. */
@@ -49,17 +66,6 @@ Polynomial& Polynomial::operator=(const Polynomial& p)
 lp_polynomial_t* Polynomial::get_internal() { return mPoly.get(); }
 /** Get a const pointer to the internal lp_polynomial_t. */
 const lp_polynomial_t* Polynomial::get_internal() const { return mPoly.get(); }
-
-/**
- * Simplify the polynomial, assuming that we onle care about about its roots.
- * In particular, we divide by the gcd of the coefficients.
- */
-void Polynomial::simplify()
-{
-  lp_polynomial_t* tmp = lp_polynomial_new(mContext.get_polynomial_context());
-  lp_polynomial_pp(tmp, get_internal());
-  mPoly.reset(tmp);
-}
 
 /** Stream the given Polynomial to an output stream. */
 std::ostream& operator<<(std::ostream& os, const Polynomial& p)
@@ -80,7 +86,7 @@ bool operator<(const Polynomial& lhs, const Polynomial& rhs)
 /** Add two polynomials. */
 Polynomial operator+(const Polynomial& lhs, const Polynomial& rhs)
 {
-  Polynomial res(lhs.get_context());
+  Polynomial res(detail::context(lhs, rhs));
   lp_polynomial_add(res.get_internal(), lhs.get_internal(), rhs.get_internal());
   return res;
 }
@@ -88,8 +94,10 @@ Polynomial operator+(const Polynomial& lhs, const Polynomial& rhs)
 Polynomial operator+(const Polynomial& lhs, const Integer& rhs)
 {
   lp_monomial_t monomial;
-  lp_monomial_construct(lhs.get_context().get_polynomial_context(), &monomial);
-  lp_monomial_set_coefficient(lhs.get_context().get_polynomial_context(), &monomial, rhs.get_internal());
+  lp_monomial_construct(detail::context(lhs), &monomial);
+  lp_monomial_set_coefficient(detail::context(lhs),
+                              &monomial,
+                              rhs.get_internal());
   Polynomial res(lhs);
   lp_polynomial_add_monomial(res.get_internal(), &monomial);
   lp_monomial_destruct(&monomial);
@@ -104,14 +112,14 @@ Polynomial operator+(const Integer& lhs, const Polynomial& rhs)
 /** Unary negation of a polynomial. */
 Polynomial operator-(const Polynomial& p)
 {
-  Polynomial res(p.get_context());
+  Polynomial res(detail::context(p));
   lp_polynomial_neg(res.get_internal(), p.get_internal());
   return res;
 }
 /** Subtract two polynomials. */
 Polynomial operator-(const Polynomial& lhs, const Polynomial& rhs)
 {
-  Polynomial res(lhs.get_context());
+  Polynomial res(detail::context(lhs, rhs));
   lp_polynomial_sub(res.get_internal(), lhs.get_internal(), rhs.get_internal());
   return res;
 }
@@ -129,15 +137,16 @@ Polynomial operator-(const Integer& lhs, const Polynomial& rhs)
 /** Multiply two polynomials. */
 Polynomial operator*(const Polynomial& lhs, const Polynomial& rhs)
 {
-  Polynomial res(lhs.get_context());
+  Polynomial res(detail::context(lhs, rhs));
   lp_polynomial_mul(res.get_internal(), lhs.get_internal(), rhs.get_internal());
   return res;
 }
 /** Multiply a polynomial and an integer. */
 Polynomial operator*(const Polynomial& lhs, const Integer& rhs)
 {
-  Polynomial res(lhs.get_context());
-  lp_polynomial_mul_integer(res.get_internal(), lhs.get_internal(), rhs.get_internal());
+  Polynomial res(detail::context(lhs));
+  lp_polynomial_mul_integer(
+      res.get_internal(), lhs.get_internal(), rhs.get_internal());
   return res;
 }
 /** Multiply an integer and a polynomial. */
@@ -156,7 +165,7 @@ Polynomial& operator*=(Polynomial& lhs, const Polynomial& rhs)
 /** Compute a polynomial to some power. */
 Polynomial pow(const Polynomial& lhs, unsigned exp)
 {
-  Polynomial res(lhs.get_context());
+  Polynomial res(detail::context(lhs));
   lp_polynomial_pow(res.get_internal(), lhs.get_internal(), exp);
   return res;
 }
@@ -164,7 +173,7 @@ Polynomial pow(const Polynomial& lhs, unsigned exp)
 /** Divide a polynomial by a polynomial, assuming that there is no remainder. */
 Polynomial div(const Polynomial& lhs, const Polynomial& rhs)
 {
-  Polynomial res(lhs.get_context());
+  Polynomial res(detail::context(lhs, rhs));
   lp_polynomial_div(res.get_internal(), lhs.get_internal(), rhs.get_internal());
   return res;
 }
@@ -187,7 +196,7 @@ Variable main_variable(const Polynomial& p)
 /** Obtain the k'th coefficient of a polynomial. */
 Polynomial coefficient(const Polynomial& p, std::size_t k)
 {
-  Polynomial res(p.get_context());
+  Polynomial res(detail::context(p));
   lp_polynomial_get_coefficient(res.get_internal(), p.get_internal(), k);
   return res;
 }
@@ -212,7 +221,7 @@ std::vector<Polynomial> coefficients(const Polynomial& p)
 /** Compute the derivative of a polynomial (in its main variable). */
 Polynomial derivative(const Polynomial& p)
 {
-  Polynomial res(p.get_context());
+  Polynomial res(detail::context(p));
   lp_polynomial_derivative(res.get_internal(), p.get_internal());
   return res;
 }
@@ -220,8 +229,9 @@ Polynomial derivative(const Polynomial& p)
 /** Compute the resultant of two polynomials. */
 Polynomial resultant(const Polynomial& p, const Polynomial& q)
 {
-  Polynomial res(p.get_context());
-  lp_polynomial_resultant(res.get_internal(), p.get_internal(), q.get_internal());
+  Polynomial res(detail::context(p, q));
+  lp_polynomial_resultant(
+      res.get_internal(), p.get_internal(), q.get_internal());
   return res;
 }
 
@@ -236,12 +246,13 @@ std::vector<Polynomial> square_free_factors(const Polynomial& p)
   lp_polynomial_t** factors = nullptr;
   std::size_t* multiplicities = nullptr;
   std::size_t size = 0;
-  lp_polynomial_factor_square_free(p.get_internal(), &factors, &multiplicities, &size);
+  lp_polynomial_factor_square_free(
+      p.get_internal(), &factors, &multiplicities, &size);
 
   std::vector<Polynomial> res;
   for (std::size_t i = 0; i < size; ++i)
   {
-    res.emplace_back(p.get_context(), factors[i]);
+    res.emplace_back(factors[i]);
   }
   free(factors);
   free(multiplicities);
@@ -249,11 +260,30 @@ std::vector<Polynomial> square_free_factors(const Polynomial& p)
   return res;
 }
 
+std::vector<Value> isolate_real_roots(const Polynomial& p, const Assignment& a)
+{
+  lp_value_t* roots = new lp_value_t[degree(p)];
+  std::size_t roots_size;
+  lp_polynomial_roots_isolate(p.get_internal(), a.get_internal(), roots, &roots_size);
+  std::vector<Value> res;
+  for (std::size_t i = 0; i < roots_size; ++i)
+  {
+    res.emplace_back(lp_value_new_copy(&roots[i]));
+  }
+  for (std::size_t i = 0; i < roots_size; ++i)
+  {
+    lp_value_destruct(&roots[i]);
+  }
+  delete[] roots;
+  return res;
+}
+
 bool evaluate_polynomial_constraint(const Polynomial& p,
                                     const Assignment& a,
                                     SignCondition sc)
 {
-  return evaluate_sign_condition(sc, lp_polynomial_sgn(p.get_internal(), a.get_internal()));
+  return evaluate_sign_condition(
+      sc, lp_polynomial_sgn(p.get_internal(), a.get_internal()));
 }
 
 std::vector<Interval> infeasible_regions(const Polynomial& p,
@@ -310,22 +340,26 @@ std::vector<Interval> infeasible_regions(const Polynomial& p,
   return regions;
 }
 
-VariableCollector::VariableCollector() {
+VariableCollector::VariableCollector()
+{
   lp_variable_list_construct(&mVarList);
 }
-VariableCollector::~VariableCollector() {
+VariableCollector::~VariableCollector()
+{
   lp_variable_list_destruct(&mVarList);
 }
-void VariableCollector::operator()(const Polynomial& p) {
+void VariableCollector::operator()(const Polynomial& p)
+{
   lp_polynomial_get_variables(p.get_internal(), &mVarList);
 }
-std::vector<Variable> VariableCollector::get_variables() const {
+std::vector<Variable> VariableCollector::get_variables() const
+{
   std::vector<Variable> res;
-  for (std::size_t i = 0; i < lp_variable_list_size(&mVarList); ++i) {
+  for (std::size_t i = 0; i < lp_variable_list_size(&mVarList); ++i)
+  {
     res.emplace_back(mVarList.list[i]);
   }
   return res;
 }
-
 
 }  // namespace poly

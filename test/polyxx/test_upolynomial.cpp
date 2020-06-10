@@ -4,6 +4,5 @@
 #include <polyxx.h>
 
 TEST_CASE("upolynomial::constructors") {
-    int coeffs[] = {-2,0,1};
-    poly::UPolynomial p(2, coeffs);
+    poly::UPolynomial p({-2,0,1});
 }

@@ -13,15 +13,15 @@ TEST_CASE("dyadic_rational::constructors")
 
 TEST_CASE("dyadic_rational::to_double")
 {
-  CHECK(to_double(DyadicRational(Integer(0))) == 0.0);
   CHECK(to_double(DyadicRational(Integer(1))) == 1.0);
+  CHECK(to_double(DyadicRational(Integer(2))) == 2.0);
 }
 
 TEST_CASE("dyadic_rational::sgn")
 {
   CHECK(sgn(DyadicRational(-10)) == -1);
   CHECK(sgn(DyadicRational(-1)) == -1);
-  CHECK(sgn(DyadicRational(Integer(0))) == 0);
+  CHECK(sgn(DyadicRational(Integer(0l))) == 0);
   CHECK(sgn(DyadicRational(1)) == 1);
   CHECK(sgn(DyadicRational(10)) == 1);
 }

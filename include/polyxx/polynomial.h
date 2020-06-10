@@ -8,8 +8,10 @@
 #include "integer.h"
 #include "interval.h"
 #include "sign_condition.h"
-
+#include "value.h"
 #include "variable.h"
+
+#include <cassert>
 #include <iosfwd>
 #include <vector>
 
@@ -22,18 +24,18 @@ class Polynomial
 {
   friend std::ostream& operator<<(std::ostream& os, const Polynomial& p);
 
-  const Context& mContext;
-
   /** The actual polynomial. */
   deleting_unique_ptr<lp_polynomial_t> mPoly;
 
  public:
+  Polynomial(lp_polynomial_t* poly);
+  Polynomial(const lp_polynomial_t* poly);
+  
+  
   /** Construct a zero polynomial. */
+  Polynomial(const lp_polynomial_context_t* c);
   Polynomial(const Context& c);
   Polynomial() : Polynomial(Context::get_context()) {}
-  /** Create from a lp_polynomial_t pointer, claiming it's ownership. */
-  Polynomial(const Context& c, lp_polynomial_t* poly);
-  Polynomial(lp_polynomial_t* poly) : Polynomial(Context::get_context(), poly) {}
   /** Create from a variable. */
   Polynomial(const Context& c, Variable v);
   Polynomial(Variable v) : Polynomial(Context::get_context(), v) {}
@@ -48,21 +50,24 @@ class Polynomial
   /** Assign from the given Polynomial. */
   Polynomial& operator=(const Polynomial& p);
 
-  const Context& get_context() const {
-    return mContext;
-  }
   /** Get a non-const pointer to the internal lp_polynomial_t. Handle with care!
    */
   lp_polynomial_t* get_internal();
   /** Get a const pointer to the internal lp_polynomial_t. */
   const lp_polynomial_t* get_internal() const;
-
-  /**
-   * Simplify the polynomial, assuming that we onle care about about its roots.
-   * In particular, we divide by the gcd of the coefficients.
-   */
-  void simplify();
 };
+
+namespace detail {
+  inline const lp_polynomial_context_t* context(const Polynomial& p) {
+    return lp_polynomial_get_context(p.get_internal());
+  }
+  inline const lp_polynomial_context_t* context(const Polynomial& lhs, const Polynomial& rhs) {
+    assert(lp_polynomial_context_equal(context(lhs), context(rhs)) == 0);
+    return context(lhs);
+  }
+}
+
+
 
 /** Stream the given Polynomial to an output stream. */
 std::ostream& operator<<(std::ostream& os, const Polynomial& p);
@@ -130,6 +135,11 @@ Polynomial discriminant(const Polynomial& p);
  * Attention: this does not yield a full factorization!
  */
 std::vector<Polynomial> square_free_factors(const Polynomial& p);
+
+
+/** Isolate the real roots of a Polynomial with respect to an Assignment for all
+ * but the main variable. */
+std::vector<Value> isolate_real_roots(const Polynomial& p, const Assignment& a);
 
 bool evaluate_polynomial_constraint(const Polynomial& p,
                                     const Assignment& a,

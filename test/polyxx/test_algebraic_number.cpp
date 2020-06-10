@@ -6,7 +6,6 @@
 using namespace poly;
 
 TEST_CASE("algebraic_number::constructors") {
-    int coeffs[] = {-2,0,1};
-    UPolynomial p(2, coeffs);
+    UPolynomial p({-2,0,1});
     AlgebraicNumber an(p, DyadicInterval(Integer(1), Integer(2)));
 }

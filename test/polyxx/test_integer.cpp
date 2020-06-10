@@ -3,13 +3,20 @@
 
 #include <polyxx.h>
 
+using namespace poly;
+
 TEST_CASE("integer::constructors") {
-    poly::Integer i;
-    CHECK(i == poly::Integer(0));
+    Integer i;
+    CHECK(i == Integer(0l));
+}
+
+TEST_CASE("integer::bit_size") {
+    CHECK(bit_size(Integer(5)) == 3);
+    CHECK(bit_size(Integer(64)) == 7);
 }
 
 TEST_CASE("integer::gcd") {
-    poly::Integer a(15);
-    poly::Integer b(125);
-    CHECK(gcd(a, b) == poly::Integer(5));
+    Integer a(15);
+    Integer b(125);
+    CHECK(gcd(a, b) == Integer(5));
 }

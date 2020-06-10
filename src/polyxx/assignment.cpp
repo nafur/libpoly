@@ -12,7 +12,7 @@ namespace poly
     lp_assignment_delete(ptr);
   }
 
-  Assignment::Assignment(const Context& c): mContext(c), mAssignment(lp_assignment_new(mContext.get_variable_db()), assignment_deleter)
+  Assignment::Assignment(const Context& c): mAssignment(lp_assignment_new(c.get_variable_db()), assignment_deleter)
   {
   }
 
@@ -33,8 +33,9 @@ namespace poly
   }
   void Assignment::clear()
   {
+    const lp_variable_db_t* var_db = mAssignment->var_db;
     lp_assignment_destruct(mAssignment.get());
-    lp_assignment_construct(mAssignment.get(), mContext.get_variable_db());
+    lp_assignment_construct(mAssignment.get(), var_db);
   }
 
   std::ostream &operator<<(std::ostream &os, const Assignment &a)
