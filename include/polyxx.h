@@ -9,6 +9,8 @@ Classes hold their data either as a member or within a std::unique_ptr.
 All classes provide the following interface:
     - lp_data_t* get_internal();
     - const lp_data_t* get_internal() const;
+
+If a copy constructor exists (lp_data_construct_copy):
     - explicit Data(const lp_data_t*);
 
 Additionally, for classes that hold pointers:

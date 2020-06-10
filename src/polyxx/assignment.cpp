@@ -1,23 +1,18 @@
 #include "polyxx/assignment.h"
 
-
-#include "assignment.h"
-
 namespace poly
 {
 
-  /** A deleter for an std::unique_ptr holding a lp_assignment_t pointer */
-  inline void assignment_deleter(lp_assignment_t *ptr)
+  Assignment::Assignment(const Context& c)
   {
-    lp_assignment_delete(ptr);
+    lp_assignment_construct(get_internal(), c.get_variable_db());
+  }
+  Assignment::~Assignment() {
+    lp_assignment_destruct(get_internal());
   }
 
-  Assignment::Assignment(const Context& c): mAssignment(lp_assignment_new(c.get_variable_db()), assignment_deleter)
-  {
-  }
-
-  lp_assignment_t *Assignment::get_internal() { return mAssignment.get(); }
-  const lp_assignment_t *Assignment::get_internal() const { return mAssignment.get(); }
+  lp_assignment_t *Assignment::get_internal() { return &mAssignment; }
+  const lp_assignment_t *Assignment::get_internal() const { return &mAssignment; }
 
   void Assignment::set(const Variable &var, const Value &value)
   {
@@ -33,9 +28,9 @@ namespace poly
   }
   void Assignment::clear()
   {
-    const lp_variable_db_t* var_db = mAssignment->var_db;
-    lp_assignment_destruct(mAssignment.get());
-    lp_assignment_construct(mAssignment.get(), var_db);
+    const lp_variable_db_t* var_db = get_internal()->var_db;
+    lp_assignment_destruct(get_internal());
+    lp_assignment_construct(get_internal(), var_db);
   }
 
   std::ostream &operator<<(std::ostream &os, const Assignment &a)

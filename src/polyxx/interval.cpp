@@ -4,6 +4,10 @@
 
 namespace poly {
 
+  Interval::Interval(const lp_interval_t* i) {
+    lp_interval_construct_copy(get_internal(), i);
+  }
+
 Interval::Interval(const Value& a, bool a_open, const Value& b, bool b_open)
 {
   lp_interval_construct(

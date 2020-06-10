@@ -1,11 +1,13 @@
 #pragma once
 
-#include <iosfwd>
-#include <memory>
-
 #include "context.h"
 #include "value.h"
 #include "variable.h"
+
+#include "../assignment.h"
+
+#include <iosfwd>
+#include <memory>
 
 namespace poly {
 
@@ -15,13 +17,14 @@ namespace poly {
 class Assignment
 {
   /** The actual assignment. */
-  deleting_unique_ptr<lp_assignment_t> mAssignment;
+  lp_assignment_t mAssignment;
 
  public:
   /** Construct an empty assignment with a custom context. */
   Assignment(const Context& c);
   /** Construct an empty assignment. */
   Assignment() : Assignment(Context::get_context()) {}
+  ~Assignment();
 
   /** Get a non-const pointer to the internal lp_assignment_t. Handle with care!
    */

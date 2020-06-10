@@ -1,11 +1,13 @@
 #pragma once
 
-#include <iosfwd>
-#include <memory>
-
 #include "context.h"
 #include "interval.h"
 #include "variable.h"
+
+#include "../assignment.h"
+
+#include <iosfwd>
+#include <memory>
 
 namespace poly {
 
@@ -14,16 +16,15 @@ namespace poly {
  */
 class IntervalAssignment
 {
-  const Context& mContext;
-
   /** The actual assignment. */
-  deleting_unique_ptr<lp_interval_assignment_t> mAssignment;
+  lp_interval_assignment_t mAssignment;
 
  public:
   /** Construct an empty assignment with a custom context. */
   IntervalAssignment(const Context& c);
   /** Construct an empty assignment. */
   IntervalAssignment() : IntervalAssignment(Context::get_context()) {}
+  ~IntervalAssignment();
 
   /** Get a non-const pointer to the internal lp_interval_assignment_t. Handle with care!
    */
@@ -32,7 +33,7 @@ class IntervalAssignment
   const lp_interval_assignment_t* get_internal() const;
 
   /** Assign var to the given value. */
-  void set(const Variable& var, const Interval& value);
+  void set(const Variable& var, const Interval& interval);
   /** Unassign the given variable. */
   void unset(const Variable& var);
   /** Retrieve a value from the Assignment. */
