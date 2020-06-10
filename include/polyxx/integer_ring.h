@@ -17,19 +17,19 @@ class IntegerRing
  public:
   IntegerRing();
   IntegerRing(const Integer& m, bool is_prime);
-  ~IntegerRing();
 
   /** Get a non-const pointer to the internal lp_int_ring_t. Handle with care!
    */
   lp_int_ring_t* get_internal();
   /** Get a const pointer to the internal lp_int_ring_t. */
   const lp_int_ring_t* get_internal() const;
+
+  static IntegerRing Z;
 };
 
-// TODO: Make arguments const, see https://github.com/SRI-CSL/libpoly/pull/23
-bool operator==(IntegerRing& lhs, IntegerRing& rhs);
+bool operator==(const IntegerRing& lhs, const IntegerRing& rhs);
 
 /** Stream the given IntegerRing to an output stream. */
-std::ostream& operator<<(std::ostream& os, IntegerRing& ir);
+std::ostream& operator<<(std::ostream& os, const IntegerRing& ir);
 
 }  // namespace poly
