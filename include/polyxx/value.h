@@ -51,7 +51,7 @@ class Value
   static Value plus_infty();
 };
 
-static_assert(sizeof(Value) == sizeof(lp_value_t));
+static_assert(sizeof(Value) == sizeof(lp_value_t), "Please check the size of Value.");
 namespace detail {
   inline lp_value_t* cast_to(Value* i) {
     return reinterpret_cast<lp_value_t*>(i);

@@ -47,7 +47,7 @@ class AlgebraicNumber
   const lp_algebraic_number_t* get_internal() const;
 };
 
-static_assert(sizeof(AlgebraicNumber) == sizeof(lp_algebraic_number_t));
+static_assert(sizeof(AlgebraicNumber) == sizeof(lp_algebraic_number_t), "Please check the size of AlgebraicNumber.");
 namespace detail {
   inline lp_algebraic_number_t* cast_to(AlgebraicNumber* i) {
     return reinterpret_cast<lp_algebraic_number_t*>(i);

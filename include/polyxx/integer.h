@@ -51,7 +51,7 @@ class Integer
   const lp_integer_t* get_internal() const;
 };
 
-static_assert(sizeof(Integer) == sizeof(lp_integer_t));
+static_assert(sizeof(Integer) == sizeof(lp_integer_t), "Please check the size of Integer.");
 namespace detail {
   inline lp_integer_t* cast_to(Integer* i) {
     return reinterpret_cast<lp_integer_t*>(i);

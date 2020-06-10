@@ -41,7 +41,7 @@ class Interval
   static Interval full();
 };
 
-static_assert(sizeof(Interval) == sizeof(lp_interval_t));
+static_assert(sizeof(Interval) == sizeof(lp_interval_t), "Please check the size of Interval.");
 
 void swap(Interval& lhs, Interval& rhs);
 
