@@ -17,20 +17,18 @@ namespace poly {
 class Value
 {
   /** The actual value. */
-  deleting_unique_ptr<lp_value_t> mValue;
+  lp_value_t mValue;
+
+  Value(lp_value_type_t type, const void* data);
 
  public:
   /** Construct a none value. */
   Value();
   Value(long i);
   /** Create from a lp_value_t, creating a copy. */
-  Value(const lp_value_t& val);
-  /** Create from a lp_value_t pointer, claiming it's ownership. */
-  Value(lp_value_t* ptr);
+  explicit Value(const lp_value_t* val);
   /** Copy from the given Value. */
   Value(const Value& val);
-  /** Move from the given Value. */
-  Value(Value&& val);
 
   Value(const AlgebraicNumber& an);
   Value(const DyadicRational& i);
@@ -41,22 +39,33 @@ class Value
   Value& operator=(const Value& v);
   /** Move from the given Value. */
   Value& operator=(Value&& v);
-  /** Assign from the given lp_value_t pointer, claiming it's ownership. */
-  Value& operator=(lp_value_t* v);
-
+  
   /** Get a non-const pointer to the internal lp_value_t. Handle with care! */
   lp_value_t* get_internal();
   /** Get a const pointer to the internal lp_value_t. */
   const lp_value_t* get_internal() const;
-  /** Release the lp_value_t pointer. This yields ownership of the returned
-   * pointer. */
-  lp_value_t* release();
-
+  
   /** Return -infty */
   static Value minus_infty();
   /** Return +infty */
   static Value plus_infty();
 };
+
+static_assert(sizeof(Value) == sizeof(lp_value_t));
+namespace detail {
+  inline lp_value_t* cast_to(Value* i) {
+    return reinterpret_cast<lp_value_t*>(i);
+  }
+  inline const lp_value_t* cast_to(const Value* i) {
+    return reinterpret_cast<const lp_value_t*>(i);
+  }
+  inline Value* cast_from(lp_value_t* i) {
+    return reinterpret_cast<Value*>(i);
+  }
+  inline const Value* cast_from(const lp_value_t* i) {
+    return reinterpret_cast<const Value*>(i);
+  }
+}
 
 void swap(Value& lhs, Value& rhs);
 

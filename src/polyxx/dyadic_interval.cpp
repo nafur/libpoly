@@ -107,7 +107,7 @@ bool is_point(const DyadicInterval& di) {
   return lp_dyadic_interval_is_point(di.get_internal());
 }
 DyadicRational get_point(const DyadicInterval& di) {
-  return lp_dyadic_interval_get_point(di.get_internal());
+  return DyadicRational(lp_dyadic_interval_get_point(di.get_internal()));
 }
 int log_size(const DyadicInterval& di) {
   return lp_dyadic_interval_size(di.get_internal());

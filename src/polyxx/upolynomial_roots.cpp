@@ -1,17 +1,13 @@
-#include "root_isolation.h"
+#include "polyxx/upolynomial_roots.h"
 
-namespace CVC4 {
-namespace theory {
-namespace arith {
-namespace nl {
-namespace libpoly {
+namespace poly {
 
-std::vector<RAN> isolate_real_roots(const UPolynomial& p)
+std::vector<AlgebraicNumber> isolate_real_roots(const UPolynomial& p)
 {
   lp_algebraic_number_t* roots = new lp_algebraic_number_t[degree(p)];
   std::size_t roots_size;
-  lp_upolynomial_roots_isolate(p.get(), roots, &roots_size);
-  std::vector<RAN> res;
+  lp_upolynomial_roots_isolate(p.get_internal(), roots, &roots_size);
+  std::vector<AlgebraicNumber> res;
   for (std::size_t i = 0; i < roots_size; ++i)
   {
     res.emplace_back(roots[i]);
@@ -24,8 +20,4 @@ std::vector<RAN> isolate_real_roots(const UPolynomial& p)
   return res;
 }
 
-}  // namespace libpoly
-}  // namespace nl
-}  // namespace arith
-}  // namespace theory
-}  // namespace CVC4
+}  // namespace poly

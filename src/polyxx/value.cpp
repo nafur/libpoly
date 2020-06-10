@@ -2,25 +2,30 @@
 
 namespace poly {
 
-inline void value_deleter(lp_value_t* ptr) { lp_value_delete(ptr); }
+  Value::Value(lp_value_type_t type, const void* data) {
+    lp_value_construct(get_internal(), type, data);
+  }
 
-Value::Value() : mValue(lp_value_new(LP_VALUE_NONE, nullptr), value_deleter) {}
-Value::Value(const lp_value_t& val)
-    : mValue(lp_value_new_copy(&val), value_deleter)
+Value::Value() {
+  lp_value_construct_none(&mValue);
+}
+Value::Value(const lp_value_t* val)
 {
+  lp_value_construct_copy(get_internal(), val);
 }
-Value::Value(lp_value_t* ptr) : mValue(ptr, value_deleter) {}
-Value::Value(const Value& val) : Value(lp_value_new_copy(val.get_internal())) {}
-Value::Value(Value&& val) : Value(val.release()) {}
+Value::Value(const Value& val)
+{
+  lp_value_construct_copy(get_internal(), val.get_internal());
+}
 
-Value::Value(const Integer& i): Value(lp_value_new(lp_value_type_t::LP_VALUE_INTEGER, i.get_internal())) {
+Value::Value(const Integer& i):  Value(lp_value_type_t::LP_VALUE_INTEGER, i.get_internal()) {
 }
-Value::Value(const AlgebraicNumber& an): Value(lp_value_new(lp_value_type_t::LP_VALUE_ALGEBRAIC, an.get_internal())) {
+Value::Value(const AlgebraicNumber& an): Value(lp_value_type_t::LP_VALUE_ALGEBRAIC, an.get_internal()) {
 }
 
 Value& Value::operator=(const Value& v)
 {
-  mValue.reset(lp_value_new_copy(v.get_internal()));
+  lp_value_assign(get_internal(), v.get_internal());
   return *this;
 }
 Value& Value::operator=(Value&& v)
@@ -28,23 +33,17 @@ Value& Value::operator=(Value&& v)
   mValue = std::move(v.mValue);
   return *this;
 }
-Value& Value::operator=(lp_value_t* v)
-{
-  mValue.reset(v);
-  return *this;
-}
 
-lp_value_t* Value::get_internal() { return mValue.get(); }
-const lp_value_t* Value::get_internal() const { return mValue.get(); }
-lp_value_t* Value::release() { return mValue.release(); }
+lp_value_t* Value::get_internal() { return &mValue; }
+const lp_value_t* Value::get_internal() const { return &mValue; }
 
 Value Value::minus_infty()
 {
-  return Value(lp_value_new(LP_VALUE_MINUS_INFINITY, nullptr));
+  return Value(LP_VALUE_MINUS_INFINITY, nullptr);
 }
 Value Value::plus_infty()
 {
-  return Value(lp_value_new(LP_VALUE_PLUS_INFINITY, nullptr));
+  return Value(LP_VALUE_PLUS_INFINITY, nullptr);
 }
 
 Integer to_integer(const Value& v) {

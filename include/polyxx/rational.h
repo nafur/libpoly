@@ -15,6 +15,7 @@ namespace poly
         lp_rational_t mRat;
 
     public:
+        explicit Rational(const lp_rational_t* r);
         /** Construct as zero. */
         Rational();
         /** Construct as copy of r. */

@@ -19,6 +19,7 @@ class RationalInterval
   lp_rational_interval_t mInterval;
 
  public:
+  explicit RationalInterval(const lp_rational_interval_t* ri);
   RationalInterval();
   RationalInterval(const Rational& a, bool a_open, const Rational& b, bool b_open);
   RationalInterval(const Rational& a, const Rational& b);

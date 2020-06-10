@@ -29,7 +29,7 @@ namespace poly
   }
   Value Assignment::get(const Variable &var) const
   {
-    return *lp_assignment_get_value(get_internal(), var.get_internal());
+    return Value(lp_assignment_get_value(get_internal(), var.get_internal()));
   }
   void Assignment::clear()
   {

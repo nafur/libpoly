@@ -25,7 +25,7 @@ class DyadicRational
   /** Construct as d. */
   DyadicRational(double d);
 
-  DyadicRational(const lp_dyadic_rational_t* dr);
+  explicit DyadicRational(const lp_dyadic_rational_t* dr);
 
   ~DyadicRational();
 

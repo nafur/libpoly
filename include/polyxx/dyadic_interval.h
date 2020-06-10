@@ -18,6 +18,7 @@ class DyadicInterval
   lp_dyadic_interval_t mInterval;
 
  public:
+  explicit DyadicInterval(const lp_dyadic_interval_t* di);
   /** Construct the zero interval [0;0]. */
   DyadicInterval();
   DyadicInterval(const DyadicRational& dr);

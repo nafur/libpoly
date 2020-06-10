@@ -13,15 +13,15 @@ TEST_CASE("rational::constructors")
 
 TEST_CASE("rational::to_double")
 {
-  CHECK(to_double(Rational(0)) == 0.0);
   CHECK(to_double(Rational(1)) == 1.0);
+  CHECK(to_double(Rational(2)) == 2.0);
 }
 
 TEST_CASE("rational::sgn")
 {
   CHECK(sgn(Rational(-10)) == -1);
   CHECK(sgn(Rational(-1)) == -1);
-  CHECK(sgn(Rational(0)) == 0);
+  CHECK(sgn(Rational()) == 0);
   CHECK(sgn(Rational(1)) == 1);
   CHECK(sgn(Rational(10)) == 1);
 }
@@ -179,5 +179,5 @@ TEST_CASE("rational::ceil")
 TEST_CASE("rational::floor")
 {
   CHECK(floor(Rational(1)) == Rational(1));
-  CHECK(floor(Rational(Integer(1), Integer(2))) == Rational(0));
+  CHECK(floor(Rational(Integer(1), Integer(2))) == Rational());
 }

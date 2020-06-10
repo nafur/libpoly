@@ -324,7 +324,7 @@ std::vector<Interval> infeasible_regions(const Polynomial& p,
     }
     else
     {
-      last_value = lp_value_new_copy(&cur.b);
+      last_value = Value(lp_value_new_copy(&cur.b));
       last_open = cur.b_open;
     }
   }

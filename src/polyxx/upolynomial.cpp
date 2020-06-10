@@ -10,7 +10,7 @@ inline void upolynomial_deleter(lp_upolynomial_t* ptr)
   lp_upolynomial_delete(ptr);
 }
 
-UPolynomial::UPolynomial(const std::vector<Integer>& coefficients): mPoly(lp_upolynomial_construct(lp_Z, coefficients.size(), detail::cast_in_place(coefficients.data())), upolynomial_deleter)
+UPolynomial::UPolynomial(const std::vector<Integer>& coefficients): mPoly(lp_upolynomial_construct(lp_Z, coefficients.size(), detail::cast_to(coefficients.data())), upolynomial_deleter)
 {
 }
 /** Create from a lp_upolynomial_t pointer, claiming it's ownership. */
@@ -54,6 +54,10 @@ UPolynomial operator*(const UPolynomial& lhs, const UPolynomial& rhs)
 std::size_t degree(const UPolynomial& p)
 {
   return lp_upolynomial_degree(p.get_internal());
+}
+
+const Integer& leading_coefficient(const UPolynomial& p) {
+  return *detail::cast_from(lp_upolynomial_lead_coeff(p.get_internal()));
 }
 
 std::vector<UPolynomial> square_free_factors(const UPolynomial& p,

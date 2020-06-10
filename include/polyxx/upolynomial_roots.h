@@ -1,28 +1,15 @@
+#pragma once
 
-#ifndef CVC4__THEORY__NLARITH__LIBPOLY__ROOT_ISOLATION_H
-#define CVC4__THEORY__NLARITH__LIBPOLY__ROOT_ISOLATION_H
-
-#include <poly/algebraic_number.h>
-
-#include "assignment.h"
-#include "polynomial.h"
+#include "algebraic_number.h"
+#include "rational_interval.h"
 #include "upolynomial.h"
-#include "ran.h"
-#include "value.h"
 
-namespace CVC4 {
-namespace theory {
-namespace arith {
-namespace nl {
-namespace libpoly {
+namespace poly {
+
+std::size_t count_real_roots(const UPolynomial& p, const RationalInterval& ri);
 
 /** Isolate the real roots of a UPolynomial. */
-std::vector<RAN> isolate_real_roots(const UPolynomial& p);
+std::vector<AlgebraicNumber> isolate_real_roots(const UPolynomial& p);
 
-}  // namespace libpoly
-}  // namespace nl
-}  // namespace arith
-}  // namespace theory
-}  // namespace CVC4
+}  // namespace poly
 
-#endif

@@ -53,11 +53,17 @@ class Integer
 
 static_assert(sizeof(Integer) == sizeof(lp_integer_t));
 namespace detail {
-  inline lp_integer_t* cast_in_place(Integer* i) {
+  inline lp_integer_t* cast_to(Integer* i) {
     return reinterpret_cast<lp_integer_t*>(i);
   }
-  inline const lp_integer_t* cast_in_place(const Integer* i) {
+  inline const lp_integer_t* cast_to(const Integer* i) {
     return reinterpret_cast<const lp_integer_t*>(i);
+  }
+  inline Integer* cast_from(lp_integer_t* i) {
+    return reinterpret_cast<Integer*>(i);
+  }
+  inline const Integer* cast_from(const lp_integer_t* i) {
+    return reinterpret_cast<const Integer*>(i);
   }
 }
 
