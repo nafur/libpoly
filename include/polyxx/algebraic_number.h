@@ -19,6 +19,7 @@ class AlgebraicNumber
   lp_algebraic_number_t mValue;
 
  public:
+  explicit AlgebraicNumber(const lp_algebraic_number_t* an);
   /** Construct as zero. */
   AlgebraicNumber();
   /** Copy from the given AlgebraicNumber. */
@@ -33,12 +34,11 @@ class AlgebraicNumber
   AlgebraicNumber(UPolynomial&& poly, const DyadicInterval& di);
   /** Construct from a defining polynomial and an isolating interval. */
   AlgebraicNumber(const UPolynomial& poly, const DyadicInterval& di);
-  /** Construct from a lp_algebraic_number_t, copying its contents. */
-  AlgebraicNumber(const lp_algebraic_number_t& an);
   /** Custom destructor. */
   ~AlgebraicNumber();
   /** Assign from the given AlgebraicNumber. */
-  AlgebraicNumber& operator=(AlgebraicNumber an);
+  AlgebraicNumber& operator=(const AlgebraicNumber& an);
+  AlgebraicNumber& operator=(AlgebraicNumber&& an);
 
   /** Get a non-const pointer to the internal lp_algebraic_number_t. Handle with
    * care! */
@@ -46,6 +46,23 @@ class AlgebraicNumber
   /** Get a const pointer to the internal lp_algebraic_number_t. */
   const lp_algebraic_number_t* get_internal() const;
 };
+
+static_assert(sizeof(AlgebraicNumber) == sizeof(lp_algebraic_number_t));
+namespace detail {
+  inline lp_algebraic_number_t* cast_to(AlgebraicNumber* i) {
+    return reinterpret_cast<lp_algebraic_number_t*>(i);
+  }
+  inline const lp_algebraic_number_t* cast_to(const AlgebraicNumber* i) {
+    return reinterpret_cast<const lp_algebraic_number_t*>(i);
+  }
+  inline AlgebraicNumber* cast_from(lp_algebraic_number_t* i) {
+    return reinterpret_cast<AlgebraicNumber*>(i);
+  }
+  inline const AlgebraicNumber* cast_from(const lp_algebraic_number_t* i) {
+    return reinterpret_cast<const AlgebraicNumber*>(i);
+  }
+}
+
 /** Stream the given AlgebraicNumber to an output stream. */
 std::ostream& operator<<(std::ostream& os, const AlgebraicNumber& an);
 

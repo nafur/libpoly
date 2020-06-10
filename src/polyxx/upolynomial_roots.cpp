@@ -10,7 +10,7 @@ std::vector<AlgebraicNumber> isolate_real_roots(const UPolynomial& p)
   std::vector<AlgebraicNumber> res;
   for (std::size_t i = 0; i < roots_size; ++i)
   {
-    res.emplace_back(roots[i]);
+    res.emplace_back(&roots[i]);
   }
   for (std::size_t i = 0; i < roots_size; ++i)
   {

@@ -103,10 +103,10 @@ bool is_infinity(const Value& v);
 
 
 double to_double(const Value& v);
-AlgebraicNumber to_algebraic_number(const Value& v);
-DyadicRational to_dyadic_rational(const Value& v);
-Integer to_integer(const Value& v);
-Rational to_rational(const Value& v);
+const AlgebraicNumber& to_algebraic_number(const Value& v);
+const DyadicRational& to_dyadic_rational(const Value& v);
+const Integer& to_integer(const Value& v);
+const Rational& to_rational(const Value& v);
 
 Integer ceil(const Value& v);
 Integer floor(const Value& v);
