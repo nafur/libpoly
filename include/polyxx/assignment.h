@@ -1,21 +1,19 @@
 #pragma once
 
+#include <iosfwd>
+#include <memory>
+
+#include "../assignment.h"
 #include "context.h"
 #include "value.h"
 #include "variable.h"
-
-#include "../assignment.h"
-
-#include <iosfwd>
-#include <memory>
 
 namespace poly {
 
 /**
  * Implements a wrapper for lp_assignment_t from libpoly.
  */
-class Assignment
-{
+class Assignment {
   /** The actual assignment. */
   lp_assignment_t mAssignment;
 
@@ -38,7 +36,7 @@ class Assignment
   void unset(const Variable& var);
   /** Retrieve a value from the Assignment. */
   Value get(const Variable& var) const;
-  //RationalInterval get_approximate(const Variable& var) const;
+  // RationalInterval get_approximate(const Variable& var) const;
   /** Clear the assignment. */
   void clear();
 };

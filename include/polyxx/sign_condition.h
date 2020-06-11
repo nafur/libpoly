@@ -1,13 +1,12 @@
 #pragma once
 
-#include "../sign_condition.h"
-
 #include <iosfwd>
+
+#include "../sign_condition.h"
 
 namespace poly {
 
-enum class SignCondition
-{
+enum class SignCondition {
   LT = LP_SGN_LT_0,
   LE = LP_SGN_LE_0,
   EQ = LP_SGN_EQ_0,

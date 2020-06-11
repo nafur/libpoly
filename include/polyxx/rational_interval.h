@@ -1,21 +1,20 @@
 #pragma once
 
-#include "../rational_interval.h"
+#include <iosfwd>
 
+#include "../rational_interval.h"
 #include "algebraic_number.h"
 #include "dyadic_interval.h"
+#include "integer.h"
 #include "rational.h"
 #include "value.h"
-
-#include <iosfwd>
 
 namespace poly {
 
 /**
  * Implements a wrapper for lp_rational_interval_t from libpoly.
  */
-class RationalInterval
-{
+class RationalInterval {
  private:
   /** The actual interval. */
   lp_rational_interval_t mInterval;
@@ -23,11 +22,13 @@ class RationalInterval
  public:
   explicit RationalInterval(const lp_rational_interval_t* ri);
   RationalInterval();
-  RationalInterval(const Rational& a, bool a_open, const Rational& b, bool b_open);
+  RationalInterval(const Rational& a, bool a_open, const Rational& b,
+                   bool b_open);
   RationalInterval(const Rational& a, const Rational& b);
   RationalInterval(const Rational& a);
   RationalInterval(const RationalInterval& i);
-  RationalInterval(const DyadicRational& a, bool a_open, const DyadicRational& b, bool b_open);
+  RationalInterval(const DyadicRational& a, bool a_open,
+                   const DyadicRational& b, bool b_open);
   RationalInterval(const DyadicRational& a, const DyadicRational& b);
   RationalInterval(const DyadicInterval& i);
   ~RationalInterval();

@@ -13,8 +13,7 @@ namespace poly {
 /**
  * Implements a wrapper for lp_algebraic_number_t from libpoly.
  */
-class AlgebraicNumber
-{
+class AlgebraicNumber {
   /** The actual algebraic number. */
   lp_algebraic_number_t mValue;
 
@@ -50,20 +49,16 @@ class AlgebraicNumber
 static_assert(sizeof(AlgebraicNumber) == sizeof(lp_algebraic_number_t),
               "Please check the size of AlgebraicNumber.");
 namespace detail {
-inline lp_algebraic_number_t* cast_to(AlgebraicNumber* i)
-{
+inline lp_algebraic_number_t* cast_to(AlgebraicNumber* i) {
   return reinterpret_cast<lp_algebraic_number_t*>(i);
 }
-inline const lp_algebraic_number_t* cast_to(const AlgebraicNumber* i)
-{
+inline const lp_algebraic_number_t* cast_to(const AlgebraicNumber* i) {
   return reinterpret_cast<const lp_algebraic_number_t*>(i);
 }
-inline AlgebraicNumber* cast_from(lp_algebraic_number_t* i)
-{
+inline AlgebraicNumber* cast_from(lp_algebraic_number_t* i) {
   return reinterpret_cast<AlgebraicNumber*>(i);
 }
-inline const AlgebraicNumber* cast_from(const lp_algebraic_number_t* i)
-{
+inline const AlgebraicNumber* cast_from(const lp_algebraic_number_t* i) {
   return reinterpret_cast<const AlgebraicNumber*>(i);
 }
 }  // namespace detail

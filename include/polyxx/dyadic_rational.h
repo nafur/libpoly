@@ -8,8 +8,7 @@
 
 namespace poly {
 
-class DyadicRational
-{
+class DyadicRational {
   lp_dyadic_rational_t mDRat;
 
  public:

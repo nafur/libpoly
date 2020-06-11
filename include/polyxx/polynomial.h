@@ -1,9 +1,12 @@
 #pragma once
 
+#include <cassert>
+#include <iosfwd>
+#include <vector>
+
 #include "../monomial.h"
 #include "../polynomial.h"
 #include "../variable_list.h"
-
 #include "assignment.h"
 #include "integer.h"
 #include "interval.h"
@@ -11,17 +14,12 @@
 #include "value.h"
 #include "variable.h"
 
-#include <cassert>
-#include <iosfwd>
-#include <vector>
-
 namespace poly {
 
 /**
  * Implements a wrapper for lp_polynomial_t from libpoly.
  */
-class Polynomial
-{
+class Polynomial {
   friend std::ostream& operator<<(std::ostream& os, const Polynomial& p);
 
   /** The actual polynomial. */
@@ -30,8 +28,7 @@ class Polynomial
  public:
   Polynomial(lp_polynomial_t* poly);
   Polynomial(const lp_polynomial_t* poly);
-  
-  
+
   /** Construct a zero polynomial. */
   Polynomial(const lp_polynomial_context_t* c);
   Polynomial(const Context& c);
@@ -41,9 +38,10 @@ class Polynomial
   Polynomial(Variable v) : Polynomial(Context::get_context(), v) {}
   /** Construct i * v^n. */
   Polynomial(const Context& c, Integer i, Variable v, unsigned n);
-  Polynomial(Integer i, Variable v, unsigned n) : Polynomial(Context::get_context(), i, v, n) {}
+  Polynomial(Integer i, Variable v, unsigned n)
+      : Polynomial(Context::get_context(), i, v, n) {}
   Polynomial(const Context& c, Integer i);
-  Polynomial(Integer i) : Polynomial(Context::get_context(), i) {};
+  Polynomial(Integer i) : Polynomial(Context::get_context(), i){};
   /** Copy from the given Polynomial. */
   Polynomial(const Polynomial& p);
 
@@ -58,17 +56,16 @@ class Polynomial
 };
 
 namespace detail {
-  inline const lp_polynomial_context_t* context(const Polynomial& p) {
-    return lp_polynomial_get_context(p.get_internal());
-  }
-  inline const lp_polynomial_context_t* context(const Polynomial& lhs, const Polynomial& rhs) {
-    assert(lp_polynomial_context_equal(context(lhs), context(rhs)) == 0);
-    (void)rhs;
-    return context(lhs);
-  }
+inline const lp_polynomial_context_t* context(const Polynomial& p) {
+  return lp_polynomial_get_context(p.get_internal());
 }
-
-
+inline const lp_polynomial_context_t* context(const Polynomial& lhs,
+                                              const Polynomial& rhs) {
+  assert(lp_polynomial_context_equal(context(lhs), context(rhs)) == 0);
+  (void)rhs;
+  return context(lhs);
+}
+}  // namespace detail
 
 /** Stream the given Polynomial to an output stream. */
 std::ostream& operator<<(std::ostream& os, const Polynomial& p);
@@ -137,28 +134,26 @@ Polynomial discriminant(const Polynomial& p);
  */
 std::vector<Polynomial> square_free_factors(const Polynomial& p);
 
-
 /** Isolate the real roots of a Polynomial with respect to an Assignment for all
  * but the main variable. */
 std::vector<Value> isolate_real_roots(const Polynomial& p, const Assignment& a);
 
-bool evaluate_polynomial_constraint(const Polynomial& p,
-                                    const Assignment& a,
+bool evaluate_polynomial_constraint(const Polynomial& p, const Assignment& a,
                                     SignCondition sc);
 
 std::vector<Interval> infeasible_regions(const Polynomial& p,
-                                         const Assignment& a,
-                                         SignCondition sc);
+                                         const Assignment& a, SignCondition sc);
 
 int sgn(const Polynomial& p, const Assignment& a);
 
 /** Utility class to collect all variables from a sequence of polynomials.
  */
 class VariableCollector {
-private:
+ private:
   /** Internal variable list. */
   lp_variable_list_t mVarList;
-public:
+
+ public:
   /** Default constructor, create the variable list. */
   VariableCollector();
   /** Destructs the variable list. */

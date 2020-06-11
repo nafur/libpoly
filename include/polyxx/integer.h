@@ -14,8 +14,7 @@ class Rational;
 /**
  * Implements a wrapper for lp_integer_t from libpoly.
  */
-class Integer
-{
+class Integer {
   /** The actual integer. */
   lp_integer_t mInt;
 
@@ -52,21 +51,22 @@ class Integer
   const lp_integer_t* get_internal() const;
 };
 
-static_assert(sizeof(Integer) == sizeof(lp_integer_t), "Please check the size of Integer.");
+static_assert(sizeof(Integer) == sizeof(lp_integer_t),
+              "Please check the size of Integer.");
 namespace detail {
-  inline lp_integer_t* cast_to(Integer* i) {
-    return reinterpret_cast<lp_integer_t*>(i);
-  }
-  inline const lp_integer_t* cast_to(const Integer* i) {
-    return reinterpret_cast<const lp_integer_t*>(i);
-  }
-  inline Integer* cast_from(lp_integer_t* i) {
-    return reinterpret_cast<Integer*>(i);
-  }
-  inline const Integer* cast_from(const lp_integer_t* i) {
-    return reinterpret_cast<const Integer*>(i);
-  }
+inline lp_integer_t* cast_to(Integer* i) {
+  return reinterpret_cast<lp_integer_t*>(i);
 }
+inline const lp_integer_t* cast_to(const Integer* i) {
+  return reinterpret_cast<const lp_integer_t*>(i);
+}
+inline Integer* cast_from(lp_integer_t* i) {
+  return reinterpret_cast<Integer*>(i);
+}
+inline const Integer* cast_from(const lp_integer_t* i) {
+  return reinterpret_cast<const Integer*>(i);
+}
+}  // namespace detail
 
 /** Stream the given Integer to an output stream. */
 std::ostream& operator<<(std::ostream& os, const Integer& i);
@@ -134,17 +134,13 @@ Integer pow(IntegerRing& ir, const Integer& lhs, unsigned rhs);
 Integer sqrt(const Integer& i);
 
 Integer& add_mul(Integer& lhs, const Integer& a, const Integer& b);
-Integer& add_mul(IntegerRing& ir,
-                 Integer& lhs,
-                 const Integer& a,
+Integer& add_mul(IntegerRing& ir, Integer& lhs, const Integer& a,
                  const Integer& b);
 Integer& add_mul(Integer& lhs, const Integer& a, int b);
 Integer& add_mul(IntegerRing& ir, Integer& lhs, const Integer& a, int b);
 
 Integer& sub_mul(Integer& lhs, const Integer& a, const Integer& b);
-Integer& sub_mul(IntegerRing& ir,
-                 Integer& lhs,
-                 const Integer& a,
+Integer& sub_mul(IntegerRing& ir, Integer& lhs, const Integer& a,
                  const Integer& b);
 
 Integer operator/(const Integer& lhs, const Integer& rhs);
@@ -180,8 +176,7 @@ Integer lcm(const Integer& a, const Integer& b);
 
 namespace std {
 template <>
-struct hash<poly::Integer>
-{
+struct hash<poly::Integer> {
   std::size_t operator()(const poly::Integer& i) const { return poly::hash(i); }
 };
 }  // namespace std

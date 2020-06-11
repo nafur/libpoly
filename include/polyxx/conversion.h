@@ -19,8 +19,7 @@ namespace libpoly {
 
 /** Bijective mapping between CVC4 variables and libpoly variables.
  */
-struct VariableMapper
-{
+struct VariableMapper {
   /** A mapping from CVC4 variables to libpoly variables.
    */
   std::map<CVC4::Node, libpoly::Variable> mVarCVCpoly;

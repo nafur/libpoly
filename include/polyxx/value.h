@@ -1,21 +1,19 @@
 #pragma once
 
-#include "../value.h"
+#include <iosfwd>
 
+#include "../value.h"
 #include "algebraic_number.h"
 #include "dyadic_rational.h"
 #include "integer.h"
 #include "rational.h"
-
-#include <iosfwd>
 
 namespace poly {
 
 /**
  * Implements a wrapper for lp_value_t from libpoly.
  */
-class Value
-{
+class Value {
   /** The actual value. */
   lp_value_t mValue;
 
@@ -39,52 +37,51 @@ class Value
   Value& operator=(const Value& v);
   /** Move from the given Value. */
   Value& operator=(Value&& v);
-  
+
   /** Get a non-const pointer to the internal lp_value_t. Handle with care! */
   lp_value_t* get_internal();
   /** Get a const pointer to the internal lp_value_t. */
   const lp_value_t* get_internal() const;
-  
+
   /** Return -infty */
   static Value minus_infty();
   /** Return +infty */
   static Value plus_infty();
 };
 
-static_assert(sizeof(Value) == sizeof(lp_value_t), "Please check the size of Value.");
+static_assert(sizeof(Value) == sizeof(lp_value_t),
+              "Please check the size of Value.");
 namespace detail {
-  inline lp_value_t* cast_to(Value* i) {
-    return reinterpret_cast<lp_value_t*>(i);
-  }
-  inline const lp_value_t* cast_to(const Value* i) {
-    return reinterpret_cast<const lp_value_t*>(i);
-  }
-  inline Value* cast_from(lp_value_t* i) {
-    return reinterpret_cast<Value*>(i);
-  }
-  inline const Value* cast_from(const lp_value_t* i) {
-    return reinterpret_cast<const Value*>(i);
-  }
+inline lp_value_t* cast_to(Value* i) {
+  return reinterpret_cast<lp_value_t*>(i);
 }
+inline const lp_value_t* cast_to(const Value* i) {
+  return reinterpret_cast<const lp_value_t*>(i);
+}
+inline Value* cast_from(lp_value_t* i) { return reinterpret_cast<Value*>(i); }
+inline const Value* cast_from(const lp_value_t* i) {
+  return reinterpret_cast<const Value*>(i);
+}
+}  // namespace detail
 
 void swap(Value& lhs, Value& rhs);
 
 // RationalInterval approximate(const Value& v);
- 
+
 bool operator==(const Value& lhs, const Value& rhs);
 bool operator!=(const Value& lhs, const Value& rhs);
 bool operator<(const Value& lhs, const Value& rhs);
 bool operator<=(const Value& lhs, const Value& rhs);
 bool operator>(const Value& lhs, const Value& rhs);
 bool operator>=(const Value& lhs, const Value& rhs);
- 
+
 bool operator==(const Value& lhs, const Rational& rhs);
 bool operator!=(const Value& lhs, const Rational& rhs);
 bool operator<(const Value& lhs, const Rational& rhs);
 bool operator<=(const Value& lhs, const Rational& rhs);
 bool operator>(const Value& lhs, const Rational& rhs);
 bool operator>=(const Value& lhs, const Rational& rhs);
- 
+
 bool operator==(const Rational& lhs, const Value& rhs);
 bool operator!=(const Rational& lhs, const Value& rhs);
 bool operator<(const Rational& lhs, const Value& rhs);
@@ -101,7 +98,6 @@ bool is_rational(const Value& v);
 bool is_integer(const Value& v);
 bool is_infinity(const Value& v);
 
-
 double to_double(const Value& v);
 const AlgebraicNumber& to_algebraic_number(const Value& v);
 const DyadicRational& to_dyadic_rational(const Value& v);
@@ -114,15 +110,11 @@ Integer floor(const Value& v);
 Integer numerator(const Value& v);
 Integer denominator(const Value& v);
 
-Value value_between(const lp_value_t* lhs,
-                     bool l_strict,
-                     const lp_value_t* rhs,
-                     bool r_strict);
+Value value_between(const lp_value_t* lhs, bool l_strict, const lp_value_t* rhs,
+                    bool r_strict);
 
-Value value_between(const Value& lhs,
-                     bool l_strict,
-                     const Value& rhs,
-                     bool r_strict);
+Value value_between(const Value& lhs, bool l_strict, const Value& rhs,
+                    bool r_strict);
 
 int approximate_size(const Value& lower, const Value& upper);
 

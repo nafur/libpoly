@@ -1,25 +1,23 @@
 #pragma once
 
+#include <iosfwd>
+#include <utility>
+#include <vector>
+
 #include "../integer.h"
 #include "../upolynomial.h"
-
 #include "dyadic_rational.h"
 #include "integer.h"
 #include "integer_ring.h"
 #include "rational.h"
 #include "variable.h"
 
-#include <iosfwd>
-#include <utility>
-#include <vector>
-
 namespace poly {
 
 /**
  * Implements a wrapper for lp_upolynomial_t from libpoly.
  */
-class UPolynomial
-{
+class UPolynomial {
   /** The actual univariate polynomial. */
   deleting_unique_ptr<lp_upolynomial_t> mPoly;
 
@@ -38,7 +36,6 @@ class UPolynomial
   explicit UPolynomial(lp_upolynomial_t* poly);
   explicit UPolynomial(const lp_upolynomial_t* poly);
 
-  
   /** Get a non-const pointer to the internal lp_upolynomial_t. Handle with
    * care! */
   lp_upolynomial_t* get_internal();
@@ -102,16 +99,20 @@ UPolynomial div_degrees(const UPolynomial& lhs, long rhs);
 UPolynomial div_exact(const UPolynomial& lhs, const UPolynomial& rhs);
 UPolynomial div_exact(const UPolynomial& lhs, const Integer& rhs);
 UPolynomial rem_exact(const UPolynomial& lhs, const UPolynomial& rhs);
-std::pair<UPolynomial,UPolynomial> div_rem_exact(const UPolynomial& lhs, const UPolynomial& rhs);
-std::pair<UPolynomial,UPolynomial> div_rem_pseudo(const UPolynomial& lhs, const UPolynomial& rhs);
+std::pair<UPolynomial, UPolynomial> div_rem_exact(const UPolynomial& lhs,
+                                                  const UPolynomial& rhs);
+std::pair<UPolynomial, UPolynomial> div_rem_pseudo(const UPolynomial& lhs,
+                                                   const UPolynomial& rhs);
 
 Integer content(const UPolynomial& p);
 void make_primitive(const UPolynomial& p);
 UPolynomial primitive_part(const UPolynomial& p);
 
 UPolynomial gcd(const UPolynomial& lhs, const UPolynomial& rhs);
-UPolynomial extended_gcd(const UPolynomial& lhs, const UPolynomial& rhs, UPolynomial& u, UPolynomial& v);
-void solve_bezout(const UPolynomial& p, const UPolynomial& q, const UPolynomial& r, UPolynomial& u, UPolynomial& v);
+UPolynomial extended_gcd(const UPolynomial& lhs, const UPolynomial& rhs,
+                         UPolynomial& u, UPolynomial& v);
+void solve_bezout(const UPolynomial& p, const UPolynomial& q,
+                  const UPolynomial& r, UPolynomial& u, UPolynomial& v);
 
 /**
  * Compute a square-free factorization of a univariate polynomial.

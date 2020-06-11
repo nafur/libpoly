@@ -1,21 +1,19 @@
 #pragma once
 
+#include <iosfwd>
+#include <memory>
+
+#include "../assignment.h"
 #include "context.h"
 #include "interval.h"
 #include "variable.h"
-
-#include "../assignment.h"
-
-#include <iosfwd>
-#include <memory>
 
 namespace poly {
 
 /**
  * Implements a wrapper for lp_interval_assignment_t from libpoly.
  */
-class IntervalAssignment
-{
+class IntervalAssignment {
   /** The actual assignment. */
   lp_interval_assignment_t mAssignment;
 
@@ -26,7 +24,8 @@ class IntervalAssignment
   IntervalAssignment() : IntervalAssignment(Context::get_context()) {}
   ~IntervalAssignment();
 
-  /** Get a non-const pointer to the internal lp_interval_assignment_t. Handle with care!
+  /** Get a non-const pointer to the internal lp_interval_assignment_t. Handle
+   * with care!
    */
   lp_interval_assignment_t* get_internal();
   /** Get a const pointer to the internal lp_interval_assignment_t. */

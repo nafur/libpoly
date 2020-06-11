@@ -10,8 +10,7 @@ namespace poly {
 
 class Integer;
 
-class IntegerRing
-{
+class IntegerRing {
   deleting_unique_ptr<lp_int_ring_t> mRing;
 
  public:

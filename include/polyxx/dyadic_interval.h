@@ -11,8 +11,7 @@ namespace poly {
 /**
  * Implements a wrapper for lp_dyadic_interval_t from libpoly.
  */
-class DyadicInterval
-{
+class DyadicInterval {
  private:
   /** The actual interval. */
   lp_dyadic_interval_t mInterval;
@@ -23,9 +22,7 @@ class DyadicInterval
   DyadicInterval();
   DyadicInterval(const DyadicRational& dr);
   DyadicInterval(const DyadicRational& a, const DyadicRational& b);
-  DyadicInterval(const DyadicRational& a,
-                 bool a_open,
-                 const DyadicRational& b,
+  DyadicInterval(const DyadicRational& a, bool a_open, const DyadicRational& b,
                  bool b_open);
   /** Construct an open interval from the given two integers. */
   DyadicInterval(const Integer& a, const Integer& b);

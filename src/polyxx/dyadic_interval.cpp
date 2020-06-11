@@ -4,78 +4,58 @@
 
 namespace poly {
 
-DyadicInterval::DyadicInterval()
-{
+DyadicInterval::DyadicInterval() {
   lp_dyadic_interval_construct_zero(&mInterval);
 }
-DyadicInterval::DyadicInterval(const DyadicRational& dr)
-{
+DyadicInterval::DyadicInterval(const DyadicRational& dr) {
   lp_dyadic_interval_construct_point(&mInterval, dr.get_internal());
 }
 DyadicInterval::DyadicInterval(const DyadicRational& a, const DyadicRational& b)
-    : DyadicInterval(a, true, b, true)
-{
-}
-DyadicInterval::DyadicInterval(const DyadicRational& a,
-                               bool a_open,
-                               const DyadicRational& b,
-                               bool b_open)
-{
-  lp_dyadic_interval_construct(
-      &mInterval, a.get_internal(), a_open, b.get_internal(), b_open);
+    : DyadicInterval(a, true, b, true) {}
+DyadicInterval::DyadicInterval(const DyadicRational& a, bool a_open,
+                               const DyadicRational& b, bool b_open) {
+  lp_dyadic_interval_construct(&mInterval, a.get_internal(), a_open,
+                               b.get_internal(), b_open);
 }
 DyadicInterval::DyadicInterval(const Integer& a, const Integer& b)
-    : DyadicInterval(a, true, b, true)
-{
-}
-DyadicInterval::DyadicInterval(const Integer& a,
-                               bool a_open,
-                               const Integer& b,
-                               bool b_open)
-{
-  lp_dyadic_interval_construct_from_integer(
-      &mInterval, a.get_internal(), a_open, b.get_internal(), b_open);
+    : DyadicInterval(a, true, b, true) {}
+DyadicInterval::DyadicInterval(const Integer& a, bool a_open, const Integer& b,
+                               bool b_open) {
+  lp_dyadic_interval_construct_from_integer(&mInterval, a.get_internal(),
+                                            a_open, b.get_internal(), b_open);
 }
 
-DyadicInterval::DyadicInterval(const DyadicInterval& i)
-{
+DyadicInterval::DyadicInterval(const DyadicInterval& i) {
   lp_dyadic_interval_construct_copy(&mInterval, i.get_internal());
 }
 
 DyadicInterval::~DyadicInterval() { lp_dyadic_interval_destruct(&mInterval); }
 
-DyadicInterval& DyadicInterval::operator=(DyadicInterval i)
-{
+DyadicInterval& DyadicInterval::operator=(DyadicInterval i) {
   std::swap(mInterval, i.mInterval);
   return *this;
 }
 
 lp_dyadic_interval_t* DyadicInterval::get_internal() { return &mInterval; }
 
-const lp_dyadic_interval_t* DyadicInterval::get_internal() const
-{
+const lp_dyadic_interval_t* DyadicInterval::get_internal() const {
   return &mInterval;
 }
 
-void DyadicInterval::collapse(const DyadicRational& dr)
-{
+void DyadicInterval::collapse(const DyadicRational& dr) {
   lp_dyadic_interval_collapse_to(get_internal(), dr.get_internal());
 }
-void DyadicInterval::set_lower(const DyadicRational& dr, bool open)
-{
+void DyadicInterval::set_lower(const DyadicRational& dr, bool open) {
   lp_dyadic_interval_set_a(get_internal(), dr.get_internal(), open);
 }
-void DyadicInterval::set_upper(const DyadicRational& dr, bool open)
-{
+void DyadicInterval::set_upper(const DyadicRational& dr, bool open) {
   lp_dyadic_interval_set_b(get_internal(), dr.get_internal(), open);
 }
-void DyadicInterval::scale(int n)
-{
+void DyadicInterval::scale(int n) {
   lp_dyadic_interval_scale(get_internal(), n);
 }
 
-std::ostream& operator<<(std::ostream& os, const DyadicInterval& i)
-{
+std::ostream& operator<<(std::ostream& os, const DyadicInterval& i) {
   os << (i.get_internal()->a_open ? "( " : "[ ");
   os << lp_dyadic_rational_to_string(&(i.get_internal()->a)) << " ; "
      << lp_dyadic_rational_to_string(&(i.get_internal()->b));
@@ -92,7 +72,8 @@ bool operator==(const DyadicInterval& lhs, const DyadicInterval& rhs) {
 }
 
 bool contains(const DyadicInterval& lhs, const DyadicRational& rhs) {
-  return lp_dyadic_interval_contains_dyadic_rational(lhs.get_internal(), rhs.get_internal());
+  return lp_dyadic_interval_contains_dyadic_rational(lhs.get_internal(),
+                                                     rhs.get_internal());
 }
 
 bool contains_zero(const DyadicInterval& lhs) {
@@ -116,6 +97,5 @@ int log_size(const DyadicInterval& di) {
 int sgn(const DyadicInterval& di) {
   return lp_dyadic_interval_sgn(di.get_internal());
 }
-
 
 }  // namespace poly

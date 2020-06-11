@@ -12,4 +12,3 @@ std::size_t count_real_roots(const UPolynomial& p, const RationalInterval& ri);
 std::vector<AlgebraicNumber> isolate_real_roots(const UPolynomial& p);
 
 }  // namespace poly
-

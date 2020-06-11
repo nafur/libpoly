@@ -1,10 +1,9 @@
 #include "polyxx/integer_ring.h"
 
-#include "polyxx/integer.h"
-
 #include <iostream>
 #include <utility>
 
+#include "polyxx/integer.h"
 
 namespace poly {
 
@@ -16,20 +15,17 @@ void int_ring_deleter(lp_int_ring_t* ptr) { lp_int_ring_detach(ptr); }
 IntegerRing::IntegerRing() : mRing(lp_Z, int_ring_deleter) {}
 
 IntegerRing::IntegerRing(const Integer& m, bool is_prime)
-    : mRing(lp_int_ring_create(m.get_internal(), is_prime ? 1 : 0), int_ring_deleter)
-{
-}
+    : mRing(lp_int_ring_create(m.get_internal(), is_prime ? 1 : 0),
+            int_ring_deleter) {}
 
 lp_int_ring_t* IntegerRing::get_internal() { return mRing.get(); }
 const lp_int_ring_t* IntegerRing::get_internal() const { return mRing.get(); }
 
-bool operator==(const IntegerRing& lhs, const IntegerRing& rhs)
-{
+bool operator==(const IntegerRing& lhs, const IntegerRing& rhs) {
   return lp_int_ring_equal(lhs.get_internal(), rhs.get_internal());
 }
 
-std::ostream& operator<<(std::ostream& os, const IntegerRing& ir)
-{
+std::ostream& operator<<(std::ostream& os, const IntegerRing& ir) {
   return os << lp_int_ring_to_string(ir.get_internal());
 }
 

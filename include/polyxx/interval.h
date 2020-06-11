@@ -10,8 +10,7 @@ namespace poly {
 /**
  * Implements a wrapper for lp_interval_t from libpoly.
  */
-class Interval
-{
+class Interval {
  private:
   /** The actual interval. */
   lp_interval_t mInterval;
@@ -41,7 +40,8 @@ class Interval
   static Interval full();
 };
 
-static_assert(sizeof(Interval) == sizeof(lp_interval_t), "Please check the size of Interval.");
+static_assert(sizeof(Interval) == sizeof(lp_interval_t),
+              "Please check the size of Interval.");
 
 void swap(Interval& lhs, Interval& rhs);
 
