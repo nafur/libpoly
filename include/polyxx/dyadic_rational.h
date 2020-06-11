@@ -23,7 +23,7 @@ namespace poly {
     /** Move from a DyadicRational. */
     DyadicRational(DyadicRational&& dr);
 
-    /** Construct as a * 2^n. */
+    /** Construct as a / 2^n. */
     DyadicRational(long a, unsigned long n);
     /** Construct from an Integer. */
     DyadicRational(const Integer& i);
