@@ -47,21 +47,26 @@ class AlgebraicNumber
   const lp_algebraic_number_t* get_internal() const;
 };
 
-static_assert(sizeof(AlgebraicNumber) == sizeof(lp_algebraic_number_t), "Please check the size of AlgebraicNumber.");
+static_assert(sizeof(AlgebraicNumber) == sizeof(lp_algebraic_number_t),
+              "Please check the size of AlgebraicNumber.");
 namespace detail {
-  inline lp_algebraic_number_t* cast_to(AlgebraicNumber* i) {
-    return reinterpret_cast<lp_algebraic_number_t*>(i);
-  }
-  inline const lp_algebraic_number_t* cast_to(const AlgebraicNumber* i) {
-    return reinterpret_cast<const lp_algebraic_number_t*>(i);
-  }
-  inline AlgebraicNumber* cast_from(lp_algebraic_number_t* i) {
-    return reinterpret_cast<AlgebraicNumber*>(i);
-  }
-  inline const AlgebraicNumber* cast_from(const lp_algebraic_number_t* i) {
-    return reinterpret_cast<const AlgebraicNumber*>(i);
-  }
+inline lp_algebraic_number_t* cast_to(AlgebraicNumber* i)
+{
+  return reinterpret_cast<lp_algebraic_number_t*>(i);
 }
+inline const lp_algebraic_number_t* cast_to(const AlgebraicNumber* i)
+{
+  return reinterpret_cast<const lp_algebraic_number_t*>(i);
+}
+inline AlgebraicNumber* cast_from(lp_algebraic_number_t* i)
+{
+  return reinterpret_cast<AlgebraicNumber*>(i);
+}
+inline const AlgebraicNumber* cast_from(const lp_algebraic_number_t* i)
+{
+  return reinterpret_cast<const AlgebraicNumber*>(i);
+}
+}  // namespace detail
 
 /** Stream the given AlgebraicNumber to an output stream. */
 std::ostream& operator<<(std::ostream& os, const AlgebraicNumber& an);

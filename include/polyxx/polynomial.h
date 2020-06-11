@@ -63,6 +63,7 @@ namespace detail {
   }
   inline const lp_polynomial_context_t* context(const Polynomial& lhs, const Polynomial& rhs) {
     assert(lp_polynomial_context_equal(context(lhs), context(rhs)) == 0);
+    (void)rhs;
     return context(lhs);
   }
 }
