@@ -7,6 +7,9 @@ Value::Value(lp_value_type_t type, const void* data) {
 }
 
 Value::Value() { lp_value_construct_none(&mValue); }
+Value::Value(long i) {
+  lp_value_construct_int(get_internal(), i);
+}
 Value::Value(const lp_value_t* val) {
   lp_value_construct_copy(get_internal(), val);
 }

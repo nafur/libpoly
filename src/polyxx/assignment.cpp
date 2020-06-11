@@ -17,8 +17,11 @@ void Assignment::set(const Variable &var, const Value &value) {
 void Assignment::unset(const Variable &var) {
   lp_assignment_set_value(get_internal(), var.get_internal(), nullptr);
 }
-Value Assignment::get(const Variable &var) const {
-  return Value(lp_assignment_get_value(get_internal(), var.get_internal()));
+bool Assignment::has(const Variable& var) const {
+  return lp_assignment_get_value(get_internal(), var.get_internal())->type != LP_VALUE_NONE;
+}
+const Value& Assignment::get(const Variable &var) const {
+  return *detail::cast_from(lp_assignment_get_value(get_internal(), var.get_internal()));
 }
 void Assignment::clear() {
   const lp_variable_db_t *var_db = get_internal()->var_db;

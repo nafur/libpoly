@@ -30,12 +30,14 @@ class Assignment {
   /** Get a const pointer to the internal lp_assignment_t. */
   const lp_assignment_t* get_internal() const;
 
-  /** Assign var to the given value. */
+  /** Assign variable to the given value. */
   void set(const Variable& var, const Value& value);
   /** Unassign the given variable. */
   void unset(const Variable& var);
+  /** Check whether the variable is assigned. */
+  bool has(const Variable& var) const;
   /** Retrieve a value from the Assignment. */
-  Value get(const Variable& var) const;
+  const Value& get(const Variable& var) const;
   // RationalInterval get_approximate(const Variable& var) const;
   /** Clear the assignment. */
   void clear();
