@@ -152,15 +152,11 @@ Rational div_2exp(const Rational &lhs, unsigned n) {
   return res;
 }
 
-Integer numerator(const Rational &r) {
-  Integer res;
-  lp_rational_get_num(r.get_internal(), res.get_internal());
-  return res;
+const Integer& numerator(const Rational &r) {
+  return *detail::cast_from(mpq_numref(r.get_internal()));
 }
-Integer denominator(const Rational &r) {
-  Integer res;
-  lp_rational_get_den(r.get_internal(), res.get_internal());
-  return res;
+const Integer& denominator(const Rational &r) {
+  return *detail::cast_from(mpq_denref(r.get_internal()));
 }
 
 bool is_integer(const Rational &r) {

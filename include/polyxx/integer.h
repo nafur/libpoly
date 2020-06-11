@@ -9,174 +9,281 @@
 
 namespace poly {
 
-class Rational;
+  class Rational;
 
-/**
- * Implements a wrapper for lp_integer_t from libpoly.
- */
-class Integer {
-  /** The actual integer. */
-  lp_integer_t mInt;
+  /**
+   * Implements a wrapper for lp_integer_t.
+   */
+  class Integer {
+    /** The actual integer. */
+    lp_integer_t mInt;
 
- public:
-  Integer();
-  Integer(int i);
-  Integer(long i);
-  Integer(IntegerRing& ir, long i);
-  Integer(const char* x, int base);
-  Integer(IntegerRing& ir, const char* x, int base);
-  Integer(const Integer& i);
-  Integer(IntegerRing& ir, const Integer& i);
-  Integer(const Rational& r);
-  Integer(IntegerRing& ir, const Rational& r);
-  Integer(const lp_integer_t& i);
-  Integer(IntegerRing& ir, const lp_integer_t& i);
-  Integer(const mpz_class& m);
-  Integer(IntegerRing& ir, const mpz_class& m);
-  explicit Integer(const lp_integer_t* i);
-  Integer(IntegerRing& ir, const lp_integer_t* i);
+   public:
+    /** Constructs zero. */
+    Integer();
+    /** Constructs from an int. */
+    Integer(int i);
+    /** Constructs from a long. */
+    Integer(long i);
+    /** Constructs from a long into the given ring. */
+    Integer(IntegerRing& ir, long i);
+    /** Constructs from a string. */
+    Integer(const char* x, int base);
+    /** Constructs from a string into the given ring. */
+    Integer(IntegerRing& ir, const char* x, int base);
+    /** Constructs as copy. */
+    Integer(const Integer& i);
+    /** Constructs as copy into the given ring. */
+    Integer(IntegerRing& ir, const Integer& i);
+    /** Constructs as copy, assuming the rational is indeed an integer. */
+    Integer(const Rational& r);
+    /** Constructs as copy, assuming the rational is indeed an integer, into the
+     * given ring. */
+    Integer(IntegerRing& ir, const Rational& r);
 
-  /** Custom destructor. */
-  ~Integer();
-  /** Assign from the given Integer. */
-  Integer& operator=(const Integer& i);
-  Integer& assign(IntegerRing& ir, const Integer& i);
-  /** Assign from the given integer. */
-  Integer& operator=(long i);
-  Integer& assign(IntegerRing& ir, long i);
+    /** Construct from a mpz_class, which is the underlying representation
+     * anyway. */
+    Integer(const mpz_class& m);
+    /** Construct from a mpz_class, which is the underlying representation
+     * anyway, into the given ring. */
+    Integer(IntegerRing& ir, const mpz_class& m);
+    /** Construct from an internal lp_integer_t pointer. */
+    explicit Integer(const lp_integer_t* i);
+    /** Construct from an internal lp_integer_t pointer into the given ring. */
+    Integer(IntegerRing& ir, const lp_integer_t* i);
 
-  /** Get a non-const pointer to the internal lp_integer_t. Handle with care! */
-  lp_integer_t* get_internal();
-  /** Get a const pointer to the internal lp_integer_t. */
-  const lp_integer_t* get_internal() const;
-};
+    /** Custom destructor. */
+    ~Integer();
+    /** Assign from an Integer. */
+    Integer& operator=(const Integer& i);
+    /** Assign from an Integer into the given ring. */
+    Integer& assign(IntegerRing& ir, const Integer& i);
+    /** Move from an Integer. */
+    Integer& operator=(Integer&& i);
+    /** Move from an Integer into the given ring. */
+    Integer& assign(IntegerRing& ir, Integer&& i);
+    /** Assign from the given integer. */
+    Integer& operator=(long i);
+    /** Assign from the given integer into the given ring. */
+    Integer& assign(IntegerRing& ir, long i);
 
-static_assert(sizeof(Integer) == sizeof(lp_integer_t),
-              "Please check the size of Integer.");
-namespace detail {
-inline lp_integer_t* cast_to(Integer* i) {
-  return reinterpret_cast<lp_integer_t*>(i);
-}
-inline const lp_integer_t* cast_to(const Integer* i) {
-  return reinterpret_cast<const lp_integer_t*>(i);
-}
-inline Integer* cast_from(lp_integer_t* i) {
-  return reinterpret_cast<Integer*>(i);
-}
-inline const Integer* cast_from(const lp_integer_t* i) {
-  return reinterpret_cast<const Integer*>(i);
-}
-}  // namespace detail
+    /** Get a non-const pointer to the internal lp_integer_t. Handle with care!
+     */
+    lp_integer_t* get_internal();
+    /** Get a const pointer to the internal lp_integer_t. */
+    const lp_integer_t* get_internal() const;
+  };
 
-/** Stream the given Integer to an output stream. */
-std::ostream& operator<<(std::ostream& os, const Integer& i);
+  /** Make sure that we can cast between Integer and lp_integer_t. */
+  static_assert(sizeof(Integer) == sizeof(lp_integer_t),
+                "Please check the size of Integer.");
+  namespace detail {
+    /** Non-const cast from an Integer to a lp_integer_t. */
+    inline lp_integer_t* cast_to(Integer* i) {
+      return reinterpret_cast<lp_integer_t*>(i);
+    }
+    /** Const cast from an Integer to a lp_integer_t. */
+    inline const lp_integer_t* cast_to(const Integer* i) {
+      return reinterpret_cast<const lp_integer_t*>(i);
+    }
+    /** Non-const cast from a lp_integer_t to an Integer. */
+    inline Integer* cast_from(lp_integer_t* i) {
+      return reinterpret_cast<Integer*>(i);
+    }
+    /** Const cast from a lp_integer_t to an Integer. */
+    inline const Integer* cast_from(const lp_integer_t* i) {
+      return reinterpret_cast<const Integer*>(i);
+    }
+  }  // namespace detail
 
-std::size_t bit_size(const Integer& i);
+  /** Stream the given Integer to an output stream. */
+  std::ostream& operator<<(std::ostream& os, const Integer& i);
 
-bool operator==(const Integer& lhs, const Integer& rhs);
-bool operator!=(const Integer& lhs, const Integer& rhs);
-bool operator<(const Integer& lhs, const Integer& rhs);
-bool operator<=(const Integer& lhs, const Integer& rhs);
-bool operator>(const Integer& lhs, const Integer& rhs);
-bool operator>=(const Integer& lhs, const Integer& rhs);
+  /** Number of bits needed for the given integer. */
+  std::size_t bit_size(const Integer& i);
 
-int compare(IntegerRing& ir, const Integer& lhs, const Integer& rhs);
-int compare(IntegerRing& ir, const Integer& lhs, long rhs);
-int compare(IntegerRing& ir, long lhs, const Integer& rhs);
+  /** Compare two integers. */
+  bool operator==(const Integer& lhs, const Integer& rhs);
+  /** Compare two integers. */
+  bool operator!=(const Integer& lhs, const Integer& rhs);
+  /** Compare two integers. */
+  bool operator<(const Integer& lhs, const Integer& rhs);
+  /** Compare two integers. */
+  bool operator<=(const Integer& lhs, const Integer& rhs);
+  /** Compare two integers. */
+  bool operator>(const Integer& lhs, const Integer& rhs);
+  /** Compare two integers. */
+  bool operator>=(const Integer& lhs, const Integer& rhs);
 
-bool divides(const Integer& lhs, const Integer& rhs);
-bool divides(IntegerRing& ir, const Integer& lhs, const Integer& rhs);
+  /** Compare two integers over the given ring. */
+  int compare(IntegerRing& ir, const Integer& lhs, const Integer& rhs);
+  /** Compare two integers over the given ring. */
+  int compare(IntegerRing& ir, const Integer& lhs, long rhs);
+  /** Compare two integers over the given ring. */
+  int compare(IntegerRing& ir, long lhs, const Integer& rhs);
 
-void swap(Integer& lhs, Integer& rhs);
+  /** Checks whether lhs divides rhs. */
+  bool divides(const Integer& lhs, const Integer& rhs);
+  /** Checks whether lhs divides rhs over the given ring. */
+  bool divides(IntegerRing& ir, const Integer& lhs, const Integer& rhs);
 
-Integer& operator++(Integer& i);
-Integer& operator--(Integer& i);
-Integer operator++(Integer& i, int);
-Integer operator--(Integer& i, int);
-Integer& increment(IntegerRing& ir, Integer& i);
-Integer& decrement(IntegerRing& ir, Integer& i);
+  /** Swaps the contents of two integers. */
+  void swap(Integer& lhs, Integer& rhs);
 
-Integer operator+(const Integer& lhs, const Integer& rhs);
-Integer& operator+=(Integer& lhs, const Integer& rhs);
-Integer add(IntegerRing& ir, const Integer& lhs, const Integer& rhs);
-Integer& add_assign(IntegerRing& ir, Integer& lhs, const Integer& rhs);
+  /** Pre-increment an integer. */
+  Integer& operator++(Integer& i);
+  /** Pre-decrement an integer. */
+  Integer& operator--(Integer& i);
+  /** Post-increment an integer. */
+  Integer operator++(Integer& i, int);
+  /** Post-decrement an integer. */
+  Integer operator--(Integer& i, int);
+  /** Pre-increment an integer. */
+  Integer& increment(IntegerRing& ir, Integer& i);
+  /** Pre-decrement an integer. */
+  Integer& decrement(IntegerRing& ir, Integer& i);
 
-Integer operator-(const Integer& lhs, const Integer& rhs);
-Integer& operator-=(Integer& lhs, const Integer& rhs);
-Integer sub(IntegerRing& ir, const Integer& lhs, const Integer& rhs);
-Integer& sub_assign(IntegerRing& ir, Integer& lhs, const Integer& rhs);
+  /** Add two integers. */
+  Integer operator+(const Integer& lhs, const Integer& rhs);
+  /** Add and assign two integers. */
+  Integer& operator+=(Integer& lhs, const Integer& rhs);
+  /** Add two integers in the given ring. */
+  Integer add(IntegerRing& ir, const Integer& lhs, const Integer& rhs);
+  /** Add and assign two integers in the given ring. */
+  Integer& add_assign(IntegerRing& ir, Integer& lhs, const Integer& rhs);
 
-Integer operator-(const Integer& i);
-Integer neg(IntegerRing& ir, const Integer& i);
+  /** Subtract two integers. */
+  Integer operator-(const Integer& lhs, const Integer& rhs);
+  /** Subtract and assign two integers. */
+  Integer& operator-=(Integer& lhs, const Integer& rhs);
+  /** Subtract two integers in the given ring. */
+  Integer sub(IntegerRing& ir, const Integer& lhs, const Integer& rhs);
+  /** Subtract and assign two integers in the given ring. */
+  Integer& sub_assign(IntegerRing& ir, Integer& lhs, const Integer& rhs);
 
-Integer abs(const Integer& i);
-Integer abs(IntegerRing& ir, const Integer& i);
+  /** Negate an integer. */
+  Integer operator-(const Integer& i);
+  /** Negate an integer in the given ring. */
+  Integer neg(IntegerRing& ir, const Integer& i);
 
-Integer inverse(IntegerRing& ir, const Integer& i);
+  /** Compute the absolute value. */
+  Integer abs(const Integer& i);
+  /** Compute the absolute value in the given ring. */
+  Integer abs(IntegerRing& ir, const Integer& i);
 
-Integer operator*(const Integer& lhs, const Integer& rhs);
-Integer operator*(const Integer& lhs, long rhs);
-Integer operator*(long lhs, const Integer& rhs);
-Integer& operator*=(Integer& lhs, const Integer& rhs);
-Integer& operator*=(Integer& lhs, long rhs);
-Integer mul(IntegerRing& ir, const Integer& lhs, const Integer& rhs);
-Integer mul(IntegerRing& ir, const Integer& lhs, long rhs);
-Integer mul(IntegerRing& ir, long lhs, const Integer& rhs);
-Integer& mul_assign(IntegerRing& ir, Integer& lhs, const Integer& rhs);
-Integer& mul_assign(IntegerRing& ir, Integer& lhs, long rhs);
+  /** Compute the inverse in the given ring.
+   * Note that inverses do not exist in Z (except for -1 and 1).
+   */
+  Integer inverse(IntegerRing& ir, const Integer& i);
 
-Integer mul_pow2(const Integer& lhs, unsigned rhs);
-Integer mul_pow2(IntegerRing& ir, const Integer& lhs, unsigned rhs);
+  /** Multiply two integers. */
+  Integer operator*(const Integer& lhs, const Integer& rhs);
+  /** Multiply two integers. */
+  Integer operator*(const Integer& lhs, long rhs);
+  /** Multiply two integers. */
+  Integer operator*(long lhs, const Integer& rhs);
+  /** Multiply and assign two integers. */
+  Integer& operator*=(Integer& lhs, const Integer& rhs);
+  /** Multiply and assign two integers. */
+  Integer& operator*=(Integer& lhs, long rhs);
+  /** Multiply two integers in the given ring. */
+  Integer mul(IntegerRing& ir, const Integer& lhs, const Integer& rhs);
+  /** Multiply two integers in the given ring. */
+  Integer mul(IntegerRing& ir, const Integer& lhs, long rhs);
+  /** Multiply two integers in the given ring. */
+  Integer mul(IntegerRing& ir, long lhs, const Integer& rhs);
+  /** Multiply and assign two integers in the given ring. */
+  Integer& mul_assign(IntegerRing& ir, Integer& lhs, const Integer& rhs);
+  /** Multiply and assign two integers in the given ring. */
+  Integer& mul_assign(IntegerRing& ir, Integer& lhs, long rhs);
 
-Integer pow(const Integer& lhs, unsigned rhs);
-Integer pow(IntegerRing& ir, const Integer& lhs, unsigned rhs);
+  /** Compute lhs * 2^rhs. */
+  Integer mul_pow2(const Integer& lhs, unsigned rhs);
+  /** Compute lhs * 2^rhs in the given ring. */
+  Integer mul_pow2(IntegerRing& ir, const Integer& lhs, unsigned rhs);
 
-Integer sqrt(const Integer& i);
+  /** Compute lhs^rhs. */
+  Integer pow(const Integer& lhs, unsigned rhs);
+  /** Compute lhs^rhs in the given ring. */
+  Integer pow(IntegerRing& ir, const Integer& lhs, unsigned rhs);
 
-Integer& add_mul(Integer& lhs, const Integer& a, const Integer& b);
-Integer& add_mul(IntegerRing& ir, Integer& lhs, const Integer& a,
-                 const Integer& b);
-Integer& add_mul(Integer& lhs, const Integer& a, int b);
-Integer& add_mul(IntegerRing& ir, Integer& lhs, const Integer& a, int b);
+  /** Compute the (truncated part of the) square root. */
+  Integer sqrt(const Integer& i);
 
-Integer& sub_mul(Integer& lhs, const Integer& a, const Integer& b);
-Integer& sub_mul(IntegerRing& ir, Integer& lhs, const Integer& a,
-                 const Integer& b);
+  /** Compute lhs += a * b. */
+  Integer& add_mul(Integer& lhs, const Integer& a, const Integer& b);
+  /** Compute lhs += a * b in the given ring. */
+  Integer& add_mul(IntegerRing& ir, Integer& lhs, const Integer& a,
+                   const Integer& b);
+  /** Compute lhs += a * b. */
+  Integer& add_mul(Integer& lhs, const Integer& a, int b);
+  /** Compute lhs += a * b in the given ring. */
+  Integer& add_mul(IntegerRing& ir, Integer& lhs, const Integer& a, int b);
 
-Integer operator/(const Integer& lhs, const Integer& rhs);
-Integer& operator/=(Integer& lhs, const Integer& rhs);
+  /** Compute lhs -= a * b. */
+  Integer& sub_mul(Integer& lhs, const Integer& a, const Integer& b);
+  /** Compute lhs -= a * b in the given ring. */
+  Integer& sub_mul(IntegerRing& ir, Integer& lhs, const Integer& a,
+                   const Integer& b);
 
-Integer operator%(const Integer& lhs, const Integer& rhs);
-Integer& operator%=(Integer& lhs, const Integer& rhs);
+  /** Compute the (truncated part of the) quotient of two integers. */
+  Integer operator/(const Integer& lhs, const Integer& rhs);
+  /** Compute and assign the (truncated part of the) quotient of two integers.
+   */
+  Integer& operator/=(Integer& lhs, const Integer& rhs);
 
-Integer div_exact(const Integer& lhs, const Integer& rhs);
-Integer div_exact(IntegerRing& ir, const Integer& lhs, const Integer& rhs);
+  /** Compute the remainder of two integers. */
+  Integer operator%(const Integer& lhs, const Integer& rhs);
+  /** Compute and assign the remainder of two integers. */
+  Integer& operator%=(Integer& lhs, const Integer& rhs);
 
-Integer div_rem(Integer& rem, const Integer& lhs, const Integer& rhs);
+  /** Compute the quotient of two integers, assuming that divides(lhs, rhs). */
+  Integer div_exact(const Integer& lhs, const Integer& rhs);
+  /** Compute the quotient of two integers in the given ring, assuming that
+   * divides(lhs, rhs). */
+  Integer div_exact(IntegerRing& ir, const Integer& lhs, const Integer& rhs);
 
-Integer div_rem_pow2(Integer& rem, const Integer& lhs, unsigned rhs);
+  /** Compute the quotient and remainder of two integers. */
+  Integer div_rem(Integer& rem, const Integer& lhs, const Integer& rhs);
 
-long to_int(const Integer& i);
-double to_double(const Integer& i);
+  /** Compute the quotient and remainder of lhs and 2^rhs. */
+  Integer div_rem_pow2(Integer& rem, const Integer& lhs, unsigned rhs);
 
-bool is_prime(const Integer& i);
-bool is_zero(const Integer& i);
-bool is_zero(IntegerRing& ir, const Integer& i);
-bool is_in_ring(IntegerRing& ir, const Integer& i);
+  /** Returns the integer as a long. May get truncated, but keeps the correct
+   * sign. */
+  long to_int(const Integer& i);
+  /** Returns the integer as a double. */
+  double to_double(const Integer& i);
 
-std::size_t hash(const Integer& i);
+  /** Checks whether the integer is a prime number. */
+  bool is_prime(const Integer& i);
+  /** Checks whether the integer is zero. */
+  bool is_zero(const Integer& i);
+  /** Checks whether the integer is zero in the given ring. */
+  bool is_zero(IntegerRing& ir, const Integer& i);
+  /** Checks whether the integer is in the given ring. */
+  bool is_in_ring(IntegerRing& ir, const Integer& i);
 
-int sgn(const Integer& i);
-int sgn(IntegerRing& ir, const Integer& i);
+  /** Computes the hash of an integer. */
+  std::size_t hash(const Integer& i);
 
-Integer gcd(const Integer& a, const Integer& b);
-Integer lcm(const Integer& a, const Integer& b);
+  /** Computes the sign of an integer. */
+  int sgn(const Integer& i);
+  /** Computes the sign of an integer in the given ring. */
+  int sgn(IntegerRing& ir, const Integer& i);
+
+  /** Computes the greatest common divisor of two integers. */
+  Integer gcd(const Integer& a, const Integer& b);
+  /** Computes the least common multiple of two integers. */
+  Integer lcm(const Integer& a, const Integer& b);
 
 }  // namespace poly
 
 namespace std {
-template <>
-struct hash<poly::Integer> {
-  std::size_t operator()(const poly::Integer& i) const { return poly::hash(i); }
-};
+  template <>
+  struct hash<poly::Integer> {
+    std::size_t operator()(const poly::Integer& i) const {
+      return poly::hash(i);
+    }
+  };
 }  // namespace std

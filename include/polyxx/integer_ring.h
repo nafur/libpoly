@@ -1,34 +1,43 @@
 #pragma once
 
-#include <iosfwd>
-#include <memory>
-
 #include "../integer.h"
 #include "utils.h"
 
+#include <iosfwd>
+
 namespace poly {
 
-class Integer;
+  class Integer;
 
-class IntegerRing {
-  deleting_unique_ptr<lp_int_ring_t> mRing;
+  /** Represents an integer ring. Use IntegerRing::Z for the ring of all
+   * integers. */
+  class IntegerRing {
+    /** The actual ring. */
+    deleting_unique_ptr<lp_int_ring_t> mRing;
 
- public:
-  IntegerRing();
-  IntegerRing(const Integer& m, bool is_prime);
+    /** Construct the ring of all integers Z. */
+    IntegerRing();
 
-  /** Get a non-const pointer to the internal lp_int_ring_t. Handle with care!
-   */
-  lp_int_ring_t* get_internal();
-  /** Get a const pointer to the internal lp_int_ring_t. */
-  const lp_int_ring_t* get_internal() const;
+   public:
+    /** Construct the ring with the given modulus. */
+    IntegerRing(const Integer& m, bool is_prime);
 
-  static IntegerRing Z;
-};
+    /** Get a non-const pointer to the internal lp_int_ring_t. Handle with care!
+     */
+    lp_int_ring_t* get_internal();
+    /** Get a const pointer to the internal lp_int_ring_t. */
+    const lp_int_ring_t* get_internal() const;
 
-bool operator==(const IntegerRing& lhs, const IntegerRing& rhs);
+    /** The ring of all integers Z. */
+    static IntegerRing Z;
+  };
 
-/** Stream the given IntegerRing to an output stream. */
-std::ostream& operator<<(std::ostream& os, const IntegerRing& ir);
+  /** Compare two rings for equality. */
+  bool operator==(const IntegerRing& lhs, const IntegerRing& rhs);
+  /** Compare two rings for inequality. */
+  bool operator!=(const IntegerRing& lhs, const IntegerRing& rhs);
+
+  /** Stream the given IntegerRing to an output stream. */
+  std::ostream& operator<<(std::ostream& os, const IntegerRing& ir);
 
 }  // namespace poly

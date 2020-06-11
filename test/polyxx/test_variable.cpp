@@ -3,9 +3,11 @@
 
 #include "doctest.h"
 
+using namespace poly;
+
 TEST_CASE("variable") {
-  poly::Variable v1;
-  poly::Variable v2("foo");
+  Variable v1;
+  Variable v2("foo");
 
   CHECK(v1 == v1);
   CHECK_FALSE(v1 == v2);
