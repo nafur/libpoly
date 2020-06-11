@@ -68,15 +68,15 @@ include_directories(${libpoly_SOURCE_DIR}/src)
 
 add_library(poly SHARED ${poly_SOURCES})
 
-set_target_properties(poly PROPERTIES 
-  VERSION ${LIBPOLY_VERSION} 
+set_target_properties(poly PROPERTIES
+  VERSION ${LIBPOLY_VERSION}
   SOVERSION ${LIBPOLY_VERSION_MAJOR}
-) 
+)
 
 target_link_libraries(poly ${GMP_LIBRARY})
 
 add_library(polyxx SHARED ${polyxx_SOURCES})
-set_target_properties(polyxx PROPERTIES 
+set_target_properties(polyxx PROPERTIES
   VERSION ${LIBPOLY_VERSION} 
   SOVERSION ${LIBPOLY_VERSION_MAJOR}
 ) 
