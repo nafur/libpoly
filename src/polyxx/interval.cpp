@@ -11,7 +11,7 @@ namespace poly {
 Interval::Interval(const Value& a, bool a_open, const Value& b, bool b_open)
 {
   lp_interval_construct(
-      &mInterval, a.get_internal(), a_open ? 1 : 0, b.get_internal(), b_open ? 1 : 0);
+      get_internal(), a.get_internal(), a_open ? 1 : 0, b.get_internal(), b_open ? 1 : 0);
 }
 
 Interval::Interval(const Value& a, const Value& b) : Interval(a, true, b, true)
@@ -20,15 +20,15 @@ Interval::Interval(const Value& a, const Value& b) : Interval(a, true, b, true)
 
 Interval::Interval(const Value& a)
 {
-  lp_interval_construct_point(&mInterval, a.get_internal());
+  lp_interval_construct_point(get_internal(), a.get_internal());
 }
 
 Interval::Interval(const Interval& i)
 {
-  lp_interval_construct_copy(&mInterval, i.get_internal());
+  lp_interval_construct_copy(get_internal(), i.get_internal());
 }
 
-Interval::~Interval() { lp_interval_destruct(&mInterval); }
+Interval::~Interval() { lp_interval_destruct(get_internal()); }
 
 Interval& Interval::operator=(Interval i)
 {

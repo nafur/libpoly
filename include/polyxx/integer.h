@@ -21,6 +21,7 @@ class Integer
 
  public:
   Integer();
+  Integer(int i);
   Integer(long i);
   Integer(IntegerRing& ir, long i);
   Integer(const char* x, int base);

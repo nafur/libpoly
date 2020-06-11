@@ -49,6 +49,7 @@ set(polyxx_SOURCES
   polyxx/interval_assignment.cpp
   polyxx/interval.cpp
   polyxx/polynomial.cpp
+  polyxx/rational_interval.cpp
   polyxx/rational.cpp
   polyxx/sign_condition.cpp
   polyxx/upolynomial_roots.cpp

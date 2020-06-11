@@ -9,6 +9,7 @@ namespace poly {
 
 Integer::Integer() { lp_integer_construct(&mInt); }
 
+Integer::Integer(int i) : Integer(IntegerRing::Z, i) {}
 Integer::Integer(long i) : Integer(IntegerRing::Z, i) {}
 Integer::Integer(IntegerRing& ir, long i)
 {

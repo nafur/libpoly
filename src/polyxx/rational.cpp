@@ -9,6 +9,10 @@ namespace poly
     {
         lp_rational_construct(&mRat);
     }
+    Rational::Rational(int i)
+    {
+        lp_rational_construct_from_int(&mRat, i, 1);
+    }
 
     Rational::Rational(const Rational &r)
     {

@@ -2,8 +2,10 @@
 
 #include "../rational_interval.h"
 
+#include "algebraic_number.h"
 #include "dyadic_interval.h"
-#include "interval.h"
+#include "rational.h"
+#include "value.h"
 
 #include <iosfwd>
 
@@ -27,10 +29,10 @@ class RationalInterval
   RationalInterval(const RationalInterval& i);
   RationalInterval(const DyadicRational& a, bool a_open, const DyadicRational& b, bool b_open);
   RationalInterval(const DyadicRational& a, const DyadicRational& b);
-  RationalInterval(const DyadicRational& a);
   RationalInterval(const DyadicInterval& i);
   ~RationalInterval();
-  RationalInterval& operator=(RationalInterval i);
+  RationalInterval& operator=(const RationalInterval& i);
+  RationalInterval& operator=(RationalInterval&& i);
 
   /** Get a non-const pointer to the internal lp_interval_t. Handle with
    * care! */
@@ -42,22 +44,18 @@ class RationalInterval
 void swap(RationalInterval& lhs, RationalInterval& rhs);
 
 /** Stream the given Interval to an output stream. */
-std::ostream& operator<<(std::ostream& os, const Interval& i);
+std::ostream& operator<<(std::ostream& os, const RationalInterval& i);
 
 bool contains(const RationalInterval& ri, const AlgebraicNumber& an);
 bool contains(const RationalInterval& ri, const DyadicRational& dr);
 bool contains(const RationalInterval& ri, const Integer& i);
 bool contains(const RationalInterval& ri, const Rational& r);
 bool contains(const RationalInterval& ri, const Value& v);
+bool contains_zero(const RationalInterval& ri);
 
-bool operator==(const Interval& lhs, const Interval& rhs);
+bool is_point(const RationalInterval& ri);
+const Rational& get_point(const RationalInterval& ri);
 
-bool operator<(const Interval& lhs, const Interval& rhs);
-
-bool lower_is_infty(const Interval& i);
-bool upper_is_infty(const Interval& i);
-
-bool interval_covers(const Interval& lhs, const Interval& rhs);
-bool interval_connect(const Interval& lhs, const Interval& rhs);
+int sgn(const RationalInterval& ri);
 
 }  // namespace poly
