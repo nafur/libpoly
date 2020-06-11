@@ -1,11 +1,16 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include "doctest.h"
-
 #include <polyxx.h>
 
-TEST_CASE("testing variable") {
-    poly::Context context;
+#include "doctest.h"
 
-    poly::Variable v1;
-    poly::Variable v2("foo");
+TEST_CASE("variable") {
+  poly::Variable v1;
+  poly::Variable v2("foo");
+
+  CHECK(v1 == v1);
+  CHECK_FALSE(v1 == v2);
+  CHECK(v2 == v2);
+  CHECK_FALSE(v1 != v1);
+  CHECK(v1 != v2);
+  CHECK_FALSE(v2 != v2);
 }
