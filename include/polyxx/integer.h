@@ -255,7 +255,9 @@ namespace poly {
   /** Returns the integer as a double. */
   double to_double(const Integer& i);
 
-  /** Checks whether the integer is a prime number. */
+  /** Checks whether the integer is a prime number.
+   * If the integer is negative, checks whether abs(i) is a prime number.
+   */
   bool is_prime(const Integer& i);
   /** Checks whether the integer is zero. */
   bool is_zero(const Integer& i);

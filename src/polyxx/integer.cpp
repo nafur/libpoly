@@ -1,5 +1,6 @@
 #include "polyxx/integer.h"
 
+#include <cassert>
 #include <iostream>
 #include <utility>
 
@@ -252,6 +253,7 @@ namespace poly {
   }
 
   Integer sqrt(const Integer& i) {
+    assert(i >= 0);
     Integer res;
     lp_integer_sqrt_Z(res.get_internal(), i.get_internal());
     return res;
@@ -336,7 +338,7 @@ namespace poly {
   }
 
   bool is_prime(const Integer& i) {
-    return lp_integer_is_prime(i.get_internal());
+    return lp_integer_is_prime(i.get_internal()) > 0;
   }
 
   bool is_zero(const Integer& i) { return is_zero(IntegerRing::Z, i); }
