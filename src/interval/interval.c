@@ -708,8 +708,8 @@ int lp_dyadic_interval_contains_zero(const lp_dyadic_interval_t* I) {
   if (I->a_open && sgn_a >= 0) return 0;
   if (!I->a_open && sgn_a > 0) return 0;
   int sgn_b = dyadic_rational_sgn(&I->b);
-  if (I->b_open && sgn_b < 0) return 0;
-  if (!I->b_open && sgn_b <= 0) return 0;
+  if (I->b_open && sgn_b <= 0) return 0;
+  if (!I->b_open && sgn_b < 0) return 0;
   return 1;
 }
 
@@ -891,7 +891,7 @@ void lp_dyadic_interval_scale(lp_dyadic_interval_t* I, int n) {
     dyadic_rational_mul_2exp(&I->b, &I->b, n);
   } else {
     dyadic_rational_div_2exp(&I->a, &I->a, -n);
-    dyadic_rational_div_2exp(&I->a, &I->a, -n);
+    dyadic_rational_div_2exp(&I->b, &I->b, -n);
   }
 }
 
