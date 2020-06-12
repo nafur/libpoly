@@ -127,61 +127,49 @@ namespace poly {
     return rhs <= lhs;
   }
 
-  /*    bool operator==(const DyadicRational &lhs, const Rational &rhs)
-      {
-          return lp_dyadic_rational_cmp_rational(lhs.get_internal(),
-     rhs.get_internal()) == 0;
-      }
-      bool operator!=(const DyadicRational &lhs, const Rational &rhs)
-      {
-          return lp_dyadic_rational_cmp_rational(lhs.get_internal(),
-     rhs.get_internal()) != 0;
-      }
-      bool operator<(const DyadicRational &lhs, const Rational &rhs)
-      {
-          return lp_dyadic_rational_cmp_rational(lhs.get_internal(),
-     rhs.get_internal()) < 0;
-      }
-      bool operator<=(const DyadicRational &lhs, const Rational &rhs)
-      {
-          return lp_dyadic_rational_cmp_rational(lhs.get_internal(),
-     rhs.get_internal()) <= 0;
-      }
-      bool operator>(const DyadicRational &lhs, const Rational &rhs)
-      {
-          return lp_dyadic_rational_cmp_rational(lhs.get_internal(),
-     rhs.get_internal()) > 0;
-      }
-      bool operator>=(const DyadicRational &lhs, const Rational &rhs)
-      {
-          return lp_dyadic_rational_cmp_rational(lhs.get_internal(),
-     rhs.get_internal()) >= 0;
-      }
+  bool operator==(const DyadicRational& lhs, const Rational& rhs) {
+    return lp_dyadic_rational_cmp_rational(lhs.get_internal(),
+                                           rhs.get_internal()) == 0;
+  }
+  bool operator!=(const DyadicRational& lhs, const Rational& rhs) {
+    return lp_dyadic_rational_cmp_rational(lhs.get_internal(),
+                                           rhs.get_internal()) != 0;
+  }
+  bool operator<(const DyadicRational& lhs, const Rational& rhs) {
+    return lp_dyadic_rational_cmp_rational(lhs.get_internal(),
+                                           rhs.get_internal()) < 0;
+  }
+  bool operator<=(const DyadicRational& lhs, const Rational& rhs) {
+    return lp_dyadic_rational_cmp_rational(lhs.get_internal(),
+                                           rhs.get_internal()) <= 0;
+  }
+  bool operator>(const DyadicRational& lhs, const Rational& rhs) {
+    return lp_dyadic_rational_cmp_rational(lhs.get_internal(),
+                                           rhs.get_internal()) > 0;
+  }
+  bool operator>=(const DyadicRational& lhs, const Rational& rhs) {
+    return lp_dyadic_rational_cmp_rational(lhs.get_internal(),
+                                           rhs.get_internal()) >= 0;
+  }
 
-      bool operator==(const Rational &lhs, const DyadicRational &rhs)
-      {
-          return rhs == lhs;
-      }
-      bool operator!=(const Rational &lhs, const DyadicRational &rhs)
-      {
-          return rhs != lhs;
-      }
-      bool operator<(const Rational &lhs, const DyadicRational &rhs)
-      {
-          return rhs > lhs;
-      }
-      bool operator<=(const Rational &lhs, const DyadicRational &rhs)
-      {
-          return rhs >= lhs;
-      }
-      bool operator>(const Rational &lhs, const DyadicRational &rhs)
-      {
-          return rhs < lhs;
-      }
-      bool operator>=(const Rational &lhs, const DyadicRational &rhs)
-      {
-          return rhs <= lhs;
-      }*/
+  bool operator==(const Rational& lhs, const DyadicRational& rhs) {
+    return rhs == lhs;
+  }
+  bool operator!=(const Rational& lhs, const DyadicRational& rhs) {
+    return rhs != lhs;
+  }
+  bool operator<(const Rational& lhs, const DyadicRational& rhs) {
+    return rhs > lhs;
+  }
+  bool operator<=(const Rational& lhs, const DyadicRational& rhs) {
+    return rhs >= lhs;
+  }
+  bool operator>(const Rational& lhs, const DyadicRational& rhs) {
+    return rhs < lhs;
+  }
+  bool operator>=(const Rational& lhs, const DyadicRational& rhs) {
+    return rhs <= lhs;
+  }
 
   void swap(DyadicRational& lhs, DyadicRational& rhs) {
     lp_dyadic_rational_swap(lhs.get_internal(), rhs.get_internal());

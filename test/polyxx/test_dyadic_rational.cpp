@@ -36,72 +36,108 @@ TEST_CASE("dyadic_rational::operator==") {
   CHECK_FALSE(DyadicRational(1) == DyadicRational(2));
   CHECK_FALSE(DyadicRational(1) == Integer(2));
   CHECK_FALSE(Integer(1) == DyadicRational(2));
+  CHECK_FALSE(DyadicRational(1) == Rational(2));
+  CHECK_FALSE(Rational(1) == DyadicRational(2));
   CHECK(DyadicRational(1) == DyadicRational(1));
   CHECK(DyadicRational(1) == Integer(1));
   CHECK(Integer(1) == DyadicRational(1));
+  CHECK(DyadicRational(1) == Rational(1));
+  CHECK(Rational(1) == DyadicRational(1));
   CHECK_FALSE(DyadicRational(2) == DyadicRational(1));
   CHECK_FALSE(DyadicRational(2) == Integer(1));
   CHECK_FALSE(Integer(2) == DyadicRational(1));
+  CHECK_FALSE(DyadicRational(2) == Rational(1));
+  CHECK_FALSE(Rational(2) == DyadicRational(1));
 }
 
 TEST_CASE("dyadic_rational::operator!=") {
   CHECK(DyadicRational(1) != DyadicRational(2));
   CHECK(DyadicRational(1) != Integer(2));
   CHECK(Integer(1) != DyadicRational(2));
+  CHECK(DyadicRational(1) != Rational(2));
+  CHECK(Rational(1) != DyadicRational(2));
   CHECK_FALSE(DyadicRational(1) != DyadicRational(1));
   CHECK_FALSE(DyadicRational(1) != Integer(1));
   CHECK_FALSE(Integer(1) != DyadicRational(1));
+  CHECK_FALSE(DyadicRational(1) != Rational(1));
+  CHECK_FALSE(Rational(1) != DyadicRational(1));
   CHECK(DyadicRational(2) != DyadicRational(1));
   CHECK(DyadicRational(2) != Integer(1));
   CHECK(Integer(2) != DyadicRational(1));
+  CHECK(DyadicRational(2) != Rational(1));
+  CHECK(Rational(2) != DyadicRational(1));
 }
 
 TEST_CASE("dyadic_rational::operator<") {
   CHECK(DyadicRational(1) < DyadicRational(2));
   CHECK(DyadicRational(1) < Integer(2));
   CHECK(Integer(1) < DyadicRational(2));
+  CHECK(DyadicRational(1) < Rational(2));
+  CHECK(Rational(1) < DyadicRational(2));
   CHECK_FALSE(DyadicRational(1) < DyadicRational(1));
   CHECK_FALSE(DyadicRational(1) < Integer(1));
   CHECK_FALSE(Integer(1) < DyadicRational(1));
+  CHECK_FALSE(DyadicRational(1) < Rational(1));
+  CHECK_FALSE(Rational(1) < DyadicRational(1));
   CHECK_FALSE(DyadicRational(2) < DyadicRational(1));
   CHECK_FALSE(DyadicRational(2) < Integer(1));
   CHECK_FALSE(Integer(2) < DyadicRational(1));
+  CHECK_FALSE(DyadicRational(2) < Rational(1));
+  CHECK_FALSE(Rational(2) < DyadicRational(1));
 }
 
 TEST_CASE("dyadic_rational::operator<=") {
   CHECK(DyadicRational(1) <= DyadicRational(2));
   CHECK(DyadicRational(1) <= Integer(2));
   CHECK(Integer(1) <= DyadicRational(2));
+  CHECK(DyadicRational(1) <= Rational(2));
+  CHECK(Rational(1) <= DyadicRational(2));
   CHECK(DyadicRational(1) <= DyadicRational(1));
   CHECK(DyadicRational(1) <= Integer(1));
   CHECK(Integer(1) <= DyadicRational(1));
+  CHECK(DyadicRational(1) <= Rational(1));
+  CHECK(Rational(1) <= DyadicRational(1));
   CHECK_FALSE(DyadicRational(2) <= DyadicRational(1));
   CHECK_FALSE(DyadicRational(2) <= Integer(1));
   CHECK_FALSE(Integer(2) <= DyadicRational(1));
+  CHECK_FALSE(DyadicRational(2) <= Rational(1));
+  CHECK_FALSE(Rational(2) <= DyadicRational(1));
 }
 
 TEST_CASE("dyadic_rational::operator>") {
   CHECK_FALSE(DyadicRational(1) > DyadicRational(2));
   CHECK_FALSE(DyadicRational(1) > Integer(2));
   CHECK_FALSE(Integer(1) > DyadicRational(2));
+  CHECK_FALSE(DyadicRational(1) > Rational(2));
+  CHECK_FALSE(Rational(1) > DyadicRational(2));
   CHECK_FALSE(DyadicRational(1) > DyadicRational(1));
   CHECK_FALSE(DyadicRational(1) > Integer(1));
   CHECK_FALSE(Integer(1) > DyadicRational(1));
+  CHECK_FALSE(DyadicRational(1) > Rational(1));
+  CHECK_FALSE(Rational(1) > DyadicRational(1));
   CHECK(DyadicRational(2) > DyadicRational(1));
   CHECK(DyadicRational(2) > Integer(1));
   CHECK(Integer(2) > DyadicRational(1));
+  CHECK(DyadicRational(2) > Rational(1));
+  CHECK(Rational(2) > DyadicRational(1));
 }
 
 TEST_CASE("dyadic_rational::operator>=") {
   CHECK_FALSE(DyadicRational(1) >= DyadicRational(2));
   CHECK_FALSE(DyadicRational(1) >= Integer(2));
   CHECK_FALSE(Integer(1) >= DyadicRational(2));
+  CHECK_FALSE(DyadicRational(1) >= Rational(2));
+  CHECK_FALSE(Rational(1) >= DyadicRational(2));
   CHECK(DyadicRational(1) >= DyadicRational(1));
   CHECK(DyadicRational(1) >= Integer(1));
   CHECK(Integer(1) >= DyadicRational(1));
+  CHECK(DyadicRational(1) >= Rational(1));
+  CHECK(Rational(1) >= DyadicRational(1));
   CHECK(DyadicRational(2) >= DyadicRational(1));
   CHECK(DyadicRational(2) >= Integer(1));
   CHECK(Integer(2) >= DyadicRational(1));
+  CHECK(DyadicRational(2) >= Rational(1));
+  CHECK(Rational(2) >= DyadicRational(1));
 }
 
 TEST_CASE("dyadic_rational::swap") {

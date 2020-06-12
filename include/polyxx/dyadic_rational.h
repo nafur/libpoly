@@ -53,7 +53,8 @@ namespace poly {
     const lp_dyadic_rational_t* get_internal() const;
   };
 
-  /** Make sure that we can cast between DyadicRational and lp_dyadic_rational_t. */
+  /** Make sure that we can cast between DyadicRational and
+   * lp_dyadic_rational_t. */
   static_assert(sizeof(DyadicRational) == sizeof(lp_dyadic_rational_t),
                 "Please check the size of DyadicRational.");
   namespace detail {
@@ -123,21 +124,31 @@ namespace poly {
   /** Compare an Integer with a DyadicRational. */
   bool operator>=(const Integer& lhs, const DyadicRational& rhs);
 
-  /* See https://github.com/SRI-CSL/libpoly/issues/22
-      bool operator==(const DyadicRational &lhs, const Rational &rhs);
-      bool operator!=(const DyadicRational &lhs, const Rational &rhs);
-      bool operator<(const DyadicRational &lhs, const Rational &rhs);
-      bool operator<=(const DyadicRational &lhs, const Rational &rhs);
-      bool operator>(const DyadicRational &lhs, const Rational &rhs);
-      bool operator>=(const DyadicRational &lhs, const Rational &rhs);
+  /** Compare a DyadicRational with a Rational. */
+  bool operator==(const DyadicRational& lhs, const Rational& rhs);
+  /** Compare a DyadicRational with a Rational. */
+  bool operator!=(const DyadicRational& lhs, const Rational& rhs);
+  /** Compare a DyadicRational with a Rational. */
+  bool operator<(const DyadicRational& lhs, const Rational& rhs);
+  /** Compare a DyadicRational with a Rational. */
+  bool operator<=(const DyadicRational& lhs, const Rational& rhs);
+  /** Compare a DyadicRational with a Rational. */
+  bool operator>(const DyadicRational& lhs, const Rational& rhs);
+  /** Compare a DyadicRational with a Rational. */
+  bool operator>=(const DyadicRational& lhs, const Rational& rhs);
 
-      bool operator==(const Rational &lhs, const DyadicRational &rhs);
-      bool operator!=(const Rational &lhs, const DyadicRational &rhs);
-      bool operator<(const Rational &lhs, const DyadicRational &rhs);
-      bool operator<=(const Rational &lhs, const DyadicRational &rhs);
-      bool operator>(const Rational &lhs, const DyadicRational &rhs);
-      bool operator>=(const Rational &lhs, const DyadicRational &rhs);
-  */
+  /** Compare a Rational with a DyadicRational. */
+  bool operator==(const Rational& lhs, const DyadicRational& rhs);
+  /** Compare a Rational with a DyadicRational. */
+  bool operator!=(const Rational& lhs, const DyadicRational& rhs);
+  /** Compare a Rational with a DyadicRational. */
+  bool operator<(const Rational& lhs, const DyadicRational& rhs);
+  /** Compare a Rational with a DyadicRational. */
+  bool operator<=(const Rational& lhs, const DyadicRational& rhs);
+  /** Compare a Rational with a DyadicRational. */
+  bool operator>(const Rational& lhs, const DyadicRational& rhs);
+  /** Compare a Rational with a DyadicRational. */
+  bool operator>=(const Rational& lhs, const DyadicRational& rhs);
 
   /** Swap two DyadicRationals. */
   void swap(DyadicRational& lhs, DyadicRational& rhs);
