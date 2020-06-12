@@ -51,6 +51,28 @@ namespace poly {
     const lp_dyadic_rational_t* get_internal() const;
   };
 
+  /** Make sure that we can cast between DyadicRational and lp_dyadic_rational_t. */
+  static_assert(sizeof(DyadicRational) == sizeof(lp_dyadic_rational_t),
+                "Please check the size of DyadicRational.");
+  namespace detail {
+    /** Non-const cast from an DyadicRational to a lp_dyadic_rational_t. */
+    inline lp_dyadic_rational_t* cast_to(DyadicRational* i) {
+      return reinterpret_cast<lp_dyadic_rational_t*>(i);
+    }
+    /** Const cast from an DyadicRational to a lp_dyadic_rational_t. */
+    inline const lp_dyadic_rational_t* cast_to(const DyadicRational* i) {
+      return reinterpret_cast<const lp_dyadic_rational_t*>(i);
+    }
+    /** Non-const cast from a lp_dyadic_rational_t to an DyadicRational. */
+    inline DyadicRational* cast_from(lp_dyadic_rational_t* i) {
+      return reinterpret_cast<DyadicRational*>(i);
+    }
+    /** Const cast from a lp_dyadic_rational_t to an DyadicRational. */
+    inline const DyadicRational* cast_from(const lp_dyadic_rational_t* i) {
+      return reinterpret_cast<const DyadicRational*>(i);
+    }
+  }  // namespace detail
+
   /** Stream the given DyadicRational to an output stream. */
   std::ostream& operator<<(std::ostream& os, const DyadicRational& dr);
 
