@@ -26,7 +26,7 @@ namespace poly {
 
   UPolynomial::UPolynomial(const std::vector<Integer>& coefficients)
       : UPolynomial(IntegerRing::Z, coefficients) {}
-  UPolynomial::UPolynomial(IntegerRing& ir,
+  UPolynomial::UPolynomial(const IntegerRing& ir,
                            const std::vector<Integer>& coefficients)
       : mPoly(
             lp_upolynomial_construct(ir.get_internal(), coefficients.size() - 1,
@@ -34,7 +34,7 @@ namespace poly {
             upolynomial_deleter) {}
   UPolynomial::UPolynomial(const std::vector<long>& coefficients)
       : UPolynomial(IntegerRing::Z, coefficients) {}
-  UPolynomial::UPolynomial(IntegerRing& ir,
+  UPolynomial::UPolynomial(const IntegerRing& ir,
                            const std::vector<long>& coefficients)
       : mPoly(lp_upolynomial_construct_from_long(ir.get_internal(),
                                                  coefficients.size() - 1,
@@ -43,14 +43,14 @@ namespace poly {
 
   UPolynomial::UPolynomial(std::initializer_list<long> coefficients)
       : UPolynomial(std::vector<long>(coefficients)) {}
-  UPolynomial::UPolynomial(IntegerRing& ir,
+  UPolynomial::UPolynomial(const IntegerRing& ir,
                            std::initializer_list<long> coefficients)
       : UPolynomial(ir, std::vector<long>(coefficients)) {}
 
   UPolynomial::UPolynomial(std::size_t degree, long c)
       : UPolynomial(IntegerRing::Z, degree, c) {}
 
-  UPolynomial::UPolynomial(IntegerRing& ir, std::size_t degree, long c)
+  UPolynomial::UPolynomial(const IntegerRing& ir, std::size_t degree, long c)
       : mPoly(lp_upolynomial_construct_power(ir.get_internal(), degree, c),
               upolynomial_deleter) {}
 
@@ -61,7 +61,7 @@ namespace poly {
   UPolynomial::UPolynomial(UPolynomial&& poly)
       : mPoly(poly.release(), upolynomial_deleter) {}
 
-  UPolynomial::UPolynomial(IntegerRing& ir, const UPolynomial& poly)
+  UPolynomial::UPolynomial(const IntegerRing& ir, const UPolynomial& poly)
       : mPoly(lp_upolynomial_construct_copy_K(ir.get_internal(),
                                               poly.get_internal()),
               upolynomial_deleter) {}

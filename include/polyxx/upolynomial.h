@@ -37,28 +37,28 @@ namespace poly {
     /** Create from integer coefficients. */
     explicit UPolynomial(const std::vector<Integer>& coefficients);
     /** Create from integer coefficients into the given integer ring. */
-    UPolynomial(IntegerRing& ir, const std::vector<Integer>& coefficients);
+    UPolynomial(const IntegerRing& ir, const std::vector<Integer>& coefficients);
     /** Create from integer coefficients. */
     explicit UPolynomial(const std::vector<long>& coefficients);
     /** Create from integer coefficients into the given integer ring. */
-    UPolynomial(IntegerRing& ir, const std::vector<long>& coefficients);
+    UPolynomial(const IntegerRing& ir, const std::vector<long>& coefficients);
 
     /** Create from integer coefficients. */
     explicit UPolynomial(std::initializer_list<long> coefficients);
     /** Create from integer coefficients into the given integer ring. */
-    UPolynomial(IntegerRing& ir, std::initializer_list<long> coefficients);
+    UPolynomial(const IntegerRing& ir, std::initializer_list<long> coefficients);
 
     /** Construct c * x^degree. */
     UPolynomial(std::size_t degree, long c);
     /** Construct c * x^degree into the given integer ring. */
-    UPolynomial(IntegerRing& ir, std::size_t degree, long c);
+    UPolynomial(const IntegerRing& ir, std::size_t degree, long c);
 
     /** Copy from a polynomial. */
     UPolynomial(const UPolynomial& poly);
     /** Move from a polynomial. */
     UPolynomial(UPolynomial&& poly);
     /** Copy from a polynomial into the given integer ring. */
-    UPolynomial(IntegerRing& ir, const UPolynomial& poly);
+    UPolynomial(const IntegerRing& ir, const UPolynomial& poly);
 
     /** Copy from a polynomial. */
     UPolynomial& operator=(const UPolynomial& poly);

@@ -12,34 +12,34 @@ namespace poly {
 
   Integer::Integer(int i) : Integer(IntegerRing::Z, i) {}
   Integer::Integer(long i) : Integer(IntegerRing::Z, i) {}
-  Integer::Integer(IntegerRing& ir, long i) {
+  Integer::Integer(const IntegerRing& ir, long i) {
     lp_integer_construct_from_int(ir.get_internal(), &mInt, i);
   }
 
   Integer::Integer(const char* x, int base)
       : Integer(IntegerRing::Z, x, base) {}
-  Integer::Integer(IntegerRing& ir, const char* x, int base) {
+  Integer::Integer(const IntegerRing& ir, const char* x, int base) {
     lp_integer_construct_from_string(ir.get_internal(), &mInt, x, base);
   }
 
   Integer::Integer(const Integer& i) : Integer(IntegerRing::Z, i) {}
-  Integer::Integer(IntegerRing& ir, const Integer& i) {
+  Integer::Integer(const IntegerRing& ir, const Integer& i) {
     lp_integer_construct_copy(ir.get_internal(), &mInt, i.get_internal());
   }
 
   Integer::Integer(const Rational& r) : Integer(IntegerRing::Z, r) {}
-  Integer::Integer(IntegerRing& ir, const Rational& r) {
+  Integer::Integer(const IntegerRing& ir, const Rational& r) {
     lp_integer_construct_from_rational(ir.get_internal(), &mInt,
                                        r.get_internal());
   }
 
   Integer::Integer(const mpz_class& m) : Integer(IntegerRing::Z, m) {}
-  Integer::Integer(IntegerRing& ir, const mpz_class& m) {
+  Integer::Integer(const IntegerRing& ir, const mpz_class& m) {
     lp_integer_construct_copy(ir.get_internal(), &mInt, m.get_mpz_t());
   }
 
   Integer::Integer(const lp_integer_t* i) : Integer(IntegerRing::Z, i) {}
-  Integer::Integer(IntegerRing& ir, const lp_integer_t* i) {
+  Integer::Integer(const IntegerRing& ir, const lp_integer_t* i) {
     lp_integer_construct_copy(ir.get_internal(), &mInt, i);
   }
 
@@ -48,19 +48,19 @@ namespace poly {
   Integer& Integer::operator=(const Integer& i) {
     return assign(IntegerRing::Z, i);
   }
-  Integer& Integer::assign(IntegerRing& ir, const Integer& i) {
+  Integer& Integer::assign(const IntegerRing& ir, const Integer& i) {
     lp_integer_assign(ir.get_internal(), &mInt, i.get_internal());
     return *this;
   }
   Integer& Integer::operator=(Integer&& i) {
     return assign(IntegerRing::Z, std::move(i));
   }
-  Integer& Integer::assign(IntegerRing& ir, Integer&& i) {
+  Integer& Integer::assign(const IntegerRing& ir, Integer&& i) {
     lp_integer_assign(ir.get_internal(), &mInt, i.get_internal());
     return *this;
   }
   Integer& Integer::operator=(long i) { return assign(IntegerRing::Z, i); }
-  Integer& Integer::assign(IntegerRing& ir, long i) {
+  Integer& Integer::assign(const IntegerRing& ir, long i) {
     lp_integer_assign_int(ir.get_internal(), &mInt, i);
     return *this;
   }
@@ -96,21 +96,21 @@ namespace poly {
     return compare(IntegerRing::Z, lhs, rhs) >= 0;
   }
 
-  int compare(IntegerRing& ir, const Integer& lhs, const Integer& rhs) {
+  int compare(const IntegerRing& ir, const Integer& lhs, const Integer& rhs) {
     return lp_integer_cmp(ir.get_internal(), lhs.get_internal(),
                           rhs.get_internal());
   }
-  int compare(IntegerRing& ir, const Integer& lhs, long rhs) {
+  int compare(const IntegerRing& ir, const Integer& lhs, long rhs) {
     return lp_integer_cmp_int(ir.get_internal(), lhs.get_internal(), rhs);
   }
-  int compare(IntegerRing& ir, long lhs, const Integer& rhs) {
+  int compare(const IntegerRing& ir, long lhs, const Integer& rhs) {
     return -lp_integer_cmp_int(ir.get_internal(), rhs.get_internal(), lhs);
   }
 
   bool divides(const Integer& lhs, const Integer& rhs) {
     return divides(IntegerRing::Z, lhs, rhs);
   }
-  bool divides(IntegerRing& ir, const Integer& lhs, const Integer& rhs) {
+  bool divides(const IntegerRing& ir, const Integer& lhs, const Integer& rhs) {
     return lp_integer_divides(ir.get_internal(), lhs.get_internal(),
                               rhs.get_internal());
   }
@@ -132,11 +132,11 @@ namespace poly {
     return res;
   }
 
-  Integer& increment(IntegerRing& ir, Integer& i) {
+  Integer& increment(const IntegerRing& ir, Integer& i) {
     lp_integer_inc(ir.get_internal(), i.get_internal());
     return i;
   }
-  Integer& decrement(IntegerRing& ir, Integer& i) {
+  Integer& decrement(const IntegerRing& ir, Integer& i) {
     lp_integer_dec(ir.get_internal(), i.get_internal());
     return i;
   }
@@ -147,11 +147,11 @@ namespace poly {
   Integer& operator+=(Integer& lhs, const Integer& rhs) {
     return add_assign(IntegerRing::Z, lhs, rhs);
   }
-  Integer add(IntegerRing& ir, const Integer& lhs, const Integer& rhs) {
+  Integer add(const IntegerRing& ir, const Integer& lhs, const Integer& rhs) {
     Integer res(lhs);
     return add_assign(ir, res, rhs);
   }
-  Integer& add_assign(IntegerRing& ir, Integer& lhs, const Integer& rhs) {
+  Integer& add_assign(const IntegerRing& ir, Integer& lhs, const Integer& rhs) {
     lp_integer_add(ir.get_internal(), lhs.get_internal(), lhs.get_internal(),
                    rhs.get_internal());
     return lhs;
@@ -163,32 +163,32 @@ namespace poly {
   Integer& operator-=(Integer& lhs, const Integer& rhs) {
     return sub_assign(IntegerRing::Z, lhs, rhs);
   }
-  Integer sub(IntegerRing& ir, const Integer& lhs, const Integer& rhs) {
+  Integer sub(const IntegerRing& ir, const Integer& lhs, const Integer& rhs) {
     Integer res(lhs);
     return sub_assign(ir, res, rhs);
   }
 
-  Integer& sub_assign(IntegerRing& ir, Integer& lhs, const Integer& rhs) {
+  Integer& sub_assign(const IntegerRing& ir, Integer& lhs, const Integer& rhs) {
     lp_integer_sub(ir.get_internal(), lhs.get_internal(), lhs.get_internal(),
                    rhs.get_internal());
     return lhs;
   }
 
   Integer operator-(const Integer& i) { return neg(IntegerRing::Z, i); }
-  Integer neg(IntegerRing& ir, const Integer& i) {
+  Integer neg(const IntegerRing& ir, const Integer& i) {
     Integer res;
     lp_integer_neg(ir.get_internal(), res.get_internal(), i.get_internal());
     return res;
   }
 
   Integer abs(const Integer& i) { return abs(IntegerRing::Z, i); }
-  Integer abs(IntegerRing& ir, const Integer& i) {
+  Integer abs(const IntegerRing& ir, const Integer& i) {
     Integer res;
     lp_integer_abs(ir.get_internal(), res.get_internal(), i.get_internal());
     return res;
   }
 
-  Integer inverse(IntegerRing& ir, const Integer& i) {
+  Integer inverse(const IntegerRing& ir, const Integer& i) {
     Integer res;
     lp_integer_inv(ir.get_internal(), res.get_internal(), i.get_internal());
     return res;
@@ -210,23 +210,23 @@ namespace poly {
     return mul_assign(IntegerRing::Z, lhs, rhs);
   }
 
-  Integer mul(IntegerRing& ir, const Integer& lhs, const Integer& rhs) {
+  Integer mul(const IntegerRing& ir, const Integer& lhs, const Integer& rhs) {
     Integer res(lhs);
     return mul_assign(ir, res, rhs);
   }
-  Integer mul(IntegerRing& ir, const Integer& lhs, long rhs) {
+  Integer mul(const IntegerRing& ir, const Integer& lhs, long rhs) {
     Integer res(lhs);
     return mul_assign(ir, res, rhs);
   }
-  Integer mul(IntegerRing& ir, long lhs, const Integer& rhs) {
+  Integer mul(const IntegerRing& ir, long lhs, const Integer& rhs) {
     return mul(ir, rhs, lhs);
   }
-  Integer& mul_assign(IntegerRing& ir, Integer& lhs, const Integer& rhs) {
+  Integer& mul_assign(const IntegerRing& ir, Integer& lhs, const Integer& rhs) {
     lp_integer_mul(ir.get_internal(), lhs.get_internal(), lhs.get_internal(),
                    rhs.get_internal());
     return lhs;
   }
-  Integer& mul_assign(IntegerRing& ir, Integer& lhs, long rhs) {
+  Integer& mul_assign(const IntegerRing& ir, Integer& lhs, long rhs) {
     lp_integer_mul_int(ir.get_internal(), lhs.get_internal(),
                        lhs.get_internal(), rhs);
     return lhs;
@@ -235,7 +235,7 @@ namespace poly {
   Integer mul_pow2(const Integer& lhs, unsigned rhs) {
     return mul_pow2(IntegerRing::Z, lhs, rhs);
   }
-  Integer mul_pow2(IntegerRing& ir, const Integer& lhs, unsigned rhs) {
+  Integer mul_pow2(const IntegerRing& ir, const Integer& lhs, unsigned rhs) {
     Integer res;
     lp_integer_mul_pow2(ir.get_internal(), res.get_internal(),
                         lhs.get_internal(), rhs);
@@ -245,7 +245,7 @@ namespace poly {
   Integer pow(const Integer& lhs, unsigned rhs) {
     return pow(IntegerRing::Z, lhs, rhs);
   }
-  Integer pow(IntegerRing& ir, const Integer& lhs, unsigned rhs) {
+  Integer pow(const IntegerRing& ir, const Integer& lhs, unsigned rhs) {
     Integer res;
     lp_integer_pow(ir.get_internal(), res.get_internal(), lhs.get_internal(),
                    rhs);
@@ -262,7 +262,7 @@ namespace poly {
   Integer& add_mul(Integer& lhs, const Integer& a, const Integer& b) {
     return add_mul(IntegerRing::Z, lhs, a, b);
   }
-  Integer& add_mul(IntegerRing& ir, Integer& lhs, const Integer& a,
+  Integer& add_mul(const IntegerRing& ir, Integer& lhs, const Integer& a,
                    const Integer& b) {
     lp_integer_add_mul(ir.get_internal(), lhs.get_internal(), a.get_internal(),
                        b.get_internal());
@@ -271,7 +271,7 @@ namespace poly {
   Integer& add_mul(Integer& lhs, const Integer& a, int b) {
     return add_mul(IntegerRing::Z, lhs, a, b);
   }
-  Integer& add_mul(IntegerRing& ir, Integer& lhs, const Integer& a, int b) {
+  Integer& add_mul(const IntegerRing& ir, Integer& lhs, const Integer& a, int b) {
     lp_integer_add_mul_int(ir.get_internal(), lhs.get_internal(),
                            a.get_internal(), b);
     return lhs;
@@ -280,7 +280,7 @@ namespace poly {
   Integer& sub_mul(Integer& lhs, const Integer& a, const Integer& b) {
     return sub_mul(IntegerRing::Z, lhs, a, b);
   }
-  Integer& sub_mul(IntegerRing& ir, Integer& lhs, const Integer& a,
+  Integer& sub_mul(const IntegerRing& ir, Integer& lhs, const Integer& a,
                    const Integer& b) {
     lp_integer_sub_mul(ir.get_internal(), lhs.get_internal(), a.get_internal(),
                        b.get_internal());
@@ -310,7 +310,7 @@ namespace poly {
   Integer div_exact(const Integer& lhs, const Integer& rhs) {
     return div_exact(IntegerRing::Z, lhs, rhs);
   }
-  Integer div_exact(IntegerRing& ir, const Integer& lhs, const Integer& rhs) {
+  Integer div_exact(const IntegerRing& ir, const Integer& lhs, const Integer& rhs) {
     Integer res;
     lp_integer_div_exact(ir.get_internal(), res.get_internal(),
                          lhs.get_internal(), rhs.get_internal());
@@ -342,11 +342,11 @@ namespace poly {
   }
 
   bool is_zero(const Integer& i) { return is_zero(IntegerRing::Z, i); }
-  bool is_zero(IntegerRing& ir, const Integer& i) {
+  bool is_zero(const IntegerRing& ir, const Integer& i) {
     return lp_integer_is_zero(ir.get_internal(), i.get_internal());
   }
 
-  bool is_in_ring(IntegerRing& ir, const Integer& i) {
+  bool is_in_ring(const IntegerRing& ir, const Integer& i) {
     return lp_integer_in_ring(ir.get_internal(), i.get_internal());
   }
 
@@ -355,7 +355,7 @@ namespace poly {
   }
 
   int sgn(const Integer& i) { return sgn(IntegerRing::Z, i); }
-  int sgn(IntegerRing& ir, const Integer& i) {
+  int sgn(const IntegerRing& ir, const Integer& i) {
     return lp_integer_sgn(ir.get_internal(), i.get_internal());
   }
 
