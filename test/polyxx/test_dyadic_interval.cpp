@@ -36,7 +36,7 @@ TEST_CASE("dyadic_interval::scale") {
   {
     DyadicInterval di(-1, 1);
     di.scale(-2);
-    // See https://github.com/SRI-CSL/libpoly/pull/26
+    // TODO: https://github.com/SRI-CSL/libpoly/pull/26
     // CHECK(di == DyadicInterval(DyadicRational(-1,2), DyadicRational(1,2)));
   }
   {
@@ -88,9 +88,78 @@ TEST_CASE("dyadic_interval::operator== / operator!=") {
 }
 
 TEST_CASE("dyadic_interval::contains") {
-  CHECK_FALSE(contains(DyadicInterval(1,3), DyadicRational(0)));
-  CHECK_FALSE(contains(DyadicInterval(1,3), DyadicRational(1)));
-  CHECK(contains(DyadicInterval(1,3), DyadicRational(2)));
-  CHECK_FALSE(contains(DyadicInterval(1,3), DyadicRational(3)));
-  CHECK_FALSE(contains(DyadicInterval(1,3), DyadicRational(4)));
+  CHECK_FALSE(contains(DyadicInterval(1, 3), DyadicRational(0)));
+  CHECK_FALSE(contains(DyadicInterval(1, 3), DyadicRational(1)));
+  CHECK(contains(DyadicInterval(1, 3), DyadicRational(2)));
+  CHECK_FALSE(contains(DyadicInterval(1, 3), DyadicRational(3)));
+  CHECK_FALSE(contains(DyadicInterval(1, 3), DyadicRational(4)));
+}
+
+TEST_CASE("dyadic_interval::contains_zero") {
+  CHECK_FALSE(contains_zero(DyadicInterval(-2, -1)));
+  // TODO: https://github.com/SRI-CSL/libpoly/pull/27
+  //CHECK_FALSE(contains_zero(DyadicInterval(-1, 0)));
+  //CHECK(contains_zero(DyadicInterval(-1, false, 0, false)));
+  //CHECK_FALSE(contains_zero(DyadicInterval(-1, false, 0, true)));
+  //CHECK(contains_zero(DyadicInterval(-1, true, 0, false)));
+  //CHECK_FALSE(contains_zero(DyadicInterval(-1, true, 0, true)));
+  CHECK(contains_zero(DyadicInterval(-1, 1)));
+  CHECK(contains_zero(DyadicInterval(0, false, 1, false)));
+  CHECK(contains_zero(DyadicInterval(0, false, 1, true)));
+  CHECK_FALSE(contains_zero(DyadicInterval(0, true, 1, false)));
+  CHECK_FALSE(contains_zero(DyadicInterval(0, true, 1, true)));
+  CHECK_FALSE(contains_zero(DyadicInterval(1, 2)));
+}
+
+TEST_CASE("dyadic_interval::disjoint") {
+    CHECK(disjoint(DyadicInterval(1, 3), DyadicInterval(4, 6)));
+    CHECK(disjoint(DyadicInterval(1, 3), DyadicInterval(3, 4)));
+    CHECK(disjoint(DyadicInterval(1, 3), DyadicInterval(3, false, 4, false)));
+    CHECK(disjoint(DyadicInterval(1, false, 3, false), DyadicInterval(3, 4)));
+    CHECK_FALSE(disjoint(DyadicInterval(1, false, 3, false), DyadicInterval(3, false, 4, false)));
+    CHECK_FALSE(disjoint(DyadicInterval(1, 3), DyadicInterval(2, 4)));
+    CHECK_FALSE(disjoint(DyadicInterval(2, 4), DyadicInterval(2, 4)));
+    CHECK_FALSE(disjoint(DyadicInterval(2, 4), DyadicInterval(1, 3)));
+    CHECK(disjoint(DyadicInterval(3, 4), DyadicInterval(1, 3)));
+    CHECK(disjoint(DyadicInterval(3, 4), DyadicInterval(1, false, 3, false)));
+    CHECK(disjoint(DyadicInterval(3, false, 4, false), DyadicInterval(1, 3)));
+    CHECK_FALSE(disjoint(DyadicInterval(3, false, 4, false), DyadicInterval(1, false, 3, false)));
+    CHECK(disjoint(DyadicInterval(4, 6), DyadicInterval(1, 3)));
+}
+
+TEST_CASE("dyadic_interval::is_point") {
+    CHECK(is_point(DyadicInterval(3)));
+    CHECK_FALSE(is_point(DyadicInterval(3, true, 4, true)));
+    CHECK_FALSE(is_point(DyadicInterval(3, false, 4, false)));
+}
+
+TEST_CASE("dyadic_interval::get_lower") {
+    CHECK(get_lower(DyadicInterval(3)) == DyadicRational(3));
+    CHECK(get_lower(DyadicInterval(3, true, 4, true)) == DyadicRational(3));
+    CHECK(get_lower(DyadicInterval(3, false, 4, false)) == DyadicRational(3));
+}
+
+TEST_CASE("dyadic_interval::get_upper") {
+    CHECK(get_upper(DyadicInterval(3)) == DyadicRational(3));
+    CHECK(get_upper(DyadicInterval(2, true, 3, true)) == DyadicRational(3));
+    CHECK(get_upper(DyadicInterval(2, false, 3, false)) == DyadicRational(3));
+}
+
+TEST_CASE("dyadic_interval::log_size") {
+    CHECK(log_size(DyadicInterval(1)) == INT_MIN);
+    CHECK(log_size(DyadicInterval(1, 2)) == 1);
+    CHECK(log_size(DyadicInterval(1, 10)) == 4);
+}
+
+TEST_CASE("dyadic_interval::sgn") {
+    CHECK(sgn(DyadicInterval(-5)) == -1);
+    CHECK(sgn(DyadicInterval(-5, -4)) == -1);
+    CHECK(sgn(DyadicInterval(-1, 0)) == -1);
+    CHECK(sgn(DyadicInterval(-1, false, 0, false)) == 0);
+    CHECK(sgn(DyadicInterval(-1, 1)) == 0);
+    CHECK(sgn(DyadicInterval()) == 0);
+    CHECK(sgn(DyadicInterval(0, false, 1, false)) == 0);
+    CHECK(sgn(DyadicInterval(0, 1)) == 1);
+    CHECK(sgn(DyadicInterval(4, 5)) == 1);
+    CHECK(sgn(DyadicInterval(5)) == 1);
 }

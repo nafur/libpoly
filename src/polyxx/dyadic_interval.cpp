@@ -18,8 +18,8 @@ namespace poly {
     lp_dyadic_interval_construct(get_internal(), a.get_internal(), a_open,
                                  b.get_internal(), b_open);
   }
-  DyadicInterval::DyadicInterval(const Integer& i): DyadicInterval(DyadicRational(i)) {
-  }
+  DyadicInterval::DyadicInterval(const Integer& i)
+      : DyadicInterval(DyadicRational(i)) {}
   DyadicInterval::DyadicInterval(const Integer& a, const Integer& b)
       : DyadicInterval(a, true, b, true) {}
   DyadicInterval::DyadicInterval(const Integer& a, bool a_open,
@@ -124,7 +124,11 @@ namespace poly {
     return *detail::cast_from(&i.get_internal()->a);
   }
   const DyadicRational& get_upper(const DyadicInterval& i) {
-    return *detail::cast_from(&i.get_internal()->b);
+    if (is_point(i)) {
+      return *detail::cast_from(&i.get_internal()->a);
+    } else {
+      return *detail::cast_from(&i.get_internal()->b);
+    }
   }
   int log_size(const DyadicInterval& di) {
     return lp_dyadic_interval_size(di.get_internal());
