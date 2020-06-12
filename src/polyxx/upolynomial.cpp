@@ -11,9 +11,8 @@ namespace poly {
 
   UPolynomial::UPolynomial(lp_upolynomial_t* poly)
       : mPoly(poly, upolynomial_deleter) {}
-  UPolynomial::UPolynomial(const UPolynomial& poly)
-      : mPoly(lp_upolynomial_construct_copy(poly.get_internal()),
-              upolynomial_deleter) {}
+  UPolynomial::UPolynomial(const lp_upolynomial_t* poly)
+      : mPoly(lp_upolynomial_construct_copy(poly), upolynomial_deleter) {}
 
   UPolynomial::UPolynomial()
       : mPoly(lp_upolynomial_construct_power(lp_Z, 0, 0), upolynomial_deleter) {
@@ -47,6 +46,25 @@ namespace poly {
   UPolynomial::UPolynomial(IntegerRing& ir,
                            std::initializer_list<long> coefficients)
       : UPolynomial(ir, std::vector<long>(coefficients)) {}
+
+  UPolynomial::UPolynomial(std::size_t degree, long c)
+      : UPolynomial(IntegerRing::Z, degree, c) {}
+
+  UPolynomial::UPolynomial(IntegerRing& ir, std::size_t degree, long c)
+      : mPoly(lp_upolynomial_construct_power(ir.get_internal(), degree, c),
+              upolynomial_deleter) {}
+
+  UPolynomial::UPolynomial(const UPolynomial& poly)
+      : mPoly(lp_upolynomial_construct_copy(poly.get_internal()),
+              upolynomial_deleter) {}
+
+  UPolynomial::UPolynomial(UPolynomial&& poly)
+      : mPoly(poly.release(), upolynomial_deleter) {}
+
+  UPolynomial::UPolynomial(IntegerRing& ir, const UPolynomial& poly)
+      : mPoly(lp_upolynomial_construct_copy_K(ir.get_internal(),
+                                              poly.get_internal()),
+              upolynomial_deleter) {}
 
   /** Get a non-const pointer to the internal lp_upolynomial_t. Handle with
    * care!
@@ -102,6 +120,63 @@ namespace poly {
     return lp_upolynomial_is_primitive(p.get_internal());
   }
 
+  Integer evaluate_at(const UPolynomial& p, const Integer& i) {
+    Integer res;
+    lp_upolynomial_evaluate_at_integer(p.get_internal(), i.get_internal(),
+                                       res.get_internal());
+    return res;
+  }
+  Rational evaluate_at(const UPolynomial& p, const Rational& r) {
+    Rational res;
+    lp_upolynomial_evaluate_at_rational(p.get_internal(), r.get_internal(),
+                                        res.get_internal());
+    return res;
+  }
+  DyadicRational evaluate_at(const UPolynomial& p, const DyadicRational& dr) {
+    DyadicRational res;
+    lp_upolynomial_evaluate_at_dyadic_rational(
+        p.get_internal(), dr.get_internal(), res.get_internal());
+    return res;
+  }
+
+  int sign_at(const UPolynomial& p, const Integer& i) {
+    return lp_upolynomial_sgn_at_integer(p.get_internal(), i.get_internal());
+  }
+  int sign_at(const UPolynomial& p, const Rational& r) {
+    return lp_upolynomial_sgn_at_rational(p.get_internal(), r.get_internal());
+  }
+  int sign_at(const UPolynomial& p, const DyadicRational& dr) {
+    return lp_upolynomial_sgn_at_dyadic_rational(p.get_internal(),
+                                                 dr.get_internal());
+  }
+
+  bool operator==(const UPolynomial& lhs, const UPolynomial& rhs) {
+    return lp_upolynomial_cmp(lhs.get_internal(), rhs.get_internal()) == 0;
+  }
+  bool operator!=(const UPolynomial& lhs, const UPolynomial& rhs) {
+    return lp_upolynomial_cmp(lhs.get_internal(), rhs.get_internal()) != 0;
+  }
+  bool operator<(const UPolynomial& lhs, const UPolynomial& rhs) {
+    return lp_upolynomial_cmp(lhs.get_internal(), rhs.get_internal()) < 0;
+  }
+  bool operator<=(const UPolynomial& lhs, const UPolynomial& rhs) {
+    return lp_upolynomial_cmp(lhs.get_internal(), rhs.get_internal()) <= 0;
+  }
+  bool operator>(const UPolynomial& lhs, const UPolynomial& rhs) {
+    return lp_upolynomial_cmp(lhs.get_internal(), rhs.get_internal()) > 0;
+  }
+  bool operator>=(const UPolynomial& lhs, const UPolynomial& rhs) {
+    return lp_upolynomial_cmp(lhs.get_internal(), rhs.get_internal()) >= 0;
+  }
+
+  UPolynomial subst_x_neg(const UPolynomial& p) {
+    return UPolynomial(lp_upolynomial_subst_x_neg(p.get_internal()));
+  }
+  UPolynomial operator-(const UPolynomial& p) {
+    return UPolynomial(lp_upolynomial_neg(p.get_internal()));
+  }
+  void neg(UPolynomial& p) { lp_upolynomial_neg_in_place(p.get_internal()); }
+
   UPolynomial operator+(const UPolynomial& lhs, const UPolynomial& rhs) {
     return UPolynomial(
         lp_upolynomial_add(lhs.get_internal(), rhs.get_internal()));
@@ -114,6 +189,83 @@ namespace poly {
     return UPolynomial(
         lp_upolynomial_mul(lhs.get_internal(), rhs.get_internal()));
   }
+  UPolynomial operator*(const UPolynomial& lhs, const Integer& rhs) {
+    return UPolynomial(
+        lp_upolynomial_mul_c(lhs.get_internal(), rhs.get_internal()));
+  }
+  UPolynomial operator*(const Integer& lhs, const UPolynomial& rhs) {
+    return UPolynomial(
+        lp_upolynomial_mul_c(rhs.get_internal(), lhs.get_internal()));
+  }
+
+  UPolynomial pow(const UPolynomial& lhs, long rhs) {
+    return UPolynomial(lp_upolynomial_pow(lhs.get_internal(), rhs));
+  }
+
+  UPolynomial derivative(const UPolynomial& p) {
+    return UPolynomial(lp_upolynomial_derivative(p.get_internal()));
+  }
+
+  bool divides(const UPolynomial& lhs, const UPolynomial& rhs) {
+    return lp_upolynomial_divides(lhs.get_internal(), rhs.get_internal());
+  }
+
+  UPolynomial div_degrees(const UPolynomial& lhs, long rhs) {
+    return UPolynomial(lp_upolynomial_div_degrees(lhs.get_internal(), rhs));
+  }
+
+  UPolynomial div_exact(const UPolynomial& lhs, const UPolynomial& rhs) {
+    return UPolynomial(
+        lp_upolynomial_div_exact(lhs.get_internal(), rhs.get_internal()));
+  }
+  UPolynomial div_exact(const UPolynomial& lhs, const Integer& rhs) {
+    return UPolynomial(
+        lp_upolynomial_div_exact_c(lhs.get_internal(), rhs.get_internal()));
+  }
+  UPolynomial rem_exact(const UPolynomial& lhs, const UPolynomial& rhs) {
+    return UPolynomial(
+        lp_upolynomial_rem_exact(lhs.get_internal(), rhs.get_internal()));
+  }
+  std::pair<UPolynomial, UPolynomial> div_rem_exact(const UPolynomial& lhs,
+                                                    const UPolynomial& rhs) {
+    lp_upolynomial_t* div = nullptr;
+    lp_upolynomial_t* rem = nullptr;
+    lp_upolynomial_div_rem_exact(lhs.get_internal(), rhs.get_internal(), &div,
+                                 &rem);
+    return {UPolynomial(div), UPolynomial(rem)};
+  }
+  std::pair<UPolynomial, UPolynomial> div_rem_pseudo(const UPolynomial& lhs,
+                                                     const UPolynomial& rhs) {
+    lp_upolynomial_t* div = nullptr;
+    lp_upolynomial_t* rem = nullptr;
+    lp_upolynomial_div_pseudo(&div, &rem, lhs.get_internal(),
+                              rhs.get_internal());
+    return {UPolynomial(div), UPolynomial(rem)};
+  }
+
+  /** Computes the content of a polynomial.
+   * The content is the gcd of all coefficients with the sign of the leading
+   * coefficient.
+   */
+  Integer content(const UPolynomial& p);
+  /** Makes a polynomial primitive in place.
+   * A polynomial is primitive if its content is one.
+   */
+  void make_primitive(UPolynomial& p);
+  /** Computes the primitive part, that is p / content(p). */
+  UPolynomial primitive_part(const UPolynomial& p);
+
+  /** Compute the greatest common divisor. */
+  UPolynomial gcd(const UPolynomial& lhs, const UPolynomial& rhs);
+  /** Compute the extended greatest common divisor. */
+  UPolynomial extended_gcd(const UPolynomial& lhs, const UPolynomial& rhs,
+                           UPolynomial& u, UPolynomial& v);
+  /** Solves the equations
+   *  u * p + v * q = r
+   * assuming that gcd(p,q) divides r.
+   */
+  void solve_bezout(const UPolynomial& p, const UPolynomial& q,
+                    const UPolynomial& r, UPolynomial& u, UPolynomial& v);
 
   std::vector<UPolynomial> square_free_factors(const UPolynomial& p,
                                                bool with_constant) {
@@ -134,5 +286,7 @@ namespace poly {
     lp_upolynomial_factors_destruct(factors, 0);
     return res;
   }
+
+  std::vector<UPolynomial> sturm_sequence(const UPolynomial& p);
 
 }  // namespace poly

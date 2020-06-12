@@ -59,8 +59,6 @@ namespace poly {
     UPolynomial(UPolynomial&& poly);
     /** Copy from a polynomial into the given integer ring. */
     UPolynomial(IntegerRing& ir, const UPolynomial& poly);
-    /** Move from a polynomial into the given integer ring. */
-    UPolynomial(IntegerRing& ir, UPolynomial&& poly);
 
     /** Get a non-const pointer to the internal lp_upolynomial_t. Handle with
      * care! */
@@ -105,14 +103,14 @@ namespace poly {
   /** Evaluate a polynomial at a rational. */
   Rational evaluate_at(const UPolynomial& p, const Rational& r);
   /** Evaluate a polynomial at a dyadic rational. */
-  DyadicRational evaluate_at(const UPolynomial& p, const DyadicRational& i);
+  DyadicRational evaluate_at(const UPolynomial& p, const DyadicRational& dr);
 
   /** Determine the sign of a polynomial at an integer. */
   int sign_at(const UPolynomial& p, const Integer& i);
   /** Determine the sign of a polynomial at a rational. */
   int sign_at(const UPolynomial& p, const Rational& r);
   /** Determine the sign of a polynomial at a dyadic rational. */
-  int sign_at(const UPolynomial& p, const DyadicRational& i);
+  int sign_at(const UPolynomial& p, const DyadicRational& dr);
 
   /** Compares two polynomials (using a lexicographic order on the
    * coefficients). */
