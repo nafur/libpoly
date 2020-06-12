@@ -66,16 +66,23 @@ namespace poly {
                                               poly.get_internal()),
               upolynomial_deleter) {}
 
-  /** Get a non-const pointer to the internal lp_upolynomial_t. Handle with
-   * care!
-   */
+  UPolynomial& UPolynomial::operator=(const UPolynomial& poly) {
+    mPoly.reset(lp_upolynomial_construct_copy(poly.get_internal()));
+    return *this;
+  }
+  UPolynomial& UPolynomial::operator=(UPolynomial&& poly) {
+    mPoly.reset(lp_upolynomial_construct_copy(poly.get_internal()));
+    return *this;
+  }
+  UPolynomial& UPolynomial::operator=(lp_upolynomial_t* poly) {
+    mPoly.reset(poly);
+    return *this;
+  }
+
   lp_upolynomial_t* UPolynomial::get_internal() { return mPoly.get(); }
-  /** Get a const pointer to the internal lp_upolynomial_t. */
   const lp_upolynomial_t* UPolynomial::get_internal() const {
     return mPoly.get();
   }
-  /** Release the lp_upolynomial_t pointer. This yields ownership of the
-   * returned pointer. */
   lp_upolynomial_t* UPolynomial::release() { return mPoly.release(); }
 
   std::size_t degree(const UPolynomial& p) {
@@ -243,29 +250,42 @@ namespace poly {
     return {UPolynomial(div), UPolynomial(rem)};
   }
 
-  /** Computes the content of a polynomial.
-   * The content is the gcd of all coefficients with the sign of the leading
-   * coefficient.
-   */
-  Integer content(const UPolynomial& p);
-  /** Makes a polynomial primitive in place.
-   * A polynomial is primitive if its content is one.
-   */
-  void make_primitive(UPolynomial& p);
-  /** Computes the primitive part, that is p / content(p). */
-  UPolynomial primitive_part(const UPolynomial& p);
+  Integer content(const UPolynomial& p) {
+    Integer res;
+    lp_upolynomial_content_Z(p.get_internal(), res.get_internal());
+    return res;
+  }
+  void make_primitive(UPolynomial& p) {
+    lp_upolynomial_make_primitive_Z(p.get_internal());
+  }
+  UPolynomial primitive_part(const UPolynomial& p) {
+    return UPolynomial(lp_upolynomial_primitive_part_Z(p.get_internal()));
+  }
 
-  /** Compute the greatest common divisor. */
-  UPolynomial gcd(const UPolynomial& lhs, const UPolynomial& rhs);
-  /** Compute the extended greatest common divisor. */
+  UPolynomial gcd(const UPolynomial& lhs, const UPolynomial& rhs) {
+    return UPolynomial(
+        lp_upolynomial_gcd(lhs.get_internal(), rhs.get_internal()));
+  }
   UPolynomial extended_gcd(const UPolynomial& lhs, const UPolynomial& rhs,
-                           UPolynomial& u, UPolynomial& v);
-  /** Solves the equations
-   *  u * p + v * q = r
-   * assuming that gcd(p,q) divides r.
-   */
+                           UPolynomial& u, UPolynomial& v) {
+    lp_upolynomial_t* up = nullptr;
+    lp_upolynomial_t* vp = nullptr;
+    UPolynomial res(lp_upolynomial_extended_gcd(lhs.get_internal(),
+                                                rhs.get_internal(), &up, &vp));
+    u = up;
+    v = vp;
+    return res;
+  }
+
   void solve_bezout(const UPolynomial& p, const UPolynomial& q,
-                    const UPolynomial& r, UPolynomial& u, UPolynomial& v);
+                    const UPolynomial& r, UPolynomial& u, UPolynomial& v) {
+    lp_upolynomial_t* up = nullptr;
+    lp_upolynomial_t* vp = nullptr;
+    lp_upolynomial_solve_bezout(p.get_internal(), q.get_internal(),
+                                r.get_internal(), &up, &vp);
+    u = up;
+    v = vp;
+  }
 
   std::vector<UPolynomial> square_free_factors(const UPolynomial& p,
                                                bool with_constant) {
@@ -287,6 +307,16 @@ namespace poly {
     return res;
   }
 
-  std::vector<UPolynomial> sturm_sequence(const UPolynomial& p);
+  std::vector<UPolynomial> sturm_sequence(const UPolynomial& p) {
+    lp_upolynomial_t** seq;
+    std::size_t size;
+    lp_upolynomial_sturm_sequence(p.get_internal(), &seq, &size);
+    std::vector<UPolynomial> res;
+    for (std::size_t i = 0; i < size; ++i) {
+      res.emplace_back(seq[i]);
+    }
+    free(seq);
+    return res;
+  }
 
 }  // namespace poly

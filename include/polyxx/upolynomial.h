@@ -60,6 +60,14 @@ namespace poly {
     /** Copy from a polynomial into the given integer ring. */
     UPolynomial(IntegerRing& ir, const UPolynomial& poly);
 
+    /** Copy from a polynomial. */
+    UPolynomial& operator=(const UPolynomial& poly);
+    /** Move from a polynomial. */
+    UPolynomial& operator=(UPolynomial&& poly);
+    /** Assign from and take ownership of an internal lp_upolynomial_t pointer.
+     */
+    UPolynomial& operator=(lp_upolynomial_t* poly);
+
     /** Get a non-const pointer to the internal lp_upolynomial_t. Handle with
      * care! */
     lp_upolynomial_t* get_internal();
