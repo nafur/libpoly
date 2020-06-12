@@ -10,6 +10,9 @@ namespace poly {
   Rational::Rational(const Rational& r) {
     lp_rational_construct_copy(&mRat, r.get_internal());
   }
+  Rational::Rational(Rational&& r) {
+    lp_rational_construct_copy(&mRat, r.get_internal());
+  }
 
   Rational::Rational(const Integer& num, const Integer& denom) {
     lp_rational_construct_from_div(&mRat, num.get_internal(),
@@ -26,6 +29,10 @@ namespace poly {
   Rational::~Rational() { lp_rational_destruct(&mRat); }
 
   Rational& Rational::operator=(const Rational& r) {
+    lp_rational_assign(&mRat, r.get_internal());
+    return *this;
+  }
+  Rational& Rational::operator=(Rational&& r) {
     lp_rational_assign(&mRat, r.get_internal());
     return *this;
   }
