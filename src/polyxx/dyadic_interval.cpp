@@ -18,12 +18,19 @@ namespace poly {
     lp_dyadic_interval_construct(get_internal(), a.get_internal(), a_open,
                                  b.get_internal(), b_open);
   }
+  DyadicInterval::DyadicInterval(const Integer& i): DyadicInterval(DyadicRational(i)) {
+  }
   DyadicInterval::DyadicInterval(const Integer& a, const Integer& b)
       : DyadicInterval(a, true, b, true) {}
   DyadicInterval::DyadicInterval(const Integer& a, bool a_open,
                                  const Integer& b, bool b_open) {
     lp_dyadic_interval_construct_from_integer(get_internal(), a.get_internal(),
                                               a_open, b.get_internal(), b_open);
+  }
+  DyadicInterval::DyadicInterval(long a, long b)
+      : DyadicInterval(a, true, b, true) {}
+  DyadicInterval::DyadicInterval(long a, bool a_open, long b, bool b_open) {
+    lp_dyadic_interval_construct_from_int(get_internal(), a, a_open, b, b_open);
   }
 
   DyadicInterval::DyadicInterval(const DyadicInterval& i) {
@@ -127,24 +134,29 @@ namespace poly {
     return lp_dyadic_interval_sgn(di.get_internal());
   }
 
-
   bool operator==(const DyadicInterval& lhs, const Integer& rhs) {
-    return lp_dyadic_interval_cmp_integer(lhs.get_internal(), rhs.get_internal()) == 0;
+    return lp_dyadic_interval_cmp_integer(lhs.get_internal(),
+                                          rhs.get_internal()) == 0;
   }
   bool operator!=(const DyadicInterval& lhs, const Integer& rhs) {
-    return lp_dyadic_interval_cmp_integer(lhs.get_internal(), rhs.get_internal()) != 0;
+    return lp_dyadic_interval_cmp_integer(lhs.get_internal(),
+                                          rhs.get_internal()) != 0;
   }
   bool operator<(const DyadicInterval& lhs, const Integer& rhs) {
-    return lp_dyadic_interval_cmp_integer(lhs.get_internal(), rhs.get_internal()) < 0;
+    return lp_dyadic_interval_cmp_integer(lhs.get_internal(),
+                                          rhs.get_internal()) < 0;
   }
   bool operator<=(const DyadicInterval& lhs, const Integer& rhs) {
-    return lp_dyadic_interval_cmp_integer(lhs.get_internal(), rhs.get_internal()) <= 0;
+    return lp_dyadic_interval_cmp_integer(lhs.get_internal(),
+                                          rhs.get_internal()) <= 0;
   }
   bool operator>(const DyadicInterval& lhs, const Integer& rhs) {
-    return lp_dyadic_interval_cmp_integer(lhs.get_internal(), rhs.get_internal()) > 0;
+    return lp_dyadic_interval_cmp_integer(lhs.get_internal(),
+                                          rhs.get_internal()) > 0;
   }
   bool operator>=(const DyadicInterval& lhs, const Integer& rhs) {
-    return lp_dyadic_interval_cmp_integer(lhs.get_internal(), rhs.get_internal()) >= 0;
+    return lp_dyadic_interval_cmp_integer(lhs.get_internal(),
+                                          rhs.get_internal()) >= 0;
   }
 
   bool operator==(const Integer& lhs, const DyadicInterval& rhs) {
@@ -167,22 +179,28 @@ namespace poly {
   }
 
   bool operator==(const DyadicInterval& lhs, const DyadicRational& rhs) {
-    return lp_dyadic_interval_cmp_dyadic_rational(lhs.get_internal(), rhs.get_internal()) == 0;
+    return lp_dyadic_interval_cmp_dyadic_rational(lhs.get_internal(),
+                                                  rhs.get_internal()) == 0;
   }
   bool operator!=(const DyadicInterval& lhs, const DyadicRational& rhs) {
-    return lp_dyadic_interval_cmp_dyadic_rational(lhs.get_internal(), rhs.get_internal()) != 0;
+    return lp_dyadic_interval_cmp_dyadic_rational(lhs.get_internal(),
+                                                  rhs.get_internal()) != 0;
   }
   bool operator<(const DyadicInterval& lhs, const DyadicRational& rhs) {
-    return lp_dyadic_interval_cmp_dyadic_rational(lhs.get_internal(), rhs.get_internal()) < 0;
+    return lp_dyadic_interval_cmp_dyadic_rational(lhs.get_internal(),
+                                                  rhs.get_internal()) < 0;
   }
   bool operator<=(const DyadicInterval& lhs, const DyadicRational& rhs) {
-    return lp_dyadic_interval_cmp_dyadic_rational(lhs.get_internal(), rhs.get_internal()) <= 0;
+    return lp_dyadic_interval_cmp_dyadic_rational(lhs.get_internal(),
+                                                  rhs.get_internal()) <= 0;
   }
   bool operator>(const DyadicInterval& lhs, const DyadicRational& rhs) {
-    return lp_dyadic_interval_cmp_dyadic_rational(lhs.get_internal(), rhs.get_internal()) > 0;
+    return lp_dyadic_interval_cmp_dyadic_rational(lhs.get_internal(),
+                                                  rhs.get_internal()) > 0;
   }
   bool operator>=(const DyadicInterval& lhs, const DyadicRational& rhs) {
-    return lp_dyadic_interval_cmp_dyadic_rational(lhs.get_internal(), rhs.get_internal()) >= 0;
+    return lp_dyadic_interval_cmp_dyadic_rational(lhs.get_internal(),
+                                                  rhs.get_internal()) >= 0;
   }
 
   bool operator==(const DyadicRational& lhs, const DyadicInterval& rhs) {
@@ -205,22 +223,28 @@ namespace poly {
   }
 
   bool operator==(const DyadicInterval& lhs, const Rational& rhs) {
-    return lp_dyadic_interval_cmp_rational(lhs.get_internal(), rhs.get_internal()) == 0;
+    return lp_dyadic_interval_cmp_rational(lhs.get_internal(),
+                                           rhs.get_internal()) == 0;
   }
   bool operator!=(const DyadicInterval& lhs, const Rational& rhs) {
-    return lp_dyadic_interval_cmp_rational(lhs.get_internal(), rhs.get_internal()) != 0;
+    return lp_dyadic_interval_cmp_rational(lhs.get_internal(),
+                                           rhs.get_internal()) != 0;
   }
   bool operator<(const DyadicInterval& lhs, const Rational& rhs) {
-    return lp_dyadic_interval_cmp_rational(lhs.get_internal(), rhs.get_internal()) < 0;
+    return lp_dyadic_interval_cmp_rational(lhs.get_internal(),
+                                           rhs.get_internal()) < 0;
   }
   bool operator<=(const DyadicInterval& lhs, const Rational& rhs) {
-    return lp_dyadic_interval_cmp_rational(lhs.get_internal(), rhs.get_internal()) <= 0;
+    return lp_dyadic_interval_cmp_rational(lhs.get_internal(),
+                                           rhs.get_internal()) <= 0;
   }
   bool operator>(const DyadicInterval& lhs, const Rational& rhs) {
-    return lp_dyadic_interval_cmp_rational(lhs.get_internal(), rhs.get_internal()) > 0;
+    return lp_dyadic_interval_cmp_rational(lhs.get_internal(),
+                                           rhs.get_internal()) > 0;
   }
   bool operator>=(const DyadicInterval& lhs, const Rational& rhs) {
-    return lp_dyadic_interval_cmp_rational(lhs.get_internal(), rhs.get_internal()) >= 0;
+    return lp_dyadic_interval_cmp_rational(lhs.get_internal(),
+                                           rhs.get_internal()) >= 0;
   }
 
   bool operator==(const Rational& lhs, const DyadicInterval& rhs) {

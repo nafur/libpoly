@@ -22,9 +22,9 @@ namespace poly {
     /** Constructs zero. */
     Integer();
     /** Constructs from an int. */
-    Integer(int i);
+    explicit Integer(int i);
     /** Constructs from a long. */
-    Integer(long i);
+    explicit Integer(long i);
     /** Constructs from a long into the given ring. */
     Integer(IntegerRing& ir, long i);
     /** Constructs from a string. */
@@ -36,14 +36,14 @@ namespace poly {
     /** Constructs as copy into the given ring. */
     Integer(IntegerRing& ir, const Integer& i);
     /** Constructs as copy, assuming the rational is indeed an integer. */
-    Integer(const Rational& r);
+    explicit Integer(const Rational& r);
     /** Constructs as copy, assuming the rational is indeed an integer, into the
      * given ring. */
     Integer(IntegerRing& ir, const Rational& r);
 
     /** Construct from a mpz_class, which is the underlying representation
      * anyway. */
-    Integer(const mpz_class& m);
+    explicit Integer(const mpz_class& m);
     /** Construct from a mpz_class, which is the underlying representation
      * anyway, into the given ring. */
     Integer(IntegerRing& ir, const mpz_class& m);

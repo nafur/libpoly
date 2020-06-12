@@ -20,7 +20,7 @@ Polynomial::Polynomial(const Context& c)
 Polynomial::Polynomial(const Polynomial& p)
     : mPoly(lp_polynomial_new_copy(p.get_internal()), polynomial_deleter) {}
 /** Create from a variable. */
-Polynomial::Polynomial(const Context& c, Variable v) : Polynomial(c, 1, v, 1) {}
+Polynomial::Polynomial(const Context& c, Variable v) : Polynomial(c, Integer(1), v, 1) {}
 /** Construct i * v^n. */
 Polynomial::Polynomial(const Context& c, Integer i, Variable v, unsigned n)
     : mPoly(lp_polynomial_alloc(), polynomial_deleter) {

@@ -24,6 +24,8 @@ class UPolynomial {
  public:
   UPolynomial(const std::vector<Integer>& coefficients);
   UPolynomial(IntegerRing& ir, const std::vector<Integer>& coefficients);
+  UPolynomial(const std::vector<long>& coefficients);
+  UPolynomial(IntegerRing& ir, const std::vector<long>& coefficients);
 
   UPolynomial(std::size_t degree, long c);
   UPolynomial(IntegerRing& ir, std::size_t degree, long c);

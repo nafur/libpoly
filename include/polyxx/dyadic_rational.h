@@ -26,9 +26,11 @@ namespace poly {
     /** Construct as a / 2^n. */
     DyadicRational(long a, unsigned long n);
     /** Construct from an Integer. */
-    DyadicRational(const Integer& i);
+    explicit DyadicRational(const Integer& i);
     /** Construct from a double. */
-    DyadicRational(double d);
+    explicit DyadicRational(double d);
+    /** Construct from an int. */
+    DyadicRational(int i);
 
     /** Construct from an internal lp_dyadic_rational_t pointer. */
     explicit DyadicRational(const lp_dyadic_rational_t* dr);

@@ -7,5 +7,5 @@ using namespace poly;
 
 TEST_CASE("algebraic_number::constructors") {
     UPolynomial p({-2,0,1});
-    AlgebraicNumber an(p, DyadicInterval(Integer(1), Integer(2)));
+    AlgebraicNumber an(p, DyadicInterval(1, 2));
 }
