@@ -97,12 +97,11 @@ TEST_CASE("dyadic_interval::contains") {
 
 TEST_CASE("dyadic_interval::contains_zero") {
   CHECK_FALSE(contains_zero(DyadicInterval(-2, -1)));
-  // TODO: https://github.com/SRI-CSL/libpoly/pull/27
-  //CHECK_FALSE(contains_zero(DyadicInterval(-1, 0)));
-  //CHECK(contains_zero(DyadicInterval(-1, false, 0, false)));
-  //CHECK_FALSE(contains_zero(DyadicInterval(-1, false, 0, true)));
-  //CHECK(contains_zero(DyadicInterval(-1, true, 0, false)));
-  //CHECK_FALSE(contains_zero(DyadicInterval(-1, true, 0, true)));
+  CHECK_FALSE(contains_zero(DyadicInterval(-1, 0)));
+  CHECK(contains_zero(DyadicInterval(-1, false, 0, false)));
+  CHECK_FALSE(contains_zero(DyadicInterval(-1, false, 0, true)));
+  CHECK(contains_zero(DyadicInterval(-1, true, 0, false)));
+  CHECK_FALSE(contains_zero(DyadicInterval(-1, true, 0, true)));
   CHECK(contains_zero(DyadicInterval(-1, 1)));
   CHECK(contains_zero(DyadicInterval(0, false, 1, false)));
   CHECK(contains_zero(DyadicInterval(0, false, 1, true)));
