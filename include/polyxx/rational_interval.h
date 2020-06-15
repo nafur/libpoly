@@ -11,52 +11,54 @@
 
 namespace poly {
 
-/**
- * Implements a wrapper for lp_rational_interval_t from libpoly.
- */
-class RationalInterval {
- private:
-  /** The actual interval. */
-  lp_rational_interval_t mInterval;
+  /**
+   * Implements a wrapper for lp_rational_interval_t from libpoly.
+   */
+  class RationalInterval {
+   private:
+    /** The actual interval. */
+    lp_rational_interval_t mInterval;
 
- public:
-  explicit RationalInterval(const lp_rational_interval_t* ri);
-  RationalInterval();
-  RationalInterval(const Rational& a, bool a_open, const Rational& b,
-                   bool b_open);
-  RationalInterval(const Rational& a, const Rational& b);
-  RationalInterval(const Rational& a);
-  RationalInterval(const RationalInterval& i);
-  RationalInterval(const DyadicRational& a, bool a_open,
-                   const DyadicRational& b, bool b_open);
-  RationalInterval(const DyadicRational& a, const DyadicRational& b);
-  RationalInterval(const DyadicInterval& i);
-  ~RationalInterval();
-  RationalInterval& operator=(const RationalInterval& i);
-  RationalInterval& operator=(RationalInterval&& i);
+   public:
+    explicit RationalInterval(const lp_rational_interval_t* ri);
+    RationalInterval();
+    RationalInterval(const Rational& a, bool a_open, const Rational& b,
+                     bool b_open);
+    RationalInterval(const Rational& a, const Rational& b);
+    RationalInterval(const Rational& a);
+    RationalInterval(const RationalInterval& i);
+    RationalInterval(const DyadicRational& a, bool a_open,
+                     const DyadicRational& b, bool b_open);
+    RationalInterval(const DyadicRational& a, const DyadicRational& b);
+    RationalInterval(const DyadicInterval& i);
+    ~RationalInterval();
+    RationalInterval& operator=(const RationalInterval& i);
+    RationalInterval& operator=(RationalInterval&& i);
 
-  /** Get a non-const pointer to the internal lp_interval_t. Handle with
-   * care! */
-  lp_rational_interval_t* get_internal();
-  /** Get a const pointer to the internal lp_interval_t. */
-  const lp_rational_interval_t* get_internal() const;
-};
+    /** Get a non-const pointer to the internal lp_interval_t. Handle with
+     * care! */
+    lp_rational_interval_t* get_internal();
+    /** Get a const pointer to the internal lp_interval_t. */
+    const lp_rational_interval_t* get_internal() const;
+  };
 
-void swap(RationalInterval& lhs, RationalInterval& rhs);
+  void swap(RationalInterval& lhs, RationalInterval& rhs);
 
-/** Stream the given Interval to an output stream. */
-std::ostream& operator<<(std::ostream& os, const RationalInterval& i);
+  /** Stream the given Interval to an output stream. */
+  std::ostream& operator<<(std::ostream& os, const RationalInterval& i);
 
-bool contains(const RationalInterval& ri, const AlgebraicNumber& an);
-bool contains(const RationalInterval& ri, const DyadicRational& dr);
-bool contains(const RationalInterval& ri, const Integer& i);
-bool contains(const RationalInterval& ri, const Rational& r);
-bool contains(const RationalInterval& ri, const Value& v);
-bool contains_zero(const RationalInterval& ri);
+  bool contains(const RationalInterval& ri, const AlgebraicNumber& an);
+  bool contains(const RationalInterval& ri, const DyadicRational& dr);
+  bool contains(const RationalInterval& ri, const Integer& i);
+  bool contains(const RationalInterval& ri, const Rational& r);
+  bool contains(const RationalInterval& ri, const Value& v);
+  bool contains_zero(const RationalInterval& ri);
 
-bool is_point(const RationalInterval& ri);
-const Rational& get_point(const RationalInterval& ri);
+  bool is_point(const RationalInterval& ri);
+  const Rational& get_point(const RationalInterval& ri);
+  const Rational& get_lower(const RationalInterval& ri);
+  const Rational& get_upper(const RationalInterval& ri);
 
-int sgn(const RationalInterval& ri);
+  int sgn(const RationalInterval& ri);
 
 }  // namespace poly

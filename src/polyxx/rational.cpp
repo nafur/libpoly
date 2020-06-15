@@ -27,7 +27,7 @@ namespace poly {
   Rational::Rational(double d) { lp_rational_construct_from_double(&mRat, d); }
 
   Rational::Rational(const mpq_class& m) {
-     lp_rational_construct_copy(get_internal(), m.get_mpq_t());
+    lp_rational_construct_copy(get_internal(), m.get_mpq_t());
   }
 
   Rational::~Rational() { lp_rational_destruct(&mRat); }
