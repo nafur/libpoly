@@ -60,7 +60,7 @@ bool operator<(const Value& lhs, const Value& rhs) {
   return lp_value_cmp(lhs.get_internal(), rhs.get_internal()) < 0;
 }
 
-Value sample_between(const lp_value_t* lhs, bool l_strict,
+Value value_between(const lp_value_t* lhs, bool l_strict,
                      const lp_value_t* rhs, bool r_strict) {
   Value res;
   lp_value_get_value_between(lhs, l_strict ? 1 : 0, rhs, r_strict ? 1 : 0,
@@ -68,9 +68,9 @@ Value sample_between(const lp_value_t* lhs, bool l_strict,
   return res;
 }
 
-Value sample_between(const Value& lhs, bool l_strict, const Value& rhs,
+Value value_between(const Value& lhs, bool l_strict, const Value& rhs,
                      bool r_strict) {
-  return sample_between(lhs.get_internal(), l_strict, rhs.get_internal(),
+  return value_between(lhs.get_internal(), l_strict, rhs.get_internal(),
                         r_strict);
 }
 
