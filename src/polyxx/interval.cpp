@@ -52,4 +52,24 @@ std::ostream& operator<<(std::ostream& os, const Interval& i) {
   return os;
 }
 
+bool operator==(const Interval& lhs, const Interval& rhs) {
+  return lp_interval_cmp(lhs.get_internal(), rhs.get_internal()) == 0;
+}
+bool operator!=(const Interval& lhs, const Interval& rhs) {
+  return lp_interval_cmp(lhs.get_internal(), rhs.get_internal()) != 0;
+}
+bool operator<(const Interval& lhs, const Interval& rhs) {
+  return lp_interval_cmp(lhs.get_internal(), rhs.get_internal()) < 0;
+}
+bool operator<=(const Interval& lhs, const Interval& rhs) {
+  return lp_interval_cmp(lhs.get_internal(), rhs.get_internal()) <= 0;
+}
+bool operator>(const Interval& lhs, const Interval& rhs) {
+  return lp_interval_cmp(lhs.get_internal(), rhs.get_internal()) > 0;
+}
+bool operator>=(const Interval& lhs, const Interval& rhs) {
+  return lp_interval_cmp(lhs.get_internal(), rhs.get_internal()) >= 0;
+}
+
+
 }  // namespace poly

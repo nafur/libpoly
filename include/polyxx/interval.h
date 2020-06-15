@@ -62,6 +62,13 @@ Value pick_value(const Interval& i);
 int compare_lower(const Interval& lhs, const Interval& rhs);
 int compare_upper(const Interval& lhs, const Interval& rhs);
 
+bool operator==(const Interval& lhs, const Interval& rhs);
+bool operator!=(const Interval& lhs, const Interval& rhs);
+bool operator<(const Interval& lhs, const Interval& rhs);
+bool operator<=(const Interval& lhs, const Interval& rhs);
+bool operator>(const Interval& lhs, const Interval& rhs);
+bool operator>=(const Interval& lhs, const Interval& rhs);
+
 int sgn(const Interval& i);
 Interval pow(const Interval& i, unsigned n);
 Interval operator+(const Interval& lhs, const Interval& rhs);
