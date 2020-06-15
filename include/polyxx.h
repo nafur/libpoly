@@ -39,6 +39,7 @@ This also allows for direct conversions between std::vector<Data>::data() and lp
 #include "polyxx/dyadic_interval.h"
 #include "polyxx/dyadic_rational.h"
 #include "polyxx/integer.h"
+#include "polyxx/integer_ring.h"
 #include "polyxx/interval.h"
 #include "polyxx/interval_assignment.h"
 #include "polyxx/polynomial.h"
