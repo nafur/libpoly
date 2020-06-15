@@ -5,6 +5,11 @@
 
 using namespace poly;
 
+TEST_CASE("algebraic_number::move") {
+  AlgebraicNumber a(UPolynomial({-2, 0, 1}), DyadicInterval(-2, -1));
+  AlgebraicNumber a2(std::move(a));
+}
+
 TEST_CASE("algebraic_number::swap") {
   AlgebraicNumber a(UPolynomial({-2, 0, 1}), DyadicInterval(-2, -1));
   AlgebraicNumber b(UPolynomial({-2, 0, 1}), DyadicInterval(1, 2));

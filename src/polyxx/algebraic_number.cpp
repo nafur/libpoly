@@ -13,7 +13,9 @@ namespace poly {
   AlgebraicNumber::AlgebraicNumber(const AlgebraicNumber& an) {
     lp_algebraic_number_construct_copy(get_internal(), an.get_internal());
   }
-  AlgebraicNumber::AlgebraicNumber(AlgebraicNumber&& an) { swap(*this, an); }
+  AlgebraicNumber::AlgebraicNumber(AlgebraicNumber&& an) : AlgebraicNumber() {
+    swap(*this, an);
+  }
   AlgebraicNumber::AlgebraicNumber(const DyadicRational& dr) {
     lp_algebraic_number_construct_from_dyadic_rational(get_internal(),
                                                        dr.get_internal());
