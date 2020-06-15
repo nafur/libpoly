@@ -81,6 +81,14 @@ namespace poly {
     inline const Rational* cast_from(const lp_rational_t* i) {
       return reinterpret_cast<const Rational*>(i);
     }
+    /** Non-const cast from a mpq_class to a Rational. */
+    inline Rational* cast_from(mpq_class* i) {
+      return reinterpret_cast<Rational*>(i);
+    }
+    /** Const cast from a mpq_class to a Rational. */
+    inline const Rational* cast_from(const mpq_class* i) {
+      return reinterpret_cast<const Rational*>(i);
+    }
   }  // namespace detail
 
   /** Stream the given Rational to an output stream. */

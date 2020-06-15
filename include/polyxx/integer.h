@@ -104,6 +104,14 @@ namespace poly {
     inline const Integer* cast_from(const lp_integer_t* i) {
       return reinterpret_cast<const Integer*>(i);
     }
+    /** Non-const cast from a mpz_class to an Integer. */
+    inline Integer* cast_from(mpz_class* i) {
+      return reinterpret_cast<Integer*>(i);
+    }
+    /** Const cast from a mpz_class to an Integer. */
+    inline const Integer* cast_from(const mpz_class* i) {
+      return reinterpret_cast<const Integer*>(i);
+    }
   }  // namespace detail
 
   /** Stream the given Integer to an output stream. */
