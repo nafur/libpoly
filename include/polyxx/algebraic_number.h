@@ -204,6 +204,10 @@ namespace poly {
   bool is_rational(const AlgebraicNumber& an);
   /** Check whether an algebraic number is an integer. */
   bool is_integer(const AlgebraicNumber& an);
+  /** Checks whether an algebraic number is zero. */
+  bool is_zero(const AlgebraicNumber& an);
+  /** Checks whether an algebraic number is one. */
+  bool is_one(const AlgebraicNumber& an);
 
   /** Compute the ceiling of an algebraic number. */
   Integer ceil(const AlgebraicNumber& an);

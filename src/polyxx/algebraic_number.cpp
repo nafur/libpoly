@@ -279,6 +279,10 @@ namespace poly {
   bool is_integer(const AlgebraicNumber& an) {
     return lp_algebraic_number_is_integer(an.get_internal());
   }
+  bool is_zero(const AlgebraicNumber& an) { return an == AlgebraicNumber(); }
+  bool is_one(const AlgebraicNumber& an) {
+    return an == AlgebraicNumber(DyadicRational(1));
+  }
 
   Integer ceil(const AlgebraicNumber& an) {
     Integer res;
