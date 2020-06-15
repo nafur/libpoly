@@ -179,6 +179,19 @@ Polynomial derivative(const Polynomial& p) {
   return res;
 }
 
+Polynomial gcd(const Polynomial& p, const Polynomial& q) {
+  Polynomial res(detail::context(p, q));
+  lp_polynomial_gcd(res.get_internal(), p.get_internal(),
+                          q.get_internal());
+  return res;
+}
+Polynomial lcm(const Polynomial& p, const Polynomial& q) {
+  Polynomial res(detail::context(p, q));
+  lp_polynomial_lcm(res.get_internal(), p.get_internal(),
+                          q.get_internal());
+  return res;
+}
+
 /** Compute the resultant of two polynomials. */
 Polynomial resultant(const Polynomial& p, const Polynomial& q) {
   Polynomial res(detail::context(p, q));

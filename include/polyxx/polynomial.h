@@ -122,6 +122,11 @@ std::vector<Polynomial> coefficients(const Polynomial& p);
 /** Compute the derivative of a polynomial (in its main variable). */
 Polynomial derivative(const Polynomial& p);
 
+/** Compute the gcd of two polynomials. */
+Polynomial gcd(const Polynomial& p, const Polynomial& q);
+/** Compute the lcm of two polynomials. */
+Polynomial lcm(const Polynomial& p, const Polynomial& q);
+
 /** Compute the resultant of two polynomials. */
 Polynomial resultant(const Polynomial& p, const Polynomial& q);
 
