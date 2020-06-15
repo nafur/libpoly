@@ -42,11 +42,6 @@ if (NOT HAVE_OPEN_MEMSTREAM)
 endif()
 
 set(polyxx_SOURCES
-  polyxx/context.cpp
-  polyxx/variable.cpp
-)
-
-set(polyxx_SOURCES
   polyxx/algebraic_number.cpp
   polyxx/assignment.cpp
   polyxx/context.cpp
