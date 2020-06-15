@@ -175,6 +175,10 @@ namespace poly {
   /** Give a rational approximation. */
   Rational to_rational_approximation(const AlgebraicNumber& an);
 
+  /** Get lower bound of the isolating interval. */
+  const DyadicRational& get_lower_bound(const AlgebraicNumber& an);
+  /** Get upper bound of the isolating interval. */
+  const DyadicRational& get_upper_bound(const AlgebraicNumber& an);
   /** Get the midpoint of the isolating interval. */
   DyadicRational midpoint_dyadic(const AlgebraicNumber& an);
   /** Get the midpoint of the isolating interval. */

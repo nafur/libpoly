@@ -221,6 +221,13 @@ namespace poly {
     return res;
   }
 
+  const DyadicRational& get_lower_bound(const AlgebraicNumber& an) {
+    return get_lower(*detail::cast_from(&an.get_internal()->I));
+  }
+  const DyadicRational& get_upper_bound(const AlgebraicNumber& an) {
+    return get_upper(*detail::cast_from(&an.get_internal()->I));
+  }
+
   DyadicRational midpoint_dyadic(const AlgebraicNumber& an) {
     DyadicRational res;
     lp_algebraic_number_get_dyadic_midpoint(an.get_internal(),
