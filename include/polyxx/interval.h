@@ -8,7 +8,7 @@
 namespace poly {
 
 /**
- * Implements a wrapper for lp_interval_t from libpoly.
+ * Implements a wrapper for lp_interval_t.
  */
 class Interval {
  private:

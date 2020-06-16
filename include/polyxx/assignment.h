@@ -11,7 +11,7 @@
 namespace poly {
 
 /**
- * Implements a wrapper for lp_assignment_t from libpoly.
+ * Implements a wrapper for lp_assignment_t.
  */
 class Assignment {
   /** The actual assignment. */
@@ -22,6 +22,7 @@ class Assignment {
   Assignment(const Context& c);
   /** Construct an empty assignment. */
   Assignment() : Assignment(Context::get_context()) {}
+  /** Custom destructor. */
   ~Assignment();
 
   /** Get a non-const pointer to the internal lp_assignment_t. Handle with care!

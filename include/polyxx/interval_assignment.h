@@ -11,7 +11,7 @@
 namespace poly {
 
 /**
- * Implements a wrapper for lp_interval_assignment_t from libpoly.
+ * Implements a wrapper for lp_interval_assignment_t.
  */
 class IntervalAssignment {
   /** The actual assignment. */
@@ -22,6 +22,7 @@ class IntervalAssignment {
   IntervalAssignment(const Context& c);
   /** Construct an empty assignment. */
   IntervalAssignment() : IntervalAssignment(Context::get_context()) {}
+  /** Custom destructor. */
   ~IntervalAssignment();
 
   /** Get a non-const pointer to the internal lp_interval_assignment_t. Handle

@@ -17,7 +17,7 @@
 namespace poly {
 
 /**
- * Implements a wrapper for lp_polynomial_t from libpoly.
+ * Implements a wrapper for lp_polynomial_t.
  */
 class Polynomial {
   friend std::ostream& operator<<(std::ostream& os, const Polynomial& p);
