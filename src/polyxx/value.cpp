@@ -37,12 +37,8 @@ const lp_value_t* Value::get_internal() const { return &mValue; }
 Value Value::minus_infty() { return Value(LP_VALUE_MINUS_INFINITY, nullptr); }
 Value Value::plus_infty() { return Value(LP_VALUE_PLUS_INFINITY, nullptr); }
 
-const Integer& to_integer(const Value& v) {
-  return *detail::cast_from(&v.get_internal()->value.z);
-}
-
-const AlgebraicNumber& to_algebraic_number(const Value& v) {
-  return *detail::cast_from(&v.get_internal()->value.a);
+void swap(Value& lhs, Value& rhs) {
+  lp_value_swap(lhs.get_internal(), rhs.get_internal());
 }
 
 std::ostream& operator<<(std::ostream& os, const Value& v) {
@@ -58,6 +54,20 @@ bool operator!=(const Value& lhs, const Value& rhs) {
 }
 bool operator<(const Value& lhs, const Value& rhs) {
   return lp_value_cmp(lhs.get_internal(), rhs.get_internal()) < 0;
+}
+
+
+const AlgebraicNumber& to_algebraic_number(const Value& v) {
+  return *detail::cast_from(&v.get_internal()->value.a);
+}
+const DyadicRational& to_dyadic_rational(const Value& v) {
+  return *detail::cast_from(&v.get_internal()->value.dy_q);
+}
+const Integer& to_integer(const Value& v) {
+  return *detail::cast_from(&v.get_internal()->value.z);
+}
+const Rational& to_rational(const Value& v) {
+  return *detail::cast_from(&v.get_internal()->value.q);
 }
 
 Value value_between(const lp_value_t* lhs, bool l_strict,
