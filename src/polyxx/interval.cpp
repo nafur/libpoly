@@ -35,6 +35,9 @@ lp_interval_t* Interval::get_internal() { return &mInterval; }
 
 const lp_interval_t* Interval::get_internal() const { return &mInterval; }
 
+const Value& get_lower(const Interval& i) {
+  return *detail::cast_from(lp_interval_get_lower_bound(i.get_internal()));
+}
 const Value& get_upper(const Interval& i) {
   return *detail::cast_from(lp_interval_get_upper_bound(i.get_internal()));
 }
