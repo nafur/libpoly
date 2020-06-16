@@ -38,7 +38,6 @@ class Assignment {
   bool has(const Variable& var) const;
   /** Retrieve a value from the Assignment. */
   const Value& get(const Variable& var) const;
-  // RationalInterval get_approximate(const Variable& var) const;
   /** Clear the assignment. */
   void clear();
 };

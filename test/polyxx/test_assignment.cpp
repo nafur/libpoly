@@ -45,13 +45,18 @@ TEST_CASE("assignment") {
     CHECK(a.has(y));
     CHECK_FALSE(a.has(z));
 
+    a.clear();
+
+    CHECK_FALSE(a.has(x));
+    CHECK_FALSE(a.has(y));
+    CHECK_FALSE(a.has(z));
+
     a.set(x, Value(4));
     a.set(z, Value(5));
 
     CHECK(a.has(x));
-    CHECK(a.has(y));
+    CHECK_FALSE(a.has(y));
     CHECK(a.has(z));
     CHECK(a.get(x) == Value(4));
-    CHECK(a.get(y) == Value(2));
     CHECK(a.get(z) == Value(5));
 }
