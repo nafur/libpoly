@@ -6,6 +6,7 @@ set(polyxx_tests
     test_dyadic_rational
     test_integer
     test_rational
+    test_rational_interval
     test_upolynomial
     test_value
     test_variable
