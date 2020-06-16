@@ -42,6 +42,8 @@ class Polynomial {
       : Polynomial(Context::get_context(), i, v, n) {}
   Polynomial(const Context& c, Integer i);
   Polynomial(Integer i) : Polynomial(Context::get_context(), i){};
+  Polynomial(const Context& c, long i): Polynomial(c, Integer(i)) {}
+  Polynomial(long i) : Polynomial(Context::get_context(), i){};
   /** Copy from the given Polynomial. */
   Polynomial(const Polynomial& p);
 
