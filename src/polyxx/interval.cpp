@@ -55,23 +55,30 @@ std::ostream& operator<<(std::ostream& os, const Interval& i) {
   return os;
 }
 
+lp_interval_cmp_t compare(const Interval& lhs, const Interval& rhs) {
+  return lp_interval_cmp(lhs.get_internal(), rhs.get_internal());
+}
+
 bool operator==(const Interval& lhs, const Interval& rhs) {
-  return lp_interval_cmp(lhs.get_internal(), rhs.get_internal()) == 0;
+  lp_interval_cmp_t res = compare(lhs, rhs);
+  return res == LP_INTERVAL_CMP_EQ;
 }
 bool operator!=(const Interval& lhs, const Interval& rhs) {
-  return lp_interval_cmp(lhs.get_internal(), rhs.get_internal()) != 0;
+  return !(lhs == rhs);
 }
 bool operator<(const Interval& lhs, const Interval& rhs) {
-  return lp_interval_cmp(lhs.get_internal(), rhs.get_internal()) < 0;
+  lp_interval_cmp_t res = compare(lhs, rhs);
+  return (res == LP_INTERVAL_CMP_LT_NO_INTERSECT) || (res == LP_INTERVAL_CMP_LT_WITH_INTERSECT) || (res == LP_INTERVAL_CMP_LT_WITH_INTERSECT_I1);
 }
 bool operator<=(const Interval& lhs, const Interval& rhs) {
-  return lp_interval_cmp(lhs.get_internal(), rhs.get_internal()) <= 0;
+  lp_interval_cmp_t res = compare(lhs, rhs);
+  return (res == LP_INTERVAL_CMP_LT_NO_INTERSECT) || (res == LP_INTERVAL_CMP_LT_WITH_INTERSECT) || (res == LP_INTERVAL_CMP_LT_WITH_INTERSECT_I1) || (res == LP_INTERVAL_CMP_LEQ_WITH_INTERSECT_I2) || (res == LP_INTERVAL_CMP_EQ);
 }
 bool operator>(const Interval& lhs, const Interval& rhs) {
-  return lp_interval_cmp(lhs.get_internal(), rhs.get_internal()) > 0;
+  return rhs < lhs;
 }
 bool operator>=(const Interval& lhs, const Interval& rhs) {
-  return lp_interval_cmp(lhs.get_internal(), rhs.get_internal()) >= 0;
+  return rhs <= lhs;
 }
 
 
