@@ -85,14 +85,17 @@ namespace poly {
   }
 
   bool contains(const RationalInterval& ri, const AlgebraicNumber& an) {
+    assert(false && "Not yet implemented in the library.");
     return lp_rational_interval_contains_algebraic_number(ri.get_internal(),
                                                           an.get_internal());
   }
   bool contains(const RationalInterval& ri, const DyadicRational& dr) {
+    assert(false && "Not yet implemented in the library.");
     return lp_rational_interval_contains_dyadic_rational(ri.get_internal(),
                                                          dr.get_internal());
   }
   bool contains(const RationalInterval& ri, const Integer& i) {
+    assert(false && "Not yet implemented in the library.");
     return lp_rational_interval_contains_integer(ri.get_internal(),
                                                  i.get_internal());
   }
