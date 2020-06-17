@@ -263,7 +263,7 @@ std::vector<Interval> infeasible_regions(const Polynomial& p,
 
   for (std::size_t i = 0; i < feasible->size; ++i) {
     const lp_interval_t& cur = feasible->intervals[i];
-    Value lower(lp_value_new_copy(&cur.a));
+    Value lower(&cur.a);
 
     if (lower.get_internal()->type == LP_VALUE_MINUS_INFINITY) {
       // Do nothing if we start at -infty.
@@ -278,7 +278,7 @@ std::vector<Interval> infeasible_regions(const Polynomial& p,
       last_value = std::move(lower);
       last_open = false;
     } else {
-      last_value = Value(lp_value_new_copy(&cur.b));
+      last_value = Value(&cur.b);
       last_open = cur.b_open;
     }
   }
