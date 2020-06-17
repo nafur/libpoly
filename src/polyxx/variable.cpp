@@ -11,6 +11,12 @@ namespace poly {
 
   lp_variable_t Variable::get_internal() const { return mVariable; }
 
+  namespace detail {
+    std::ostream& operator<<(std::ostream& os, const variable_printer& v) {
+      return os << lp_variable_db_get_name(v.var_db, v.var);
+    }
+  }  // namespace detail
+
   std::ostream& operator<<(std::ostream& os, const Variable& v) {
     return os << lp_variable_db_get_name(
                Context::get_context().get_variable_db(), v.get_internal());
