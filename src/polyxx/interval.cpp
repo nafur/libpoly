@@ -113,19 +113,14 @@ namespace poly {
     return !(lhs == rhs);
   }
   bool operator<(const Interval& lhs, const Interval& rhs) {
-    lp_interval_cmp_t res = compare(lhs, rhs);
-    return (res == LP_INTERVAL_CMP_LT_NO_INTERSECT) ||
-           (res == LP_INTERVAL_CMP_LT_WITH_INTERSECT) ||
-           (res == LP_INTERVAL_CMP_LT_WITH_INTERSECT_I1) ||
-           (res == LP_INTERVAL_CMP_LEQ_WITH_INTERSECT_I2);
+    int l = compare_lower(lhs, rhs);
+    if (l != 0) return l < 0;
+    return compare_upper(lhs, rhs) < 0;
   }
   bool operator<=(const Interval& lhs, const Interval& rhs) {
-    lp_interval_cmp_t res = compare(lhs, rhs);
-    return (res == LP_INTERVAL_CMP_LT_NO_INTERSECT) ||
-           (res == LP_INTERVAL_CMP_LT_WITH_INTERSECT) ||
-           (res == LP_INTERVAL_CMP_LT_WITH_INTERSECT_I1) ||
-           (res == LP_INTERVAL_CMP_LEQ_WITH_INTERSECT_I2) ||
-           (res == LP_INTERVAL_CMP_EQ);
+    int l = compare_lower(lhs, rhs);
+    if (l != 0) return l < 0;
+    return compare_upper(lhs, rhs) <= 0;
   }
   bool operator>(const Interval& lhs, const Interval& rhs) { return rhs < lhs; }
   bool operator>=(const Interval& lhs, const Interval& rhs) {
