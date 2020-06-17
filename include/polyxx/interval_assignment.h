@@ -1,7 +1,6 @@
 #pragma once
 
 #include <iosfwd>
-#include <memory>
 
 #include "../assignment.h"
 #include "context.h"
