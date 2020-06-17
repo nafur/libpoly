@@ -202,6 +202,10 @@ Polynomial resultant(const Polynomial& p, const Polynomial& q) {
 
 /** Compute the discriminant of a polynomial. */
 Polynomial discriminant(const Polynomial& p) {
+  if (degree(p) == 1) {
+    // Derivative is constant, making the resultant trivial (and resultant() does not cope with that)
+    return Polynomial(Integer(1));
+  }
   return div(resultant(p, derivative(p)), leading_coefficient(p));
 }
 
