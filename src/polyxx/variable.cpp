@@ -1,5 +1,7 @@
 #include "polyxx/variable.h"
 
+#include <iostream>
+
 namespace poly {
 
   Variable::Variable() : mVariable(lp_variable_null) {}
