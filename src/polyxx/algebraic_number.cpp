@@ -221,6 +221,10 @@ namespace poly {
     return res;
   }
 
+  UPolynomial get_defining_polynomial(const AlgebraicNumber& an) {
+    return UPolynomial(an.get_internal()->f);
+  }
+
   const DyadicInterval& get_isolating_interval(const AlgebraicNumber& an) {
     return *detail::cast_from(&an.get_internal()->I);
   }
