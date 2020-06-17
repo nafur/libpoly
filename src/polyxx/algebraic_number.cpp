@@ -222,7 +222,7 @@ namespace poly {
   }
 
   UPolynomial get_defining_polynomial(const AlgebraicNumber& an) {
-    return UPolynomial(an.get_internal()->f);
+    return UPolynomial(static_cast<const lp_upolynomial_t*>(an.get_internal()->f));
   }
 
   const DyadicInterval& get_isolating_interval(const AlgebraicNumber& an) {
