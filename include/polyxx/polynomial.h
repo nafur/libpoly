@@ -63,7 +63,7 @@ inline const lp_polynomial_context_t* context(const Polynomial& p) {
 }
 inline const lp_polynomial_context_t* context(const Polynomial& lhs,
                                               const Polynomial& rhs) {
-  assert(lp_polynomial_context_equal(context(lhs), context(rhs)) == 0);
+  assert(lp_polynomial_context_equal(context(lhs), context(rhs)));
   (void)rhs;
   return context(lhs);
 }
