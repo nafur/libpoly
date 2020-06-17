@@ -234,7 +234,8 @@ std::vector<Value> isolate_real_roots(const Polynomial& p,
                               &roots_size);
   std::vector<Value> res;
   for (std::size_t i = 0; i < roots_size; ++i) {
-    res.emplace_back(lp_value_new_copy(&roots[i]));
+    res.emplace_back();
+    lp_value_construct_copy(res.back().get_internal(), &roots[i]);
   }
   for (std::size_t i = 0; i < roots_size; ++i) {
     lp_value_destruct(&roots[i]);
