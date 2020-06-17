@@ -70,13 +70,16 @@ namespace poly {
   std::ostream& operator<<(std::ostream& os, const RationalInterval& i) {
     if (i.get_internal()->is_point) {
       assert(!i.get_internal()->a_open && !i.get_internal()->b_open);
-      return os << "[ " << lp_rational_to_string(&(i.get_internal()->a))
-                << " ; " << lp_rational_to_string(&(i.get_internal()->a))
-                << " ]";
+      os << "[ ";
+      stream_ptr(os, lp_rational_to_string(&(i.get_internal()->a)));
+      os << " ; ";
+      stream_ptr(os, lp_rational_to_string(&(i.get_internal()->a)));
+      return os << " ]";
     }
     os << (i.get_internal()->a_open ? "( " : "[ ");
-    os << lp_rational_to_string(&(i.get_internal()->a)) << " ; "
-       << lp_rational_to_string(&(i.get_internal()->b));
+    stream_ptr(os, lp_rational_to_string(&(i.get_internal()->a)));
+    os << " ; ";
+    stream_ptr(os, lp_rational_to_string(&(i.get_internal()->b)));
     os << (i.get_internal()->b_open ? " )" : " ]");
     return os;
   }

@@ -45,12 +45,16 @@ const Value& get_upper(const Interval& i) {
 std::ostream& operator<<(std::ostream& os, const Interval& i) {
   if (i.get_internal()->is_point) {
     assert(!i.get_internal()->a_open && !i.get_internal()->b_open);
-    return os << "[ " << lp_value_to_string(&(i.get_internal()->a)) << " ; "
-              << lp_value_to_string(&(i.get_internal()->a)) << " ]";
+    os << "[ ";
+    stream_ptr(os, lp_value_to_string(&(i.get_internal()->a)));
+    os << " ; ";
+    stream_ptr(os, lp_value_to_string(&(i.get_internal()->a)));
+    return os << " ]";
   }
   os << (i.get_internal()->a_open ? "( " : "[ ");
-  os << lp_value_to_string(&(i.get_internal()->a)) << " ; "
-     << lp_value_to_string(&(i.get_internal()->b));
+  stream_ptr(os, lp_value_to_string(&(i.get_internal()->a)));
+  os << " ; ";
+  stream_ptr(os, lp_value_to_string(&(i.get_internal()->b)));
   os << (i.get_internal()->b_open ? " )" : " ]");
   return os;
 }

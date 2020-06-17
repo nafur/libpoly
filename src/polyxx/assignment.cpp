@@ -29,8 +29,8 @@ void Assignment::clear() {
   lp_assignment_construct(get_internal(), var_db);
 }
 
-std::ostream &operator<<(std::ostream &os, const Assignment &a) {
-  return os << lp_assignment_to_string(a.get_internal());
-}
+  std::ostream& operator<<(std::ostream& os, const Assignment& a) {
+    return stream_ptr(os, lp_assignment_to_string(a.get_internal()));
+  }
 
 }  // namespace poly

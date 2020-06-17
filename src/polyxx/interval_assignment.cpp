@@ -35,7 +35,7 @@ void IntervalAssignment::clear() {
 }
 
 std::ostream &operator<<(std::ostream &os, const IntervalAssignment &a) {
-  return os << lp_interval_assignment_to_string(a.get_internal());
+  return stream_ptr(os, lp_interval_assignment_to_string(a.get_internal()));
 }
 
 }  // namespace poly

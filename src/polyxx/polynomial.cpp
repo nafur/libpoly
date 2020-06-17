@@ -47,7 +47,7 @@ const lp_polynomial_t* Polynomial::get_internal() const { return mPoly.get(); }
 
 /** Stream the given Polynomial to an output stream. */
 std::ostream& operator<<(std::ostream& os, const Polynomial& p) {
-  return os << lp_polynomial_to_string(p.get_internal());
+  return stream_ptr(os, lp_polynomial_to_string(p.get_internal()));
 }
 /** Compare polynomials for equality. */
 bool operator==(const Polynomial& lhs, const Polynomial& rhs) {
