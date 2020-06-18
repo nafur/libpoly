@@ -10,165 +10,228 @@
 #include "assignment.h"
 #include "integer.h"
 #include "interval.h"
+#include "interval_assignment.h"
 #include "sign_condition.h"
 #include "value.h"
 #include "variable.h"
 
 namespace poly {
 
-/**
- * Implements a wrapper for lp_polynomial_t.
- */
-class Polynomial {
-  friend std::ostream& operator<<(std::ostream& os, const Polynomial& p);
-
-  /** The actual polynomial. */
-  deleting_unique_ptr<lp_polynomial_t> mPoly;
-
- public:
-  Polynomial(lp_polynomial_t* poly);
-  Polynomial(const lp_polynomial_t* poly);
-
-  /** Construct a zero polynomial. */
-  Polynomial(const lp_polynomial_context_t* c);
-  Polynomial(const Context& c);
-  Polynomial() : Polynomial(Context::get_context()) {}
-  /** Create from a variable. */
-  Polynomial(const Context& c, Variable v);
-  Polynomial(Variable v) : Polynomial(Context::get_context(), v) {}
-  /** Construct i * v^n. */
-  Polynomial(const Context& c, Integer i, Variable v, unsigned n);
-  Polynomial(Integer i, Variable v, unsigned n)
-      : Polynomial(Context::get_context(), i, v, n) {}
-  Polynomial(const Context& c, Integer i);
-  Polynomial(Integer i) : Polynomial(Context::get_context(), i){};
-  Polynomial(const Context& c, long i): Polynomial(c, Integer(i)) {}
-  Polynomial(long i) : Polynomial(Context::get_context(), i){};
-  /** Copy from the given Polynomial. */
-  Polynomial(const Polynomial& p);
-
-  /** Assign from the given Polynomial. */
-  Polynomial& operator=(const Polynomial& p);
-
-  /** Get a non-const pointer to the internal lp_polynomial_t. Handle with care!
+  /**
+   * Implements a wrapper for lp_polynomial_t.
    */
-  lp_polynomial_t* get_internal();
-  /** Get a const pointer to the internal lp_polynomial_t. */
-  const lp_polynomial_t* get_internal() const;
-};
+  class Polynomial {
+    /** The actual polynomial. */
+    deleting_unique_ptr<lp_polynomial_t> mPoly;
 
-namespace detail {
-inline const lp_polynomial_context_t* context(const Polynomial& p) {
-  return lp_polynomial_get_context(p.get_internal());
-}
-inline const lp_polynomial_context_t* context(const Polynomial& lhs,
-                                              const Polynomial& rhs) {
-  assert(lp_polynomial_context_equal(context(lhs), context(rhs)));
-  (void)rhs;
-  return context(lhs);
-}
-}  // namespace detail
+   public:
+    /** Create from a lp_polynomial_t pointer, claiming it's ownership. */
+    Polynomial(lp_polynomial_t* poly);
+    /** Copy from an internal lp_polynomial_t pointer. */
+    Polynomial(const lp_polynomial_t* poly);
+    /** Construct a zero polynomial from an interval context pointer. */
+    Polynomial(const lp_polynomial_context_t* c);
+    /** Construct a zero polynomial from a custom context. */
+    Polynomial(const Context& c);
+    /** Construct a zero polynomial. */
+    Polynomial();
 
-/** Stream the given Polynomial to an output stream. */
-std::ostream& operator<<(std::ostream& os, const Polynomial& p);
-/** Compare polynomials for equality. */
-bool operator==(const Polynomial& lhs, const Polynomial& rhs);
-/** Compare polynomials. */
-bool operator<(const Polynomial& lhs, const Polynomial& rhs);
+    /** Construct from a variable and a custom context. */
+    Polynomial(const Context& c, Variable v);
+    /** Construct from a variable. */
+    Polynomial(Variable v);
 
-/** Add two polynomials. */
-Polynomial operator+(const Polynomial& lhs, const Polynomial& rhs);
-/** Add a polynomial and an integer. */
-Polynomial operator+(const Polynomial& lhs, const Integer& rhs);
-/** Add an integer and a polynomial. */
-Polynomial operator+(const Integer& lhs, const Polynomial& rhs);
+    /** Construct i * v^n from a custom context. */
+    Polynomial(const Context& c, Integer i, Variable v, unsigned n);
+    /** Construct i * v^n. */
+    Polynomial(Integer i, Variable v, unsigned n);
 
-/** Unary negation of a polynomial. */
-Polynomial operator-(const Polynomial& p);
-/** Subtract two polynomials. */
-Polynomial operator-(const Polynomial& lhs, const Polynomial& rhs);
-/** Subtract an integer from a polynomial. */
-Polynomial operator-(const Polynomial& lhs, const Integer& rhs);
-/** Subtract a polynomial from an integer. */
-Polynomial operator-(const Integer& lhs, const Polynomial& rhs);
+    /** Construct from an integer and a custom context. */
+    Polynomial(const Context& c, Integer i);
+    /** Construct from an integer. */
+    Polynomial(Integer i);
 
-/** Multiply two polynomials. */
-Polynomial operator*(const Polynomial& lhs, const Polynomial& rhs);
-/** Multiply a polynomial and an integer. */
-Polynomial operator*(const Polynomial& lhs, const Integer& rhs);
-/** Multiply an integer and a polynomial. */
-Polynomial operator*(const Integer& lhs, const Polynomial& rhs);
+    /** Construct from an integer and a custom context. */
+    Polynomial(const Context& c, long i);
+    /** Construct from an integer. */
+    Polynomial(long i);
 
-/** Multiply and assign two polynomials. */
-Polynomial& operator*=(Polynomial& lhs, const Polynomial& rhs);
+    /** Copy from a Polynomial. */
+    Polynomial(const Polynomial& p);
+    /** Move from a Polynomial. */
+    Polynomial(Polynomial&& p);
 
-/** Compute a polynomial to some power. */
-Polynomial pow(const Polynomial& lhs, unsigned exp);
+    /** Copy from a Polynomial. */
+    Polynomial& operator=(const Polynomial& p);
+    /** Move from a Polynomial. */
+    Polynomial& operator=(Polynomial&& p);
 
-/** Divide a polynomial by a polynomial, assuming that there is no remainder. */
-Polynomial div(const Polynomial& lhs, const Polynomial& rhs);
+    /** Get a non-const pointer to the internal lp_polynomial_t. Handle with
+     * care!
+     */
+    lp_polynomial_t* get_internal();
+    /** Get a const pointer to the internal lp_polynomial_t. */
+    const lp_polynomial_t* get_internal() const;
+    /** Release the lp_polynomial_t pointer. This yields ownership of the
+     * returned pointer. */
+    lp_polynomial_t* release();
+  };
 
-/** Check if the given polynomial is constant. */
-bool is_constant(const Polynomial& p);
-/** Obtain the degree of the given polynomial in its main variable. */
-std::size_t degree(const Polynomial& p);
-/** Obtain the main variable of the given polynomial. */
-Variable main_variable(const Polynomial& p);
-/** Obtain the k'th coefficient of a polynomial. */
-Polynomial coefficient(const Polynomial& p, std::size_t k);
-/** Obtain the leading coefficient of a polynomial. */
-Polynomial leading_coefficient(const Polynomial& p);
-/** Obtain all non-constant coefficients of a polynomial. */
-std::vector<Polynomial> coefficients(const Polynomial& p);
+  /** Swap two polynomials. */
+  void swap(Polynomial& lhs, Polynomial& rhs);
 
-/** Compute the derivative of a polynomial (in its main variable). */
-Polynomial derivative(const Polynomial& p);
+  /** Return the hash of a polynomial. */
+  std::size_t hash(const Polynomial& p);
 
-/** Compute the gcd of two polynomials. */
-Polynomial gcd(const Polynomial& p, const Polynomial& q);
-/** Compute the lcm of two polynomials. */
-Polynomial lcm(const Polynomial& p, const Polynomial& q);
+  /** Stream the given Polynomial to an output stream. */
+  std::ostream& operator<<(std::ostream& os, const Polynomial& p);
 
-/** Compute the resultant of two polynomials. */
-Polynomial resultant(const Polynomial& p, const Polynomial& q);
+  /** Check if the given polynomial is zero. */
+  bool is_zero(const Polynomial& p);
+  /** Check if the given polynomial is constant. */
+  bool is_constant(const Polynomial& p);
+  /** Check if the given polynomial is liner. */
+  bool is_linear(const Polynomial& p);
+  /** Check if the leading coefficient is constant. */
+  bool is_lc_constant(const Polynomial& p);
+  /** Get the sign of the leading coefficient. Assumes is_lc_constant(p). */
+  int lc_sgn(const Polynomial& p);
+  /** Obtain the degree of the given polynomial in its main variable. */
+  std::size_t degree(const Polynomial& p);
+  /** Obtain the main variable of the given polynomial. */
+  Variable main_variable(const Polynomial& p);
+  /** Obtain the k'th coefficient of a polynomial. */
+  Polynomial coefficient(const Polynomial& p, std::size_t k);
+  /** Obtain the leading coefficient of a polynomial. */
+  Polynomial leading_coefficient(const Polynomial& p);
+  /** Obtain all non-constant coefficients of a polynomial. */
+  std::vector<Polynomial> coefficients(const Polynomial& p);
 
-/** Compute the discriminant of a polynomial. */
-Polynomial discriminant(const Polynomial& p);
+  /** Check if the given polynomial is univariate. */
+  bool is_univariate(const Polynomial& p);
+  /** Converts a polynomial to a univariate polynomial. Assumes
+   * is_univariate(p). */
+  UPolynomial to_univariate(const Polynomial& p);
+  /** Check if the given polynomial is univariate over a given assignment and
+   * the main variable is unassigned. */
+  bool is_univariate_over_assignment(const Polynomial& p, const Assignment& a);
+  /** Check if the given polynomial is completely assigned over a given
+   * assignment. */
+  bool is_assigned_over_assignment(const Polynomial& p, const Assignment& a);
+  /** Compute the sign of a polynomial over an assignment. */
+  int sgn(const Polynomial& p, const Assignment& a);
+  /** Evaluate a polynomial over an assignment. */
+  Value evaluate(const Polynomial& p, const Assignment& a);
+  /** Evaluate a polynomial constraint over an assignment. */
+  bool evaluate_constraint(const Polynomial& p, const Assignment& a,
+                           SignCondition sc);
+  /** Evaluate a polynomial over an interval assignment. The result is only an
+   * approximation. */
+  Interval evaluate(const Polynomial& p, const IntervalAssignment& a);
 
-/**
- * Compute a square-free factorization of a polynomial.
- * Attention: this does not yield a full factorization!
- */
-std::vector<Polynomial> square_free_factors(const Polynomial& p);
+  /** Compare polynomials. */
+  bool operator==(const Polynomial& lhs, const Polynomial& rhs);
+  /** Compare polynomials. */
+  bool operator!=(const Polynomial& lhs, const Polynomial& rhs);
+  /** Compare polynomials. */
+  bool operator<(const Polynomial& lhs, const Polynomial& rhs);
+  /** Compare polynomials. */
+  bool operator<=(const Polynomial& lhs, const Polynomial& rhs);
+  /** Compare polynomials. */
+  bool operator>(const Polynomial& lhs, const Polynomial& rhs);
+  /** Compare polynomials. */
+  bool operator>=(const Polynomial& lhs, const Polynomial& rhs);
 
-/** Isolate the real roots of a Polynomial with respect to an Assignment for all
- * but the main variable. */
-std::vector<Value> isolate_real_roots(const Polynomial& p, const Assignment& a);
+  /** Add two polynomials. */
+  Polynomial operator+(const Polynomial& lhs, const Polynomial& rhs);
+  /** Add a polynomial and an integer. */
+  Polynomial operator+(const Polynomial& lhs, const Integer& rhs);
+  /** Add an integer and a polynomial. */
+  Polynomial operator+(const Integer& lhs, const Polynomial& rhs);
+  /** Add and assign two polynomials. */
+  Polynomial& operator+=(Polynomial& lhs, const Polynomial& rhs);
+  /** Compute lhs += rhs1 * rhs2. */
+  Polynomial& add_mul(Polynomial& lhs, const Polynomial& rhs1, const Polynomial& rhs2);
 
-bool evaluate_polynomial_constraint(const Polynomial& p, const Assignment& a,
-                                    SignCondition sc);
+  /** Unary negation of a polynomial. */
+  Polynomial operator-(const Polynomial& p);
+  /** Subtract two polynomials. */
+  Polynomial operator-(const Polynomial& lhs, const Polynomial& rhs);
+  /** Subtract an integer from a polynomial. */
+  Polynomial operator-(const Polynomial& lhs, const Integer& rhs);
+  /** Subtract a polynomial from an integer. */
+  Polynomial operator-(const Integer& lhs, const Polynomial& rhs);
+  /** Subtract and assign two polynomials. */
+  Polynomial& operator-=(Polynomial& lhs, const Polynomial& rhs);
+  /** Compute lhs -= rhs1 * rhs2. */
+  Polynomial& sub_mul(Polynomial& lhs, const Polynomial& rhs1, const Polynomial& rhs2);
 
-std::vector<Interval> infeasible_regions(const Polynomial& p,
-                                         const Assignment& a, SignCondition sc);
+  /** Multiply two polynomials. */
+  Polynomial operator*(const Polynomial& lhs, const Polynomial& rhs);
+  /** Multiply a polynomial and an integer. */
+  Polynomial operator*(const Polynomial& lhs, const Integer& rhs);
+  /** Multiply an integer and a polynomial. */
+  Polynomial operator*(const Integer& lhs, const Polynomial& rhs);
+  /** Multiply and assign two polynomials. */
+  Polynomial& operator*=(Polynomial& lhs, const Polynomial& rhs);
 
-int sgn(const Polynomial& p, const Assignment& a);
+  /** Multiply with x^n where x is the main variable. */
+  Polynomial shl(const Polynomial& lhs, unsigned n);
+  /** Compute a polynomial to some power. */
+  Polynomial pow(const Polynomial& lhs, unsigned exp);
 
-/** Utility class to collect all variables from a sequence of polynomials.
- */
-class VariableCollector {
- private:
-  /** Internal variable list. */
-  lp_variable_list_t mVarList;
+  /** Checks whether lhs divides rhs. */
+  bool divides(const Polynomial& lhs, const Polynomial& rhs);
+  /** Compute the quotient of two polynomials, assuming divides(rhs, lhs). */
+  Polynomial div(const Polynomial& lhs, const Polynomial& rhs);
+  /** Compute the remainder of two polynomials. */
+  Polynomial rem(const Polynomial& lhs, const Polynomial& rhs);
+  /** Compute the pseudo-remainder of two polynomials. */
+  Polynomial prem(const Polynomial& lhs, const Polynomial& rhs);
+  /** Compute the sparse pseudo-remainder of two polynomials. */
+  Polynomial sprem(const Polynomial& lhs, const Polynomial& rhs);
+  /** Compute quotient and remainder of two polynomials. */
+  std::pair<Polynomial, Polynomial> div_rem(const Polynomial& lhs,
+                                            const Polynomial& rhs);
 
- public:
-  /** Default constructor, create the variable list. */
-  VariableCollector();
-  /** Destructs the variable list. */
-  ~VariableCollector();
-  /** Adds the variables of the given polynomial to the list. */
-  void operator()(const Polynomial& p);
-  /** Returns the list of variables as a vector of Variables. */
-  std::vector<Variable> get_variables() const;
-};
+  /** Compute the derivative of a polynomial (in its main variable). */
+  Polynomial derivative(const Polynomial& p);
+
+  /** Compute the gcd of two polynomials. */
+  Polynomial gcd(const Polynomial& p, const Polynomial& q);
+  /** Compute the lcm of two polynomials. */
+  Polynomial lcm(const Polynomial& p, const Polynomial& q);
+
+  /** Compute the content of a polynomial. */
+  Polynomial content(const Polynomial& p);
+  /** Compute the primitive part of a polynomial. */
+  Polynomial primitive_part(const Polynomial& p);
+  /** Compute the content and the primitive part of a polynomial. */
+  std::pair<Polynomial, Polynomial> content_primitive_part(const Polynomial& p);
+
+  /** Compute the resultant of two polynomials. */
+  Polynomial resultant(const Polynomial& p, const Polynomial& q);
+  /** Compute the discriminant of a polynomial. */
+  Polynomial discriminant(const Polynomial& p);
+
+  /** Compute the principal subresultant coefficients of two polynomials. */
+  std::vector<Polynomial> psc(const Polynomial& p, const Polynomial& q);
+
+  /**
+   * Compute a square-free factorization of a polynomial.
+   * Attention: this does not yield a full factorization!
+   */
+  std::vector<Polynomial> square_free_factors(const Polynomial& p);
+  /** Compute a content-free factorization of a polynomial. */
+  std::vector<Polynomial> content_free_factors(const Polynomial& p);
+
+  /** Isolate the real roots of a Polynomial with respect to an Assignment for
+   * all but the main variable. */
+  std::vector<Value> isolate_real_roots(const Polynomial& p,
+                                        const Assignment& a);
+
+  std::vector<Interval> infeasible_regions(const Polynomial& p,
+                                           const Assignment& a,
+                                           SignCondition sc);
 
 }  // namespace poly

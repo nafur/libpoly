@@ -43,6 +43,7 @@ This also allows for direct conversions between std::vector<Data>::data() and lp
 #include "polyxx/interval.h"
 #include "polyxx/interval_assignment.h"
 #include "polyxx/polynomial.h"
+#include "polyxx/polynomial_utils.h"
 #include "polyxx/rational.h"
 #include "polyxx/rational_interval.h"
 #include "polyxx/sign_condition.h"
