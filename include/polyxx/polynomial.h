@@ -1,12 +1,9 @@
 #pragma once
 
-#include <cassert>
 #include <iosfwd>
 #include <vector>
 
-#include "../monomial.h"
 #include "../polynomial.h"
-#include "../variable_list.h"
 #include "assignment.h"
 #include "integer.h"
 #include "interval.h"
@@ -90,7 +87,7 @@ namespace poly {
   bool is_zero(const Polynomial& p);
   /** Check if the given polynomial is constant. */
   bool is_constant(const Polynomial& p);
-  /** Check if the given polynomial is liner. */
+  /** Check if the given polynomial is linear. */
   bool is_linear(const Polynomial& p);
   /** Check if the leading coefficient is constant. */
   bool is_lc_constant(const Polynomial& p);

@@ -1,7 +1,10 @@
 #include "polyxx/polynomial.h"
 
 #include "feasibility_set.h"
-#include "polyxx/value.h"
+#include "poly.h"
+#include "variable_list.h"
+
+#include <cassert>
 
 namespace poly {
 

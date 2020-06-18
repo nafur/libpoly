@@ -1,6 +1,7 @@
 #pragma once
 
 #include "polynomial.h"
+#include "../variable_list.h"
 
 #include <vector>
 
